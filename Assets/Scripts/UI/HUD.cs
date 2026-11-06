@@ -196,7 +196,7 @@ namespace Lucky
         public void SetBossInfo(BossDef def)
         {
             bossName.text = def.Name.ToUpperInvariant();
-            bossTitle.text = def.Title;
+            bossTitle.text = def.Dodge > 0f ? $"{def.Title}  ·  {Mathf.RoundToInt(def.Dodge * 100f)}% dodge" : def.Title;
             bossName.style.color = Color.Lerp(def.Accent, Color.white, 0.35f);
         }
 

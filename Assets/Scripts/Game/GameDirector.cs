@@ -37,7 +37,6 @@ namespace Lucky
         ShopItem charm;
         List<ShopItem> consumables = new();
         readonly Dictionary<ShopItem, int> charges = new();
-        bool itemUsedThisTurn;
         ShopItem itemRequested;
         int cloverWeight, revives;
         SpriteRenderer wardBubble;
@@ -48,11 +47,10 @@ namespace Lucky
         BossDef Boss => Balance.Bosses[depth];
         Fighter BossFighter => bosses[depth];
 
-        /// <summary>Why an item can't be used right now, or null if it can: one consumable per turn, before the spin, and only when it would do something.</summary>
+        /// <summary>Why an item can't be used right now, or null if it can: any number per turn, before the spin, and only when it would do something.</summary>
         string Blocker(ShopItem item) =>
             charges.GetValueOrDefault(item) == 0 ? "None left this run"
             : !awaitingSpin ? "Wait for your turn"
-            : itemUsedThisTurn ? "Already used an item this turn"
             : item.Stat switch
             {
                 "potion" when heroHp >= heroMax => "Already at full HP",
@@ -372,7 +370,6 @@ namespace Lucky
             {
                 spinRequested = false;
                 itemRequested = null;
-                itemUsedThisTurn = false;
                 float readyAt = SetAwaitingSpin(true);
                 while (!spinRequested)
                 {
@@ -380,7 +377,6 @@ namespace Lucky
                     {
                         var item = itemRequested;
                         itemRequested = null;
-                        itemUsedThisTurn = true;
                         charges[item]--;
                         SetAwaitingSpin(false);
                         yield return UseItem(item);
@@ -448,6 +444,7 @@ namespace Lucky
             int value = FightMath.Charm(landed, bossHp, stats.CharmBelow, stats.CharmAbove);
             bool charmed = value != landed;
             var result = FightMath.Apply(bossHp, def.Hp, value);
+            bool dodged = rng.NextDouble() < def.Dodge;
             bool big = value >= 9 || result.Outcome == HitOutcome.Jackpot;
 
             AudioManager.I.Play("wheel_stop");
@@ -474,10 +471,10 @@ namespace Lucky
             FX.I.Text(wheel.PointerTip + Vector3.up * 1.3f, landed.ToString(), revealColor, big ? 3.2f : 2.4f, 0.6f, 0.9f, big);
             FX.I.Pop("vfx_glow", wheel.PointerTip + Vector3.up * 1.3f, 1f, 5f, 0.45f, revealColor);
             if (charmed) yield return CharmNudge(landed, value);
-            if (result.Outcome == HitOutcome.Jackpot) yield return LuckyReveal();
+            if (result.Outcome == HitOutcome.Jackpot && !dodged) yield return LuckyReveal();
             else yield return new WaitForSeconds(0.32f);
 
-            yield return HeroAttack(result, killable);
+            yield return HeroAttack(result, killable, dodged);
         }
 
         PrizeWheel.Drama ChooseDrama(int target)
@@ -611,7 +608,7 @@ namespace Lucky
 
         // ---------- Hero attack & outcomes ----------
 
-        IEnumerator HeroAttack(HitResult result, bool wasKillable)
+        IEnumerator HeroAttack(HitResult result, bool wasKillable, bool dodged)
         {
             var boss = BossFighter;
             // The attack flipbook bakes in a lunge that carries Ace ~1.05 body heights forward by its hit frame,
@@ -630,7 +627,8 @@ namespace Lucky
             FX.I.Dust(hero.transform.position, 4, new Color(0.8f, 0.75f, 0.7f, 0.6f));
             yield return Move(hero, strike, animated ? hero.AttackHitTime : 0.13f, Ease.OutCubic, true);
 
-            yield return Impact(result);
+            if (dodged) BossDodged();
+            else yield return Impact(result);
 
             // Let the swing (and the flipbook's hop back) finish before running home.
             yield return new WaitForSeconds(Mathf.Max(0.12f, swingEnd - Time.time));
@@ -638,7 +636,7 @@ namespace Lucky
             yield return Move(hero, hero.Home, 0.3f, Ease.InOutCubic, false, 0.6f);
             hero.Squash(1.12f, 0.9f);
 
-            if (result.Outcome == HitOutcome.Jackpot) yield break;
+            if (result.Outcome == HitOutcome.Jackpot && !dodged) yield break;
             if (wasKillable) misses++;
             RefreshTarget();
         }
@@ -787,7 +785,7 @@ namespace Lucky
         {
             var luck = new Color(0.45f, 1f, 0.4f);
             var at = wheel.PointerTip + Vector3.up * 1.2f;
-            cloverWeight = clover.Value + stats.CloverBonus;
+            cloverWeight += clover.Value + stats.CloverBonus;
             AudioManager.I.Play("charm_nudge", 1f, 1.15f);
             AudioManager.I.Play("reveal_big", 0.6f, 1.3f);
             FX.I.Pop(clover.Icon, at, 0.3f, 2.4f, 1f, Color.white, 0f, false);
@@ -1108,9 +1106,14 @@ namespace Lucky
             Destroy(sr.gameObject);
         }
 
-        /// <summary>A boss attack of <paramref name="raw"/> damage lands; Iron Hide soaks all but 1 of its armor.</summary>
+        /// <summary>A boss attack of <paramref name="raw"/> damage lands unless dodged; Iron Hide soaks all but 1 of its armor.</summary>
         void HeroHit(int raw, Color accent)
         {
+            if (rng.NextDouble() < stats.Dodge)
+            {
+                Dodged(hero, -1f, new Color(1f, 0.97f, 0.88f));
+                return;
+            }
             if (warded)
             {
                 Blocked();
@@ -1162,6 +1165,29 @@ namespace Lucky
             CameraRig.I.Kick(Vector2.right, 0.15f);
             PostFX.I.Punch(bloomAdd: 1.8f, chromaAdd: 0.6f);
             hud.Flash(WardColor, 0.35f, 0.3f);
+        }
+
+        /// <summary>The boss slips the hero's swing: no damage, no gold.</summary>
+        void BossDodged()
+        {
+            var boss = BossFighter;
+            Dodged(boss, 1f, boss.Accent);
+            AudioManager.I.Play("near_miss", 0.8f);
+            AudioManager.I.Play("boss_roar", 0.45f, BossPitch() * 1.3f);
+            boss.SetPose(Pose.Attack, 0.5f);
+        }
+
+        /// <summary>A sidestep away from the blow: afterimages, a whoosh and a floating DODGE!</summary>
+        void Dodged(Fighter f, float away, Color color)
+        {
+            AudioManager.I.Play("whoosh_ui", 1f, 1.35f);
+            FX.I.AfterImage(f.Body, new Color(color.r, color.g, color.b, 0.6f));
+            f.Knock(9f * away, 0.6f);
+            f.Squash(1.2f, 0.85f);
+            f.Tilt(-12f * away);
+            FX.I.Dust(f.transform.position, 5, new Color(0.75f, 0.7f, 0.65f, 0.6f));
+            FX.I.Text(f.Head + new Vector3(0f, 0.8f), "DODGE!", color, 1.8f, 1.2f, 1.1f, true);
+            CameraRig.I.ZoomPunch(-0.02f);
         }
 
         static readonly Color SteelColor = new(0.72f, 0.85f, 1f);

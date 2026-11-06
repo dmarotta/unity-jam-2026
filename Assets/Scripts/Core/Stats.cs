@@ -6,7 +6,7 @@ namespace Lucky
     public class Stats
     {
         public int MaxHp, Armor, CharmBelow, CharmAbove, PotionBonus, CloverBonus, Revives;
-        public float RegenFraction, PityPerMiss, GoldPerDamage, BossGoldMultiplier;
+        public float RegenFraction, PityPerMiss, GoldPerDamage, BossGoldMultiplier, Dodge;
 
         public static int Bonus(string stat)
         {
@@ -29,6 +29,7 @@ namespace Lucky
             PityPerMiss = Balance.PityPerMiss + Bonus("pity") / 100f,
             GoldPerDamage = Balance.GoldPerDamage * (1f + Bonus("gold") / 100f),
             BossGoldMultiplier = 1f + Bonus("boss_gold") / 100f,
+            Dodge = (Balance.HeroDodge + Bonus("dodge")) / 100f,
         };
 
         /// <summary>Headline numbers for the shop's stat strip, in display order.</summary>
@@ -37,6 +38,7 @@ namespace Lucky
             ("Max HP", MaxHp.ToString()),
             ("Regen", $"{Mathf.RoundToInt(RegenFraction * 100f)}%"),
             ("Armor", Armor.ToString()),
+            ("Dodge", $"{Mathf.RoundToInt(Dodge * 100f)}%"),
             ("Luck", $"+{PityPerMiss:0.0}/miss"),
             ("Gold", $"×{GoldPerDamage:0.##}"),
         };

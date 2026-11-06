@@ -8,7 +8,7 @@ namespace Lucky
     {
         public string Id, Name, Title, Arena, Attack, IdleSprite, AttackSprite, HurtSprite, Background;
         public int Hp, DmgMin, DmgMax, GoldBonus;
-        public float Height, OffsetX;
+        public float Height, OffsetX, Dodge;
         public Color Accent;
     }
 
@@ -71,6 +71,7 @@ namespace Lucky
         public static float SpinSeconds => Rule("spin_seconds", 3.1f);
         public static float AutoSpinSeconds => Rule("auto_spin_seconds", 2.4f);
         public static float GoldPerDamage => Rule("gold_per_damage", 1f);
+        public static float HeroDodge => Rule("hero_dodge", 5f);
 
         public static void Load()
         {
@@ -85,6 +86,7 @@ namespace Lucky
                     Attack = row["attack"], Height = Float(row["height"]), GoldBonus = Int(row["gold_bonus"]),
                     Accent = accent, IdleSprite = row["idle_sprite"], AttackSprite = row["attack_sprite"],
                     HurtSprite = row["hurt_sprite"], Background = row["background"], OffsetX = Float(row["offset_x"]),
+                    Dodge = Float(row["dodge"]) / 100f,
                 });
             }
 

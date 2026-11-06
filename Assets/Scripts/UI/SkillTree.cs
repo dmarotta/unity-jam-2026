@@ -59,7 +59,7 @@ namespace Lucky
         {
             { "max_hp", " MAX HP" }, { "regen", "% REGEN" }, { "armor", " ARMOR" }, { "pity", "% LUCK" },
             { "gold", "% GOLD" }, { "boss_gold", "% BOUNTY" }, { "carry", " CARRY" }, { "potion_heal", " POTION HEAL" },
-            { "clover_bonus", " CLOVER PULL" },
+            { "clover_bonus", " CLOVER PULL" }, { "dodge", "% DODGE" },
         };
 
         public SkillTree(VisualElement viewport, GameConfig config, MonoBehaviour host)

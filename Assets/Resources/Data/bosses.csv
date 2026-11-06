@@ -1,9 +1,9 @@
-id,name,title,arena,hp,dmg_min,dmg_max,attack,height,gold_bonus,accent,idle_sprite,attack_sprite,hurt_sprite,background,offset_x
-goblin,Grubb the Card Goblin,Trickster of the Deck,The Goblin Warren,15,6,7,cards,4.9,20,#7CFF6B,boss1_goblin_idle,boss1_goblin_attack,boss1_goblin_hurt,bg_floor1_warren,0
-golem,The Loaded Golem,Weighted Against You,The Rune Vault,21,7,8,melee,5.9,30,#FFB347,boss2_golem_idle,boss2_golem_attack,boss2_golem_hurt,bg_floor2_vault,0.3
-mimic,Gildmaw,The Hoard Mimic,The Cursed Treasury,26,8,9,coins,4.6,45,#FFD447,boss_mimic_idle,boss_mimic_attack,boss_mimic_hurt,bg_cursed_treasury,0
-witch,Madame Fortuna,Reader of Ruin,The Tarot Sanctum,30,9,10,magic,6.0,60,#C77DFF,boss3_witch_idle,boss3_witch_attack,boss3_witch_hurt,bg_floor3_sanctum,0
-knight,Sir Blackjack,The Cursed Champion,The Hall of Wagers,35,10,11,melee,6.4,80,#5CE1FF,boss_knight_idle,boss_knight_attack,boss_knight_hurt,bg_hall_of_wagers,0
-dragon,Snake-Eyes,The Dice Dragon,The Dragon's Hoard,39,10,12,fire,5.9,100,#FF6A3D,boss4_dragon_idle,boss4_dragon_attack,boss4_dragon_hurt,bg_floor4_dicepit,0.4
-spider,Arachna,Weaver of Odds,The Silk Catacombs,42,11,12,venom,5.0,125,#FF4D6D,boss_spider_idle,boss_spider_attack,boss_spider_hurt,bg_silk_catacombs,0
-lich,Mortis,The Lich of Ill Fortune,The Throne of Fate,48,12,13,magic,6.6,250,#5CFFB0,boss5_lich_idle,boss5_lich_attack,boss5_lich_hurt,bg_floor5_throne,0
+id,name,title,arena,hp,dmg_min,dmg_max,attack,height,gold_bonus,accent,idle_sprite,attack_sprite,hurt_sprite,background,offset_x,dodge
+goblin,Grubb the Card Goblin,Trickster of the Deck,The Goblin Warren,15,6,7,cards,4.9,20,#7CFF6B,boss1_goblin_idle,boss1_goblin_attack,boss1_goblin_hurt,bg_floor1_warren,0,5
+golem,The Loaded Golem,Weighted Against You,The Rune Vault,21,7,8,melee,5.9,30,#FFB347,boss2_golem_idle,boss2_golem_attack,boss2_golem_hurt,bg_floor2_vault,0.3,2
+mimic,Gildmaw,The Hoard Mimic,The Cursed Treasury,26,8,9,coins,4.6,45,#FFD447,boss_mimic_idle,boss_mimic_attack,boss_mimic_hurt,bg_cursed_treasury,0,4
+witch,Madame Fortuna,Reader of Ruin,The Tarot Sanctum,30,9,10,magic,6.0,60,#C77DFF,boss3_witch_idle,boss3_witch_attack,boss3_witch_hurt,bg_floor3_sanctum,0,8
+knight,Sir Blackjack,The Cursed Champion,The Hall of Wagers,35,10,11,melee,6.4,80,#5CE1FF,boss_knight_idle,boss_knight_attack,boss_knight_hurt,bg_hall_of_wagers,0,6
+dragon,Snake-Eyes,The Dice Dragon,The Dragon's Hoard,39,10,12,fire,5.9,100,#FF6A3D,boss4_dragon_idle,boss4_dragon_attack,boss4_dragon_hurt,bg_floor4_dicepit,0.4,6
+spider,Arachna,Weaver of Odds,The Silk Catacombs,42,11,12,venom,5.0,125,#FF4D6D,boss_spider_idle,boss_spider_attack,boss_spider_hurt,bg_silk_catacombs,0,12
+lich,Mortis,The Lich of Ill Fortune,The Throne of Fate,48,12,13,magic,6.6,250,#5CFFB0,boss5_lich_idle,boss5_lich_attack,boss5_lich_hurt,bg_floor5_throne,0,10
