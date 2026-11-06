@@ -2,13 +2,17 @@ using UnityEngine;
 
 namespace Lucky
 {
-    /// <summary>Persistent progress and settings. Banked gold is the currency for the future unlock tree.</summary>
+    /// <summary>Persistent progress and settings. Banked gold buys shop items, whose levels persist here.</summary>
     public static class SaveData
     {
         public static int Gold { get => PlayerPrefs.GetInt("gold", 0); set => SetInt("gold", value); }
         public static int BestDepth { get => PlayerPrefs.GetInt("best_depth", 0); set => SetInt("best_depth", value); }
         public static int Runs { get => PlayerPrefs.GetInt("runs", 0); set => SetInt("runs", value); }
         public static int Wins { get => PlayerPrefs.GetInt("wins", 0); set => SetInt("wins", value); }
+
+        /// <summary>Upgrade level of a shop item, or the owned count of a consumable.</summary>
+        public static int Level(string item) => PlayerPrefs.GetInt("item_" + item, 0);
+        public static void SetLevel(string item, int level) => SetInt("item_" + item, level);
 
         public static float MusicVolume { get => PlayerPrefs.GetFloat("music_vol", 0.7f); set => SetFloat("music_vol", value); }
         public static float SfxVolume { get => PlayerPrefs.GetFloat("sfx_vol", 1f); set => SetFloat("sfx_vol", value); }

@@ -25,14 +25,18 @@ namespace Lucky
         Camera cam;
         readonly System.Random rng = new();
 
-        int depth, heroHp, bossHp, misses, runGold, spins, jackpots, busts;
-        bool inRun, awaitingSpin, spinRequested;
+        int depth, heroHp, heroMax, bossHp, misses, runGold, spins, jackpots, busts;
+        bool inRun, awaitingSpin, spinRequested, bombRequested, bombUsedThisTurn;
         float spinStartedAt, lastTick;
         Coroutine runRoutine;
 
+        // Loadout bought in the shop, read at the start of each run.
+        ShopItem charm, bomb;
+        int charmBelow, charmAbove;
+
         BossDef Boss => Balance.Bosses[depth];
         Fighter BossFighter => bosses[depth];
-        int MaxWheelValue => Mathf.Max(Balance.Wheel);
+        bool CanBomb => awaitingSpin && !bombUsedThisTurn && bomb != null && bomb.Level > 0;
 
         // ---------- Setup ----------
 
@@ -106,6 +110,7 @@ namespace Lucky
             hud = GetComponent<HUD>();
             hud.Init(config);
             hud.SpinPressed += () => { if (awaitingSpin) spinRequested = true; };
+            hud.BombPressed += () => { if (CanBomb) bombRequested = true; };
             hud.PlayPressed += BeginRun;
             hud.RetryPressed += BeginRun;
             hud.MenuPressed += ShowTitle;
@@ -154,6 +159,7 @@ namespace Lucky
             if (inRun && kb != null && kb.escapeKey.wasPressedThisFrame) hud.ShowSettings(!hud.SettingsOpen);
             if (hud.SettingsOpen) return;
             if (awaitingSpin && confirm) spinRequested = true;
+            if (CanBomb && kb != null && kb.bKey.wasPressedThisFrame) bombRequested = true;
             if (wheel.Spinning && Time.unscaledTime - spinStartedAt > 0.2f && (confirm || click)) wheel.FastForward();
         }
 
@@ -168,15 +174,19 @@ namespace Lucky
         IEnumerator Run()
         {
             hud.ShowTitle(false);
+            hud.ShowShop(false);
             hud.HideEnd();
             yield return hud.Fade(1f, 0.25f);
             ResetStage();
             inRun = true;
-            heroHp = Balance.HeroHp;
+            LoadLoadout();
+            heroHp = heroMax;
             runGold = spins = jackpots = busts = 0;
             SaveData.Runs++;
             hud.SetGold(0, true);
-            hud.SetHeroHp(heroHp, Balance.HeroHp, false);
+            hud.SetHeroHp(heroHp, heroMax, false);
+            hud.SetCharm(charm != null ? S(charm.Icon) : null, charmAbove > 0 ? "±1" : "+1");
+            hud.SetBomb(bomb != null ? bomb.Level : 0, false);
             hero.transform.position = new Vector3(World.ArenaX(0) - 12f, World.GroundY);
             AudioManager.I.PlayMusic("music_battle");
             yield return hud.Fade(0f, 0.35f);
@@ -195,6 +205,49 @@ namespace Lucky
             yield return Victory();
         }
 
+        /// <summary>Max HP and the strongest owned charm from shop levels; the bomb is spent from the saved count.</summary>
+        void LoadLoadout()
+        {
+            heroMax = Balance.HeroHp;
+            charm = bomb = null;
+            charmBelow = charmAbove = 0;
+            foreach (var item in Balance.Shop)
+            {
+                int level = item.Level;
+                switch (item.Kind)
+                {
+                    case ItemKind.MaxHp:
+                        heroMax += level * item.Value;
+                        break;
+                    case ItemKind.Bomb:
+                        bomb = item;
+                        break;
+                    case ItemKind.PlusOne when level > 0 && charmAbove == 0:
+                        charm = item;
+                        charmBelow = item.Value;
+                        break;
+                    case ItemKind.PlusMinusOne when level > 0:
+                        charm = item;
+                        charmBelow = charmAbove = item.Value;
+                        break;
+                }
+            }
+        }
+
+        /// <summary>Can any wheel value (after charms) land exactly on the boss's HP?</summary>
+        bool Killable()
+        {
+            foreach (int v in Balance.Wheel)
+                if (FightMath.Charm(v, bossHp, charmBelow, charmAbove) == bossHp) return true;
+            return false;
+        }
+
+        void RefreshTarget()
+        {
+            wheel.SetTarget(bossHp, misses, charmBelow, charmAbove, charm?.Icon);
+            hud.SetNeed(bossHp, Killable());
+        }
+
         IEnumerator EnterArena()
         {
             var def = Boss;
@@ -204,8 +257,7 @@ namespace Lucky
             hud.SetPortraits(S("portrait_hero"), bossPortraits[depth]);
             hud.SetBossHp(bossHp, def.Hp, false);
             hud.SetDepth(depth, bossPortraits);
-            hud.SetNeed(bossHp, bossHp <= MaxWheelValue);
-            wheel.SetTarget(bossHp, misses);
+            RefreshTarget();
             hero.Home = new Vector3(World.ArenaX(depth) + World.HeroX, World.GroundY);
 
             if (depth == 0) yield return RunTo(hero.Home, 1.1f);
@@ -234,17 +286,22 @@ namespace Lucky
         {
             while (true)
             {
-                awaitingSpin = true;
-                spinRequested = false;
-                hud.SetSpinReady(true);
-                float readyAt = Time.unscaledTime;
+                spinRequested = bombRequested = bombUsedThisTurn = false;
+                float readyAt = SetAwaitingSpin(true);
                 while (!spinRequested)
                 {
+                    if (bombRequested)
+                    {
+                        bombRequested = false;
+                        SetAwaitingSpin(false);
+                        yield return ThrowBomb();
+                        if (bossHp == 0) yield break;
+                        readyAt = SetAwaitingSpin(true);
+                    }
                     if (SaveData.AutoSpin && !hud.SettingsOpen && Time.unscaledTime - readyAt > 0.6f) spinRequested = true;
                     yield return null;
                 }
-                awaitingSpin = false;
-                hud.SetSpinReady(false, "···");
+                SetAwaitingSpin(false);
 
                 yield return SpinTurn();
                 if (bossHp == 0) yield break;
@@ -254,13 +311,22 @@ namespace Lucky
             }
         }
 
+        /// <summary>Open or close the player's turn window; returns when it opened (for auto-spin).</summary>
+        float SetAwaitingSpin(bool on)
+        {
+            awaitingSpin = on;
+            hud.SetSpinReady(on, on ? "SPIN" : "···");
+            hud.SetBomb(bomb != null ? bomb.Level : 0, CanBomb);
+            return Time.unscaledTime;
+        }
+
         // ---------- Spin turn ----------
 
         IEnumerator SpinTurn()
         {
             spins++;
             var def = Boss;
-            bool killable = bossHp <= MaxWheelValue;
+            bool killable = Killable();
             int target = FightMath.PickSlice(rng, Balance.Wheel, bossHp, misses, Balance.PityPerMiss);
 #if UNITY_EDITOR
             int forced = forcedValue >= 0 ? System.Array.IndexOf(Balance.Wheel, forcedValue == 0 ? bossHp : forcedValue) : -1;
@@ -284,7 +350,9 @@ namespace Lucky
             yield return wheel.Spin(target, SaveData.AutoSpin ? Balance.AutoSpinSeconds : Balance.SpinSeconds, drama);
             wheel.SetLights(PrizeWheel.Lights.Idle);
 
-            int value = Balance.Wheel[target];
+            int landed = Balance.Wheel[target];
+            int value = FightMath.Charm(landed, bossHp, charmBelow, charmAbove);
+            bool charmed = value != landed;
             var result = FightMath.Apply(bossHp, def.Hp, value);
             bool big = value >= 9 || result.Outcome == HitOutcome.Jackpot;
 
@@ -301,16 +369,17 @@ namespace Lucky
                 FX.I.Text(wheel.PointerTip + Vector3.up * 2.4f, "SO CLOSE!", new Color(1f, 0.55f, 0.75f), 0.9f, 0.8f, 1.2f, true);
             }
 
-            // Number reveal: pops out of the pointer and hangs above the wheel.
-            AudioManager.I.Play(big ? "reveal_big" : "reveal_small", 1f, 0.9f + value * 0.02f);
-            var revealColor = result.Outcome switch
+            // Number reveal: pops out of the pointer and hangs above the wheel. A charmed number is revealed as landed first.
+            AudioManager.I.Play(big ? "reveal_big" : "reveal_small", 1f, 0.9f + landed * 0.02f);
+            var revealColor = charmed ? new Color(1f, 0.97f, 0.88f) : result.Outcome switch
             {
                 HitOutcome.Jackpot => Gold,
                 HitOutcome.Bust => new Color(1f, 0.4f, 0.5f),
                 _ => new Color(1f, 0.97f, 0.88f),
             };
-            FX.I.Text(wheel.PointerTip + Vector3.up * 1.3f, value.ToString(), revealColor, big ? 3.2f : 2.4f, 0.6f, 0.9f, big);
+            FX.I.Text(wheel.PointerTip + Vector3.up * 1.3f, landed.ToString(), revealColor, big ? 3.2f : 2.4f, 0.6f, 0.9f, big);
             FX.I.Pop("vfx_glow", wheel.PointerTip + Vector3.up * 1.3f, 1f, 5f, 0.45f, revealColor);
+            if (charmed) yield return CharmNudge(landed, value);
             if (result.Outcome == HitOutcome.Jackpot) yield return LuckyReveal();
             else yield return new WaitForSeconds(0.32f);
 
@@ -382,6 +451,27 @@ namespace Lucky
             yield return new WaitForSecondsRealtime(0.55f);
         }
 
+        /// <summary>A lucky charm tips the landed number onto the lucky one: icon pop, ±1 tick, then the new number.</summary>
+        IEnumerator CharmNudge(int landed, int value)
+        {
+            var at = wheel.PointerTip + Vector3.up * 1.3f;
+            var luck = new Color(0.6f, 1f, 0.45f);
+            yield return new WaitForSeconds(0.38f);
+            AudioManager.I.Play("charm_nudge");
+            FX.I.Pop(charm.Icon, at + Vector3.left * 2.1f, 0.5f, 1.7f, 0.9f, Color.white, 0f, false);
+            FX.I.Text(at + new Vector3(-2.1f, 1.1f), charm.Name.ToUpperInvariant() + "!", luck, 1.1f, 0.9f, 1.2f, true);
+            FX.I.Text(at + new Vector3(1.4f, 0.6f), value > landed ? "+1" : "-1", luck, 1.9f, 1.1f, 0.9f, true);
+            FX.I.Sparks(at, luck, 34, 1.3f, true);
+            FX.I.Ring(at, luck, 6f, 0.5f);
+            FX.I.Light(wheel.PointerTip, luck, 3f, 8f, 0.6f);
+            wheel.Flare(luck, 0.9f);
+            wheel.Punch(0.06f);
+            CameraRig.I.Shake(0.2f);
+            yield return new WaitForSeconds(0.25f);
+            FX.I.Text(at, value.ToString(), Gold, 3.4f, 0.6f, 0.9f, true);
+            FX.I.Pop("vfx_glow", at, 1f, 5.5f, 0.45f, Gold);
+        }
+
         // ---------- Hero attack & outcomes ----------
 
         IEnumerator HeroAttack(HitResult result, bool wasKillable)
@@ -407,8 +497,7 @@ namespace Lucky
 
             if (result.Outcome == HitOutcome.Jackpot) yield break;
             if (wasKillable) misses++;
-            wheel.SetTarget(bossHp, misses);
-            hud.SetNeed(bossHp, bossHp <= MaxWheelValue);
+            RefreshTarget();
         }
 
         IEnumerator Impact(HitResult result)
@@ -443,14 +532,20 @@ namespace Lucky
             AudioManager.I.Play("boss_hurt", 0.8f, BossPitch());
             FX.I.Text(hitPos + new Vector3(0.4f, 1.4f), "-" + dmg, jackpot ? Gold : Color.white, 1.3f + power, 1.6f, 1.1f, dmg >= 9);
 
-            int gold = Mathf.RoundToInt(dmg * Balance.GoldPerDamage);
+            yield return Land(result, hitPos);
+        }
+
+        /// <summary>Damage lands: gold for the hit, then HP drops, wraps (BUST) or hits zero (JACKPOT).</summary>
+        IEnumerator Land(HitResult result, Vector3 hitPos)
+        {
+            int gold = Mathf.RoundToInt(result.Damage * Balance.GoldPerDamage);
             GrantGold(gold, hitPos, Mathf.Min(12, 3 + gold));
 
             switch (result.Outcome)
             {
                 case HitOutcome.Hit:
                     bossHp = result.HpAfter;
-                    hud.SetBossHp(bossHp, def.Hp, true);
+                    hud.SetBossHp(bossHp, Boss.Hp, true);
                     break;
                 case HitOutcome.Bust:
                     yield return Bust(result);
@@ -459,6 +554,59 @@ namespace Lucky
                     yield return JackpotKill();
                     break;
             }
+        }
+
+        // ---------- Firebomb ----------
+
+        /// <summary>Free action before the spin: lob a flask for exactly its damage under the same exact-zero rules.</summary>
+        IEnumerator ThrowBomb()
+        {
+            var boss = BossFighter;
+            bombUsedThisTurn = true;
+            SaveData.SetLevel(bomb.Id, bomb.Level - 1);
+            hud.SetBomb(bomb.Level, false);
+
+            hero.Squash(1.15f, 0.86f);
+            hero.Tilt(-6f);
+            yield return new WaitForSeconds(0.08f);
+            hero.SetPose(Pose.Attack, 0.45f);
+            AudioManager.I.Play("potion_throw");
+            yield return Projectile(bomb.Icon, hero.Chest + new Vector3(0.9f, 0.6f), boss.Chest, 0.5f, 1.1f, Color.white, false, 760f, 3.2f);
+
+            var c = boss.Chest;
+            var fire = new Color(1f, 0.55f, 0.15f);
+            var result = FightMath.Apply(bossHp, Boss.Hp, bomb.Value);
+            AudioManager.I.Play("potion_explode");
+            AudioManager.I.Play("boss_hurt", 0.8f, BossPitch());
+            Juice.I.Hitstop(0.12f);
+            boss.SetPose(Pose.Hurt, 0.5f);
+            boss.Flash(fire, 1f);
+            boss.Squash(0.75f, 1.2f);
+            boss.Knock(4f);
+            boss.Tilt(8f);
+            FX.I.Pop("vfx_impact", c, 0.5f, 5f, 0.28f, fire);
+            FX.I.Pop("vfx_glow", c, 1f, 8f, 0.5f, fire);
+            FX.I.Ring(c, fire, 9f, 0.5f);
+            FX.I.Sparks(c, fire, 44, 1.8f);
+            FX.I.Emit(c, new FX.Burst
+            {
+                Sprite = "vfx_glow", Count = 28, SpeedMin = 2f, SpeedMax = 7f, AngleMin = 20f, AngleMax = 160f,
+                Gravity = 5f, Drag = 2f, LifeMin = 0.4f, LifeMax = 0.9f, SizeMin = 0.7f, SizeMax = 1.5f, EndSize = 0.2f,
+                Color = new Color(1f, 0.75f, 0.3f), EndColor = new Color(0.8f, 0.1f, 0.02f, 0f), Additive = true, Spread = new Vector2(0.5f, 0.4f),
+            });
+            FX.I.Dust(c + Vector3.down * 0.6f, 8, new Color(0.25f, 0.2f, 0.2f, 0.7f));
+            FX.I.Light(c, fire, 6f, 12f, 0.8f);
+            FX.I.Text(c + new Vector3(0.4f, 1.4f), "-" + bomb.Value, fire, 2.2f, 1.6f, 1.1f, true);
+            CameraRig.I.Shake(0.7f);
+            CameraRig.I.Kick(Vector2.right, 0.25f);
+            CameraRig.I.ZoomPunch(-0.05f);
+            PostFX.I.Punch(bloomAdd: 2f, chromaAdd: 0.5f, lensAdd: -0.3f);
+            hud.Flash(fire, 0.3f, 0.3f);
+
+            yield return Land(result, c);
+            if (result.Outcome == HitOutcome.Jackpot) yield break;
+            RefreshTarget();
+            yield return new WaitForSeconds(0.3f);
         }
 
         /// <summary>Two anime impact frames: black world + white silhouettes, then inverted.</summary>
@@ -599,6 +747,28 @@ namespace Lucky
                     yield return new WaitForSeconds(0.26f);
                     HeroHit(dmg, def.Accent);
                     break;
+                case "coins":
+                    AudioManager.I.Play("mimic_chomp");
+                    AudioManager.I.Play("coin_burst", 0.7f, 1.15f);
+                    for (int i = 0; i < 10; i++)
+                    {
+                        StartCoroutine(Projectile("vfx_coin", boss.Chest + new Vector3(-1.1f, 0f), hero.Chest + (Vector3)Random.insideUnitCircle * 0.6f, 0.3f, 0.45f, Color.white, false, 1100f, Random.Range(0.4f, 1.8f)));
+                        yield return new WaitForSeconds(0.035f);
+                    }
+                    yield return new WaitForSeconds(0.25f);
+                    HeroHit(dmg, def.Accent);
+                    break;
+                case "venom":
+                    AudioManager.I.Play("venom_spit");
+                    var venom = new Color(0.55f, 1f, 0.3f);
+                    for (int i = 0; i < 6; i++)
+                    {
+                        StartCoroutine(Projectile("vfx_glow", boss.transform.position + new Vector3(-1.6f, boss.Height * 0.4f), hero.Chest + (Vector3)Random.insideUnitCircle * 0.5f, 0.34f, Random.Range(0.7f, 1.2f), venom, true, 0f, 1.3f));
+                        yield return new WaitForSeconds(0.05f);
+                    }
+                    yield return new WaitForSeconds(0.3f);
+                    HeroHit(dmg, venom);
+                    break;
                 case "fire":
                     AudioManager.I.Play("boss_attack_magic", 0.9f, 0.8f);
                     for (int i = 0; i < 14; i++)
@@ -660,7 +830,7 @@ namespace Lucky
             PostFX.I.VignettePulse(new Color(0.7f, 0f, 0.05f), 0.3f);
             PostFX.I.Punch(chromaAdd: 0.5f);
             hud.Flash(new Color(1f, 0.1f, 0.1f), 0.25f, 0.3f);
-            hud.SetHeroHp(heroHp, Balance.HeroHp, true);
+            hud.SetHeroHp(heroHp, heroMax, true);
             FX.I.Pop("vfx_impact", hero.Chest, 0.3f, 2.8f, 0.2f, accent);
             FX.I.Sparks(hero.Chest, new Color(1f, 0.3f, 0.3f), 16, 1.2f);
             FX.I.Light(hero.Chest, Color.Lerp(accent, Color.red, 0.5f), 3f, 7f, 0.35f);
@@ -668,7 +838,7 @@ namespace Lucky
             AudioManager.I.Play("hero_hurt");
             AudioManager.I.Play("hit_light", 0.6f, 0.8f);
 
-            float frac = heroHp / (float)Balance.HeroHp;
+            float frac = heroHp / (float)heroMax;
             PostFX.I.SetDanger(frac < 0.3f ? 1f - frac / 0.3f * 0.6f : 0f);
             AudioManager.I.Loop("heartbeat", frac < 0.3f && heroHp > 0, 0.8f);
         }
@@ -684,9 +854,9 @@ namespace Lucky
             yield return new WaitForSeconds(0.9f);
 
             // Full heal between depths.
-            if (heroHp < Balance.HeroHp)
+            if (heroHp < heroMax)
             {
-                heroHp = Balance.HeroHp;
+                heroHp = heroMax;
                 AudioManager.I.Play("hp_refill", 0.9f, 1.25f);
                 hero.Flash(new Color(0.5f, 1f, 0.6f), 0.8f);
                 FX.I.Emit(hero.transform.position + Vector3.up * 0.3f, new FX.Burst
@@ -695,7 +865,7 @@ namespace Lucky
                     Gravity = 2f, Drag = 1f, LifeMin = 0.6f, LifeMax = 1.1f, SizeMin = 0.25f, SizeMax = 0.5f, EndSize = 0f,
                     Spin = 200f, Color = new Color(0.5f, 1f, 0.6f), EndColor = Color.white, Additive = true, Spread = new Vector2(0.8f, 0.2f),
                 });
-                hud.SetHeroHp(heroHp, Balance.HeroHp, false);
+                hud.SetHeroHp(heroHp, heroMax, false);
                 PostFX.I.SetDanger(0f);
                 AudioManager.I.Loop("heartbeat", false);
             }
@@ -806,7 +976,7 @@ namespace Lucky
             yield return new WaitForSeconds(2.4f);
             BankRun();
             hud.ShowHud(false);
-            hud.ShowEnd(true, "CURSE BROKEN!", "All five depths cleared. Fortune favours you.", RunStats());
+            hud.ShowEnd(true, "CURSE BROKEN!", $"All {bosses.Count} depths cleared. Fortune favours you.", RunStats());
         }
 
         void BankRun()

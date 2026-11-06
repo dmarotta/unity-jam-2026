@@ -12,12 +12,43 @@ namespace Lucky
         public Color Accent;
     }
 
+    public enum ItemKind { MaxHp, PlusOne, PlusMinusOne, Bomb }
+
+    /// <summary>A shop entry. Levels live in SaveData; consumables use their level as the owned count.</summary>
+    public class ShopItem
+    {
+        public string Id, Name, Requires, Icon, Desc;
+        public ItemKind Kind;
+        public int Max, Value;
+        public int[] Costs;
+
+        public bool Consumable => Kind == ItemKind.Bomb;
+        public int Level => SaveData.Level(Id);
+        public bool Maxed => Level >= Max;
+        public bool Locked => !string.IsNullOrEmpty(Requires) && SaveData.Level(Requires) == 0;
+        public int Price => Costs[Mathf.Min(Level, Costs.Length - 1)];
+
+        public bool TryBuy()
+        {
+            if (Maxed || Locked || Price > SaveData.Gold) return false;
+            SaveData.Gold -= Price;
+            SaveData.SetLevel(Id, Level + 1);
+            return true;
+        }
+    }
+
     /// <summary>Spreadsheet-driven balance: Resources/Data/bosses.csv, wheel.csv and rules.csv.</summary>
     public static class Balance
     {
         public static List<BossDef> Bosses { get; private set; }
         public static int[] Wheel { get; private set; }
+        public static List<ShopItem> Shop { get; private set; }
         static Dictionary<string, float> rules;
+
+        static readonly Dictionary<string, ItemKind> Kinds = new()
+        {
+            { "max_hp", ItemKind.MaxHp }, { "plus_one", ItemKind.PlusOne }, { "plus_minus_one", ItemKind.PlusMinusOne }, { "bomb", ItemKind.Bomb },
+        };
 
         public static int HeroHp => (int)Rule("hero_hp", 100);
         public static float PityPerMiss => Rule("pity_per_miss", 0.4f);
@@ -44,6 +75,17 @@ namespace Lucky
             var slots = Read("Data/wheel");
             Wheel = new int[slots.Count];
             foreach (var row in slots) Wheel[Int(row["slot"])] = Int(row["value"]);
+
+            Shop = new List<ShopItem>();
+            foreach (var row in Read("Data/shop"))
+            {
+                Shop.Add(new ShopItem
+                {
+                    Id = row["id"], Name = row["name"], Kind = Kinds[row["kind"].Trim()], Max = Int(row["max"]),
+                    Costs = System.Array.ConvertAll(row["cost"].Split(';'), Int), Value = Int(row["value"]),
+                    Requires = row["requires"].Trim(), Icon = row["icon"].Trim(), Desc = row["desc"],
+                });
+            }
 
             rules = new Dictionary<string, float>();
             foreach (var row in Read("Data/rules")) rules[row["key"]] = Float(row["value"]);

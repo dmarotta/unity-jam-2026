@@ -1,0 +1,5 @@
+id,name,kind,max,cost,value,requires,icon,desc
+vitality,Vitality,max_hp,8,25;50;85;125;170;225;290;370,15,,icon_heart,+{value} max HP per level. Ace starts with only {base}.
+loaded_die,Loaded Die,plus_one,1,120,1,,icon_loaded_die,Passive. Land 1 short of the Lucky Number and the die tips it over: +1.
+horseshoe,Lucky Horseshoe,plus_minus_one,1,380,1,loaded_die,icon_horseshoe,"Passive. Land 1 off the Lucky Number, either way, and it's pulled in: ±1."
+firebomb,Firebomb Flask,bomb,3,30,5,,icon_firebomb,Consumable. Throw for exactly {value} damage before you spin. Overshoot still busts. One per turn.

@@ -3,12 +3,15 @@
 usage: python extract_frames.py <video.mp4> <out_name> <mode: loop|once> [frames] [fps] [facing: 1|-1]
 Writes Assets/Resources/Anim/<out_name>.png (grid sheet) and <out_name>.json (playback metadata).
 """
+import os
 import json, sys
 import numpy as np
 import cv2
 from scipy import ndimage
+# Project root, three levels above this file (.playbot/tools/<script>.py).
+ROOT = os.path.abspath(__file__).replace("\\", "/").rsplit("/", 3)[0] + "/"
 
-OUT = "F:/unity-jam-2026/Assets/Resources/Anim/"
+OUT = ROOT + "Assets/Resources/Anim/"
 MAX_H = 400
 
 

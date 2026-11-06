@@ -19,7 +19,7 @@ namespace Lucky
 
         public enum Drama { Center, TipIn, EdgeOut, RockBack }
         public enum Lights { Idle, Spin, Jackpot, Bust }
-        enum State { Normal, Kill, Bust }
+        enum State { Normal, Kill, Bust, Charm }
 
         static readonly Color[] Palette =
         {
@@ -44,7 +44,7 @@ namespace Lucky
         MeshRenderer killOverlay, winOverlay, blur;
         Material killMat, winMat;
         float winGlow;
-        MeshFilter bustFilter;
+        MeshFilter shadeFilter;
         Mesh blurMesh;
         Color[] blurColors, blurScratch;
         float rimOuter;
@@ -94,10 +94,10 @@ namespace Lucky
             face.sharedMaterial.SetFloat("_DetailStrength", 0.32f);
             faceFilter.sharedMesh = BuildFace();
 
-            var bust = MeshObject("BustShade", disc, Order + 1, out bustFilter);
-            bust.sharedMaterial = new Material(cfg.vertexColor);
-            bust.sharedMaterial.SetFloat("_DetailStrength", 0f);
-            bustFilter.sharedMesh = new Mesh();
+            var shade = MeshObject("SliceShade", disc, Order + 1, out shadeFilter);
+            shade.sharedMaterial = new Material(cfg.vertexColor);
+            shade.sharedMaterial.SetFloat("_DetailStrength", 0f);
+            shadeFilter.sharedMesh = new Mesh();
 
             killOverlay = MeshObject("KillGlow", disc, Order + 2, out var killFilter);
             killMat = new Material(cfg.vertexColor);
@@ -288,8 +288,11 @@ namespace Lucky
 
         // ---------- State ----------
 
-        /// <summary>Recolor slices for the boss's remaining HP: exact-kill, bust and normal.</summary>
-        public void SetTarget(int hp, int misses)
+        /// <summary>
+        /// Recolor slices for the boss's remaining HP: exact-kill, bust, normal, and charm slices that a lucky charm
+        /// (<paramref name="charmBelow"/>/<paramref name="charmAbove"/>, see FightMath.Charm) pulls onto the kill.
+        /// </summary>
+        public void SetTarget(int hp, int misses, int charmBelow, int charmAbove, string charmIcon)
         {
             heat = misses;
             killSlice = -1;
@@ -299,33 +302,42 @@ namespace Lucky
             for (int i = 0; i < count; i++)
             {
                 var previous = states[i];
-                states[i] = values[i] == hp ? State.Kill : values[i] > hp ? State.Bust : State.Normal;
+                states[i] = values[i] == hp ? State.Kill
+                    : FightMath.Charm(values[i], hp, charmBelow, charmAbove) == hp ? State.Charm
+                    : values[i] > hp ? State.Bust : State.Normal;
                 if (states[i] == State.Kill) killSlice = i;
                 if (states[i] == State.Bust) AddWedge(v, c, t, SliceAngle(i), 0.12f, 1f, new Color(0.05f, 0f, 0.02f, 0.62f), null);
+                if (states[i] == State.Charm) AddWedge(v, c, t, SliceAngle(i), 0.12f, 1f, new Color(1f, 0.85f, 0.35f, 0.3f), null);
 
                 var label = labels[i];
                 var baseCol = i % Palette.Length == 2 ? new Color(0.24f, 0.07f, 0.07f) : new Color(1f, 0.95f, 0.84f);
                 label.color = states[i] switch
                 {
                     State.Kill => new Color(1f, 0.86f, 0.3f),
+                    State.Charm => new Color(0.75f, 1f, 0.55f),
                     State.Bust => Color.Lerp(baseCol, new Color(0.55f, 0.3f, 0.32f), 0.6f),
                     _ => baseCol,
                 };
                 icons[i].enabled = states[i] != State.Normal;
-                icons[i].sprite = config.Sprite(states[i] == State.Kill ? "icon_crown" : "icon_bust");
-                float iconSize = states[i] == State.Kill ? 0.7f : 0.42f;
+                icons[i].sprite = config.Sprite(states[i] switch
+                {
+                    State.Kill => "icon_crown",
+                    State.Charm => charmIcon,
+                    _ => "icon_bust",
+                });
+                float iconSize = states[i] switch { State.Kill => 0.7f, State.Charm => 0.6f, _ => 0.42f };
                 if (icons[i].sprite != null)
                 {
                     float s = iconSize / Mathf.Max(icons[i].sprite.bounds.size.x, icons[i].sprite.bounds.size.y);
                     icons[i].transform.localScale = new Vector3(s, s, 1f);
                 }
-                if (previous != states[i]) StartCoroutine(PopLabel(label.transform, states[i] == State.Kill ? 1.45f : 1.15f));
+                if (previous != states[i]) StartCoroutine(PopLabel(label.transform, states[i] is State.Kill or State.Charm ? 1.45f : 1.15f));
             }
-            var bustMesh = bustFilter.sharedMesh;
-            bustMesh.Clear();
-            bustMesh.SetVertices(v);
-            bustMesh.SetColors(c);
-            bustMesh.SetTriangles(t, 0);
+            var shadeMesh = shadeFilter.sharedMesh;
+            shadeMesh.Clear();
+            shadeMesh.SetVertices(v);
+            shadeMesh.SetColors(c);
+            shadeMesh.SetTriangles(t, 0);
 
             killOverlay.gameObject.SetActive(killSlice >= 0);
             if (killSlice >= 0) killOverlay.transform.localRotation = Quaternion.Euler(0, 0, SliceAngle(killSlice));

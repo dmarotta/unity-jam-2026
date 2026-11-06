@@ -8,9 +8,11 @@ import glob, json, os
 import numpy as np
 from PIL import Image
 from scipy import ndimage
+# Project root, three levels above this file (.playbot/tools/<script>.py).
+ROOT = os.path.abspath(__file__).replace("\\", "/").rsplit("/", 3)[0] + "/"
 
-ART = "F:/unity-jam-2026/Assets/Art/"
-ANIM = "F:/unity-jam-2026/Assets/Resources/Anim/"
+ART = ROOT + "Assets/Art/"
+ANIM = ROOT + "Assets/Resources/Anim/"
 
 
 def luminance(rgb):
@@ -87,7 +89,7 @@ def main():
         name = os.path.splitext(os.path.basename(path))[0]
         background_normal(path, ART + f"Normals/{name}_n.png")
         lights[name] = detect_lights(path)
-    with open("F:/unity-jam-2026/Assets/Resources/Data/lights.json", "w") as f:
+    with open(ROOT + "Assets/Resources/Data/lights.json", "w") as f:
         json.dump({"arenas": [{"background": k, "lights": v} for k, v in sorted(lights.items())]}, f, indent=1)
     for k, v in sorted(lights.items()):
         print(k, len(v), [(round(l["u"], 2), round(l["v"], 2)) for l in v])

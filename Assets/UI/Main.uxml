@@ -15,6 +15,10 @@
                     </ui:VisualElement>
                 </ui:VisualElement>
             </ui:VisualElement>
+            <ui:VisualElement name="charm-badge" class="charm-badge" picking-mode="Ignore">
+                <ui:VisualElement name="charm-icon" class="charm-icon" picking-mode="Ignore" />
+                <ui:Label name="charm-label" text="+1" class="charm-label" picking-mode="Ignore" />
+            </ui:VisualElement>
 
             <ui:VisualElement name="center-panel" class="center-panel" picking-mode="Ignore">
                 <ui:VisualElement name="depth-pips" class="pips" picking-mode="Ignore" />
@@ -49,6 +53,11 @@
                 <ui:Label name="spin-label" text="SPIN" class="spin-label" picking-mode="Ignore" />
             </ui:Button>
             <ui:Label name="spin-hint" text="SPACE  ·  CLICK" class="spin-hint" picking-mode="Ignore" />
+            <ui:Button name="bomb-button" class="bomb-button">
+                <ui:VisualElement class="bomb-icon" picking-mode="Ignore" />
+                <ui:Label name="bomb-count" text="×0" class="bomb-count" picking-mode="Ignore" />
+            </ui:Button>
+            <ui:Label name="bomb-hint" text="B" class="bomb-hint" picking-mode="Ignore" />
             <ui:Button name="auto-button" text="AUTO" class="pill-button auto-button" />
             <ui:Button name="settings-button" text="OPTIONS" class="pill-button settings-button" />
         </ui:VisualElement>
@@ -64,7 +73,10 @@
         <ui:VisualElement name="title-screen" class="screen title-screen">
             <ui:VisualElement name="title-logo" class="title-logo" picking-mode="Ignore" />
             <ui:Label text="Spin the Wheel of Fate. Hit the exact number. Break the curse." class="tagline" picking-mode="Ignore" />
-            <ui:Button name="title-play" text="BEGIN" class="big-button" />
+            <ui:VisualElement class="button-row">
+                <ui:Button name="title-play" text="BEGIN" class="big-button" />
+                <ui:Button name="title-shop" text="SHOP" class="big-button shop-button" />
+            </ui:VisualElement>
             <ui:Label name="title-stats" text="" class="stats-line" picking-mode="Ignore" />
             <ui:Label text="Team Lucky Number  ·  Unity Game Jam 2026" class="credits" picking-mode="Ignore" />
         </ui:VisualElement>
@@ -76,7 +88,24 @@
                 <ui:VisualElement name="end-stats" class="stats" picking-mode="Ignore" />
                 <ui:VisualElement class="button-row">
                     <ui:Button name="end-retry" text="SPIN AGAIN" class="big-button" />
+                    <ui:Button name="end-shop" text="SHOP" class="big-button shop-button" />
                     <ui:Button name="end-menu" text="TITLE" class="pill-button" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <ui:VisualElement name="shop-screen" class="screen shop-screen">
+            <ui:VisualElement name="shop-panel" class="panel shop-panel">
+                <ui:Label text="THE MERCHANT" class="panel-title title-font" picking-mode="Ignore" />
+                <ui:Label text="Banked gold buys upgrades that last forever, and firebombs for the road." class="panel-sub" picking-mode="Ignore" />
+                <ui:VisualElement name="shop-gold" class="gold-box shop-gold" picking-mode="Ignore">
+                    <ui:VisualElement class="gold-icon" picking-mode="Ignore" />
+                    <ui:Label name="shop-gold-label" text="0" class="gold-label" picking-mode="Ignore" />
+                </ui:VisualElement>
+                <ui:VisualElement name="shop-items" class="shop-items" />
+                <ui:VisualElement class="button-row">
+                    <ui:Button name="shop-begin" text="BEGIN RUN" class="big-button" />
+                    <ui:Button name="shop-back" text="BACK" class="pill-button" />
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>

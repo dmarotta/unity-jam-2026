@@ -11,16 +11,18 @@ namespace Lucky
     /// <summary>UI Toolkit HUD and menus. All animation runs on unscaled time so hitstop never freezes the UI.</summary>
     public class HUD : MonoBehaviour
     {
-        public event Action SpinPressed, PlayPressed, RetryPressed, MenuPressed;
+        public event Action SpinPressed, PlayPressed, RetryPressed, MenuPressed, BombPressed;
 
-        VisualElement root, hud, flash, fade, banner, titleScreen, endScreen, settingsScreen;
+        VisualElement root, hud, flash, fade, banner, titleScreen, endScreen, settingsScreen, shopScreen;
         VisualElement heroFill, heroGhost, bossFill, bossGhost, heroBar, bossBar, heroPortrait, bossPortrait;
-        VisualElement pips, goldBox, needPill, endStats;
+        VisualElement pips, goldBox, needPill, endStats, shopItems, charmBadge, charmIcon;
         Label heroHp, bossHp, bossName, bossTitle, depthLabel, goldLabel, needCaption, needValue, spinLabel;
-        Label bannerTitle, bannerSub, titleStats, endTitle, endSub, musicValue, sfxValue;
-        Button spinButton, autoButton, shakeToggle, flashToggle, titlePlay;
+        Label bannerTitle, bannerSub, titleStats, endTitle, endSub, musicValue, sfxValue, shopGold, bombCount, bombHint, charmLabel;
+        Button spinButton, autoButton, shakeToggle, flashToggle, titlePlay, bombButton;
         VisualElement titleLogo;
         FontAsset titleFont;
+        GameConfig config;
+        bool bombUsable;
 
         int shownGold, targetGold;
         float goldTick, lastInputTime;
@@ -32,6 +34,7 @@ namespace Lucky
         public void Init(GameConfig cfg)
         {
             root = GetComponent<UIDocument>().rootVisualElement;
+            config = cfg;
             titleFont = cfg.uiTitleFont;
             if (cfg.uiNumberFont != null) root.style.unityFontDefinition = FontDefinition.FromSDFFont(cfg.uiNumberFont);
 
@@ -74,6 +77,15 @@ namespace Lucky
             autoButton = Q<Button>("auto-button");
             shakeToggle = Q<Button>("shake-toggle");
             flashToggle = Q<Button>("flash-toggle");
+            shopScreen = Q<VisualElement>("shop-screen");
+            shopItems = Q<VisualElement>("shop-items");
+            shopGold = Q<Label>("shop-gold-label");
+            bombButton = Q<Button>("bomb-button");
+            bombCount = Q<Label>("bomb-count");
+            bombHint = Q<Label>("bomb-hint");
+            charmBadge = Q<VisualElement>("charm-badge");
+            charmIcon = Q<VisualElement>("charm-icon");
+            charmLabel = Q<Label>("charm-label");
 
             if (titleFont != null)
                 root.Query(className: "title-font").ForEach(e => e.style.unityFontDefinition = FontDefinition.FromSDFFont(titleFont));
@@ -92,6 +104,12 @@ namespace Lucky
             titlePlay.clicked += () => { Click(); PlayPressed?.Invoke(); };
             Q<Button>("end-retry").clicked += () => { Click(); RetryPressed?.Invoke(); };
             Q<Button>("end-menu").clicked += () => { Click(); MenuPressed?.Invoke(); };
+            Q<Button>("title-shop").clicked += () => { Click(); ShowShop(true); };
+            Q<Button>("end-shop").clicked += () => { Click(); ShowShop(true); };
+            Q<Button>("shop-back").clicked += () => { Click(); ShowShop(false); };
+            Q<Button>("shop-begin").clicked += () => { Click(); PlayPressed?.Invoke(); };
+            bombButton.clicked += () => { if (bombUsable) BombPressed?.Invoke(); };
+            BuildShop();
             Q<Button>("music-down").clicked += () => StepVolume(true, -0.1f);
             Q<Button>("music-up").clicked += () => StepVolume(true, 0.1f);
             Q<Button>("sfx-down").clicked += () => StepVolume(false, -0.1f);
@@ -272,6 +290,25 @@ namespace Lucky
 
         void RefreshAuto() => autoButton.EnableInClassList("on", SaveData.AutoSpin);
 
+        // ---------- Loadout: firebomb button and charm badge ----------
+
+        public void SetBomb(int count, bool usable)
+        {
+            bombUsable = usable;
+            bombCount.text = "×" + count;
+            bombButton.EnableInClassList("empty", count == 0);
+            bombHint.EnableInClassList("empty", count == 0);
+            bombButton.EnableInClassList("locked", !usable);
+        }
+
+        public void SetCharm(Sprite icon, string label)
+        {
+            charmBadge.EnableInClassList("on", icon != null);
+            if (icon == null) return;
+            charmIcon.style.backgroundImage = new StyleBackground(icon);
+            charmLabel.text = label;
+        }
+
         // ---------- Banner, flash, fade ----------
 
         public enum BannerStyle { Jackpot, Bust, Intro, Info, Danger }
@@ -370,10 +407,110 @@ namespace Lucky
         {
             titleScreen.style.display = on ? DisplayStyle.Flex : DisplayStyle.None;
             if (!on) return;
+            RefreshTitleStats();
+            StartCoroutine(PopScale(titleLogo, 1.12f, 0.9f));
+        }
+
+        void RefreshTitleStats()
+        {
             titleStats.text = SaveData.Runs > 0
                 ? $"Gold banked: {Num(SaveData.Gold)}   ·   Deepest: Depth {Mathf.Max(1, SaveData.BestDepth)}   ·   Curses broken: {SaveData.Wins}"
                 : "Click BEGIN to descend";
-            StartCoroutine(PopScale(titleLogo, 1.12f, 0.9f));
+        }
+
+        // ---------- Shop ----------
+
+        readonly List<(ShopItem item, VisualElement card)> shopCards = new();
+
+        public void ShowShop(bool on)
+        {
+            bool wasOpen = shopScreen.style.display == DisplayStyle.Flex;
+            shopScreen.style.display = on ? DisplayStyle.Flex : DisplayStyle.None;
+            if (!on)
+            {
+                if (wasOpen) AudioManager.I?.Play("whoosh_ui", 0.6f, 0.85f);
+                RefreshTitleStats();
+                return;
+            }
+            AudioManager.I?.Play("whoosh_ui", 0.7f);
+            RefreshShop();
+            var panel = Q<VisualElement>("shop-panel");
+            StartCoroutine(Tween.Run(0.35f, t =>
+            {
+                float s = Mathf.LerpUnclamped(0.7f, 1f, Ease.OutBack(t));
+                panel.style.scale = new Scale(new Vector3(s, s, 1f));
+                panel.style.opacity = t;
+            }, Ease.Linear, true));
+        }
+
+        void BuildShop()
+        {
+            foreach (var item in Balance.Shop)
+            {
+                var card = new VisualElement();
+                card.AddToClassList("shop-card");
+                var icon = new VisualElement { pickingMode = PickingMode.Ignore };
+                icon.AddToClassList("card-icon");
+                var sprite = config.Sprite(item.Icon);
+                if (sprite != null) icon.style.backgroundImage = new StyleBackground(sprite);
+                card.Add(icon);
+                card.Add(CardLabel("card-name", item.Name));
+                card.Add(CardLabel("card-level", ""));
+                card.Add(CardLabel("card-desc", item.Desc.Replace("{value}", item.Value.ToString()).Replace("{base}", Balance.HeroHp.ToString())));
+                var buy = new Button(() => Buy(item, card));
+                buy.AddToClassList("card-buy");
+                var coin = new VisualElement { pickingMode = PickingMode.Ignore };
+                coin.AddToClassList("card-coin");
+                buy.Add(coin);
+                buy.Add(CardLabel("card-price", ""));
+                card.Add(buy);
+                shopItems.Add(card);
+                shopCards.Add((item, card));
+            }
+        }
+
+        static Label CardLabel(string className, string text)
+        {
+            var label = new Label(text) { pickingMode = PickingMode.Ignore };
+            label.AddToClassList(className);
+            return label;
+        }
+
+        void RefreshShop()
+        {
+            shopGold.text = Num(SaveData.Gold);
+            foreach (var (item, card) in shopCards)
+            {
+                int level = item.Level;
+                card.EnableInClassList("done", item.Maxed);
+                card.EnableInClassList("locked", !item.Maxed && item.Locked);
+                card.EnableInClassList("poor", !item.Maxed && !item.Locked && item.Price > SaveData.Gold);
+                card.Q<Label>(className: "card-level").text = item.Consumable ? $"Carrying {level} / {item.Max}"
+                    : item.Max > 1 ? $"Level {level} / {item.Max}"
+                    : level > 0 ? "Owned" : "";
+                var requires = Balance.Shop.Find(i => i.Id == item.Requires);
+                card.Q<Label>(className: "card-price").text = item.Maxed ? (item.Consumable ? "FULL" : item.Max > 1 ? "MAXED" : "OWNED")
+                    : item.Locked ? $"Needs {requires?.Name}"
+                    : Num(item.Price);
+            }
+        }
+
+        void Buy(ShopItem item, VisualElement card)
+        {
+            int before = SaveData.Gold;
+            if (!item.TryBuy())
+            {
+                AudioManager.I?.Play("shop_deny", 0.6f);
+                StartCoroutine(Shake(card, 12f, 0.3f));
+                return;
+            }
+            AudioManager.I?.Play("shop_buy");
+            if (item.Kind == ItemKind.MaxHp) AudioManager.I?.Play("hp_upgrade", 0.8f);
+            RefreshShop();
+            StartCoroutine(PopScale(card, 1.1f, 0.45f));
+            StartCoroutine(PopScale(card.Q(className: "card-icon"), 1.4f, 0.6f));
+            int after = SaveData.Gold;
+            StartCoroutine(Tween.Run(0.45f, t => shopGold.text = Num(Mathf.RoundToInt(Mathf.Lerp(before, after, t))), Ease.OutCubic, true));
         }
 
         public void ShowEnd(bool victory, string title, string sub, IEnumerable<(string name, string value, bool gold)> stats)

@@ -1,8 +1,11 @@
 # Procedural textures: glows, rings, slash arc, dust, shadow, circle, edge fade, wheel detail.
+import os
 import numpy as np
 from PIL import Image
 from scipy.ndimage import gaussian_filter
-OUT = "F:/unity-jam-2026/Assets/Art/"
+# Project root, three levels above this file (.playbot/tools/<script>.py).
+ROOT = os.path.abspath(__file__).replace("\\", "/").rsplit("/", 3)[0] + "/"
+OUT = ROOT + "Assets/Art/"
 def save(arr, path):
     Image.fromarray(np.clip(arr*255,0,255).astype(np.uint8), "RGBA").save(OUT+path)
 def grid(n):

@@ -477,3 +477,192 @@
 .step-button:hover { scale: 1.08 1.08; }
 .step-button:active { scale: 0.9 0.9; }
 .toggle-button { min-width: 130px; }
+
+/* ---------- Charm badge under the hero panel ---------- */
+
+.charm-badge {
+    position: absolute;
+    left: 168px;
+    top: 152px;
+    flex-direction: row;
+    align-items: center;
+    padding: 2px 16px 2px 6px;
+    border-radius: 30px;
+    background-color: rgba(10, 18, 8, 0.7);
+    border-width: 2px;
+    border-color: rgba(150, 255, 110, 0.65);
+    display: none;
+}
+
+.charm-badge.on { display: flex; }
+
+.charm-icon {
+    width: 52px;
+    height: 52px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.charm-label {
+    font-size: 34px;
+    color: rgb(170, 255, 130);
+    margin-left: 6px;
+    -unity-text-outline-width: 3px;
+}
+
+/* ---------- Firebomb button (left of AUTO / SPIN) ---------- */
+
+.bomb-button {
+    position: absolute;
+    right: 335px;
+    bottom: 168px;
+    width: 128px;
+    height: 128px;
+    margin: 0;
+    padding: 0;
+    border-radius: 64px;
+    border-width: 4px;
+    border-color: rgb(255, 160, 70);
+    background-color: rgb(40, 16, 10);
+    align-items: center;
+    justify-content: center;
+    transition-property: scale, opacity, border-color;
+    transition-duration: 0.09s;
+    transition-timing-function: ease-out-back;
+}
+
+.bomb-button:hover { scale: 1.08 1.08; border-color: rgb(255, 214, 120); }
+.bomb-button:active { scale: 0.9 0.9; }
+.bomb-button.locked { opacity: 0.45; scale: 0.92 0.92; }
+.bomb-button.empty { display: none; }
+
+.bomb-icon {
+    width: 96px;
+    height: 96px;
+    background-image: url("project://database/Assets/Art/UI/icon_firebomb.png");
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.bomb-count {
+    position: absolute;
+    right: -10px;
+    bottom: -8px;
+    font-size: 34px;
+    color: rgb(255, 214, 120);
+    padding: 0 10px;
+    border-radius: 22px;
+    background-color: rgb(120, 30, 20);
+    -unity-text-outline-width: 3px;
+}
+
+.bomb-hint {
+    position: absolute;
+    right: 335px;
+    bottom: 128px;
+    width: 128px;
+    -unity-text-align: middle-center;
+    font-size: 24px;
+    color: rgb(200, 185, 160);
+}
+
+.bomb-hint.empty { display: none; }
+
+/* ---------- Shop ---------- */
+
+.shop-button { background-color: rgb(120, 82, 18); }
+.shop-button:hover { background-color: rgb(150, 104, 26); }
+
+.shop-panel { width: 1580px; padding: 44px 60px 36px 60px; }
+
+.shop-gold { margin: 6px 0 18px 0; }
+
+.shop-items {
+    flex-direction: row;
+    justify-content: center;
+    margin-bottom: 16px;
+}
+
+.shop-card {
+    width: 330px;
+    height: 520px;
+    margin: 0 12px;
+    padding: 20px 18px;
+    align-items: center;
+    border-radius: 26px;
+    border-width: 3px;
+    border-color: rgba(255, 205, 110, 0.55);
+    background-color: rgba(18, 10, 14, 0.82);
+    transition-property: border-color, opacity;
+    transition-duration: 0.2s;
+}
+
+.shop-card:hover { border-color: rgb(255, 214, 120); }
+
+.card-icon {
+    width: 136px;
+    height: 136px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.card-name {
+    font-size: 38px;
+    color: rgb(255, 214, 92);
+    margin-top: 6px;
+    -unity-text-align: middle-center;
+    -unity-text-outline-width: 3px;
+}
+
+.card-level {
+    font-size: 28px;
+    color: rgb(170, 255, 130);
+    margin-bottom: 6px;
+}
+
+.card-desc {
+    flex-grow: 1;
+    font-size: 28px;
+    color: rgb(240, 225, 195);
+    white-space: normal;
+    -unity-text-align: upper-center;
+}
+
+.card-buy {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    height: 72px;
+    min-width: 220px;
+    margin: 0;
+    padding: 0 22px;
+    border-radius: 36px;
+    border-width: 3px;
+    border-color: rgb(255, 214, 120);
+    background-color: rgb(168, 26, 46);
+    transition-property: scale, background-color;
+    transition-duration: 0.09s;
+    transition-timing-function: ease-out-back;
+}
+
+.card-buy:hover { scale: 1.06 1.06; background-color: rgb(196, 36, 58); }
+.card-buy:active { scale: 0.93 0.93; }
+
+.card-coin {
+    width: 42px;
+    height: 42px;
+    margin-right: 8px;
+    background-image: url("project://database/Assets/Art/VFX/vfx_coin.png");
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.card-price {
+    font-size: 38px;
+    color: rgb(255, 240, 200);
+    -unity-text-outline-width: 3px;
+}
+
+.shop-card.poor .card-price { color: rgb(255, 130, 130); }
+.shop-card.poor .card-buy { background-color: rgb(70, 30, 36); }
+.shop-card.done .card-buy, .shop-card.locked .card-buy { background-color: rgb(40, 34, 30); border-color: rgb(120, 100, 80); }
+.shop-card.done .card-coin, .shop-card.locked .card-coin { display: none; }
+.shop-card.done .card-price, .shop-card.locked .card-price { font-size: 30px; color: rgb(200, 185, 160); }
+.shop-card.locked { opacity: 0.6; }
+.shop-card.locked .card-icon { -unity-background-image-tint-color: rgb(90, 90, 90); }

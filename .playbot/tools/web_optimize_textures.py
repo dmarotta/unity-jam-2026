@@ -5,8 +5,9 @@ Normal maps are regenerated afterwards by make_normals.py (half resolution via -
 """
 import glob, os, shutil
 from PIL import Image
+# Project root, three levels above this file (.playbot/tools/<script>.py).
+ROOT = os.path.abspath(__file__).replace("\\", "/").rsplit("/", 3)[0] + "/"
 
-ROOT = "F:/unity-jam-2026/"
 BACKUP = ROOT + ".playbot/art-src/originals/"
 
 # (glob, max dimension or None to keep size)

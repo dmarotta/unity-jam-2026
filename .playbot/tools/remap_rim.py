@@ -1,7 +1,10 @@
+import os
 from PIL import Image
 import numpy as np
 from scipy.ndimage import map_coordinates
-src = np.asarray(Image.open("F:/unity-jam-2026/.playbot/art-src/wheel_rim_original.png").convert("RGBA")).astype(np.float32)
+# Project root, three levels above this file (.playbot/tools/<script>.py).
+ROOT = os.path.abspath(__file__).replace("\\", "/").rsplit("/", 3)[0] + "/"
+src = np.asarray(Image.open(ROOT + ".playbot/art-src/wheel_rim_original.png").convert("RGBA")).astype(np.float32)
 H,W,_ = src.shape; cx, cy, R = 471.0, 470.0, 470.0
 N = 1024; out_c = N/2; OR = N/2 - 2
 yy, xx = np.mgrid[0:N, 0:N].astype(np.float32)
@@ -17,7 +20,7 @@ for c in range(4):
 out[...,3] *= (r >= 0.80)  # hole
 # soft AA at hole edge
 edge = np.clip((r-0.80)/0.004, 0, 1); out[...,3] *= edge
-Image.fromarray(out.clip(0,255).astype(np.uint8)).save("F:/unity-jam-2026/Assets/Art/Wheel/wheel_rim.png")
+Image.fromarray(out.clip(0,255).astype(np.uint8)).save(ROOT + "Assets/Art/Wheel/wheel_rim.png")
 # detect bulbs on src ring ~0.955
 lum = 0.3*src[...,0]+0.59*src[...,1]+0.11*src[...,2]
 best=None

@@ -1,6 +1,9 @@
 """Monte-Carlo the full run straight from the game's balance sheets (Assets/Resources/Data/*.csv)."""
+import os
 import csv, random, statistics
-D = "F:/unity-jam-2026/Assets/Resources/Data/"
+# Project root, three levels above this file (.playbot/tools/<script>.py).
+ROOT = os.path.abspath(__file__).replace("\\", "/").rsplit("/", 3)[0] + "/"
+D = ROOT + "Assets/Resources/Data/"
 bosses = list(csv.DictReader(open(D + "bosses.csv")))
 wheel = [int(r["value"]) for r in sorted(csv.DictReader(open(D + "wheel.csv")), key=lambda r: int(r["slot"]))]
 rules = {r["key"]: float(r["value"]) for r in csv.DictReader(open(D + "rules.csv"))}

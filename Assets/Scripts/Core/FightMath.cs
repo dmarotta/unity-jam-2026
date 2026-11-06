@@ -33,6 +33,12 @@ namespace Lucky
             return r;
         }
 
+        /// <summary>
+        /// Lucky charms: a landed value within <paramref name="below"/> under or <paramref name="above"/> over the
+        /// boss's HP snaps onto it (Loaded Die: below 1; Lucky Horseshoe: both 1).
+        /// </summary>
+        public static int Charm(int value, int hp, int below, int above) => value >= hp - below && value <= hp + above ? hp : value;
+
         /// <summary>Weighted slice pick. The exact-kill slice gains <paramref name="pityPerMiss"/> weight per earlier miss.</summary>
         public static int PickSlice(System.Random rng, int[] values, int hp, int misses, float pityPerMiss)
         {

@@ -7,10 +7,12 @@ import glob, os, sys
 import cv2
 import numpy as np
 import imageio_ffmpeg
+# Project root, three levels above this file (.playbot/tools/<script>.py).
+ROOT = os.path.abspath(__file__).replace("\\", "/").rsplit("/", 3)[0] + "/"
 
-SRC = "F:/unity-jam-2026/.playbot/anim-src/"
-OUT = "F:/unity-jam-2026/Assets/StreamingAssets/Video/"
-STILLS = "F:/unity-jam-2026/Assets/Art/Backgrounds/"
+SRC = ROOT + ".playbot/anim-src/"
+OUT = ROOT + "Assets/StreamingAssets/Video/"
+STILLS = ROOT + "Assets/Art/Backgrounds/"
 W, H = 1600, 896
 
 

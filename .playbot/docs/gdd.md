@@ -27,7 +27,7 @@ premium casino machine: anticipation, near-misses, jackpot payoffs.
 - Boss turn: boss attacks the hero (damage from the balance sheet).
 - Hero at 0 HP → **run over, restart from boss 1** (confirmed). Hero fully heals between bosses
   (provisional).
-- Beat 5 bosses → win.
+- Beat 8 bosses → win.
 
 ## Balance (provisional, data-driven)
 
@@ -38,18 +38,27 @@ premium casino machine: anticipation, near-misses, jackpot payoffs.
 - **Hot slice (pity):** while the exact kill number is on the wheel, each miss adds
   +0.4 weight to that slice. Shown visibly: the kill slice glows hotter per miss.
   Set to 0 in the sheet to disable.
-- Bosses: HP 10 / 14 / 18 / 22 / 25; damage 5–6, 6–7, 6–7, 6–7, 7–8; hero HP 100.
-- Simulated (20k runs): **44% first-run win rate**, ~38 spins per run; death risk per boss
-  0.2% / 2.7% / 10.6% / 19.7% / 36.4% — leaves headroom for the future unlock tree.
-- Source of truth: `Assets/Resources/Data/bosses.csv`, `wheel.csv`, `rules.csv` (spreadsheet-editable).
-  Simulator reads them directly: `python .playbot/tools/balance_sim.py`.
+- Bosses: HP 10 / 14 / 17 / 20 / 23 / 26 / 28 / 32; damage per turn 6–7 rising to 12–13; hero base HP 20.
+- Designed to be unwinnable without upgrades: a fresh save loses to the goblin ~65% of the time and
+  almost always by the golem. Simulated progression (greedy shop policy, 2k players): first win at run
+  ~10 (p10 7, p90 13), ~30 minutes; fully upgraded without bombs wins ~46%.
+- Source of truth: `Assets/Resources/Data/bosses.csv`, `wheel.csv`, `rules.csv`, `shop.csv`
+  (spreadsheet-editable). `python .playbot/tools/progression_sim.py` reads them directly.
 
-## Progression
+## Progression (meta shop)
 
-- **Chips** are earned per hit (damage dealt) and as a jackpot bonus per boss; they are
-  **banked across runs** (PlayerPrefs) and shown on title / game over.
-- Future (not this milestone): meta **unlock tree** spending banked chips between runs, weapons,
-  items, bonuses, multiple worlds.
+- **Gold** is earned per point of damage dealt and as a bonus per boss kill; it is **banked across runs**
+  (PlayerPrefs). The **shop** (title and game-over screens) spends it on permanent upgrades and consumables.
+- Items (source of truth `Assets/Resources/Data/shop.csv`):
+  - **Vitality**: +15 max HP per level, 8 levels. Ace starts with only 20 HP.
+  - **Loaded Die** (passive): landing 1 below the lucky number tips it over, +1 → exact kill.
+  - **Lucky Horseshoe** (passive, requires the die): landing 1 off either way is pulled in, ±1.
+  - **Firebomb Flask** (consumable, carry 3): free action before a spin, exactly 5 damage under the same
+    exact-zero/bust rules; one per turn.
+- Charms are shown on the wheel: slices they would convert get a gold tint and the charm's icon; the reveal
+  shows the landed number, then the charm ticks it onto the lucky number.
+- Math: with the wrap rule HP is a walk on Z_max, so kill states {0} give ~max spins; the die makes it
+  {0, 1} (~half), the horseshoe {−1, 0, 1} (~a third).
 
 ## World and characters (confirmed: fantasy dungeons with gambling motifs — NOT a casino)
 
@@ -67,6 +76,11 @@ Fortune", id `Kjieicz_tCXwa3s5BpFid`; target look `.playbot/docs/concepts/concep
   3. **Madame Fortuna** — fate witch with tarot and crystal ball; The Tarot Sanctum.
   4. **Snake-Eyes, the Dice Dragon** — ivory dice-scaled dragon; The Dragon's Hoard.
   5. **Mortis, the Lich of Ill Fortune** — lich king with a wheel-of-fate staff; The Throne of Fate.
+- Depth order: Goblin, Golem, **Gildmaw the Hoard Mimic** (treasure-chest mimic with coin teeth; The Cursed
+  Treasury; spits coins), Witch, **Sir Blackjack the Cursed Champion** (ghost-fire armor, Ace of Spades shield;
+  The Hall of Wagers), Dragon, **Arachna, Weaver of Odds** (spider with a wheel-of-fate abdomen; The Silk
+  Catacombs; spits venom), Lich.
+- Every boss pose and flipbook faces **left** (toward the hero); sprites are never mirrored at runtime.
 
 ## Animation and rendering (user direction)
 

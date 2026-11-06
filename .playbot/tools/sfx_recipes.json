@@ -1549,6 +1549,299 @@
           "fade_out_ms": 220
         }
       ]
+    },
+    "shop_buy": {
+      "channels": 2,
+      "length_ms": 1300,
+      "fade_out_ms": 420,
+      "master": {
+        "hp_hz": 60,
+        "lp_hz": 14000
+      },
+      "layers": [
+        {
+          "file": "shop_buy/tr_register.mp3",
+          "onset_floor_db": -15,
+          "hp_hz": 300,
+          "lp_hz": 12000,
+          "gain_db": 0
+        },
+        {
+          "file": "shop_buy/bd_coins.mp3",
+          "onset_floor_db": -15,
+          "offset_ms": 40,
+          "hp_hz": 500,
+          "lp_hz": 12500,
+          "gain_db": -4
+        },
+        {
+          "file": "shop_buy/tl_sparkle.mp3",
+          "align": "start",
+          "offset_ms": 90,
+          "hp_hz": 3000,
+          "lp_hz": 14000,
+          "gain_db": -9,
+          "fade_in_ms": 30
+        }
+      ]
+    },
+    "shop_deny": {
+      "length_ms": 520,
+      "fade_out_ms": 160,
+      "master": {
+        "hp_hz": 60,
+        "lp_hz": 9000
+      },
+      "layers": [
+        {
+          "file": "shop_deny/tr_thunk.mp3",
+          "onset_floor_db": -15,
+          "hp_hz": 80,
+          "lp_hz": 4000,
+          "gain_db": 0,
+          "length_ms": 400
+        },
+        {
+          "file": "shop_deny/bd_fizzle.mp3",
+          "onset_floor_db": -18,
+          "offset_ms": 20,
+          "hp_hz": 150,
+          "lp_hz": 6000,
+          "gain_db": -5
+        }
+      ]
+    },
+    "hp_upgrade": {
+      "channels": 2,
+      "length_ms": 1800,
+      "fade_out_ms": 600,
+      "master": {
+        "hp_hz": 35,
+        "lp_hz": 14000
+      },
+      "layers": [
+        {
+          "file": "hp_upgrade/sb_heartbeat.mp3",
+          "onset_floor_db": -15,
+          "hp_hz": 35,
+          "lp_hz": 400,
+          "lp_order": 4,
+          "gain_db": -2,
+          "length_ms": 700,
+          "fade_out_ms": 200
+        },
+        {
+          "file": "hp_upgrade/bd_swell.mp3",
+          "align": "start",
+          "offset_ms": 0,
+          "hp_hz": 150,
+          "lp_hz": 11000,
+          "gain_db": -3,
+          "fade_in_ms": 60
+        },
+        {
+          "file": "hp_upgrade/tl_shimmer.mp3",
+          "align": "start",
+          "offset_ms": 180,
+          "hp_hz": 2500,
+          "lp_hz": 14000,
+          "gain_db": -8,
+          "fade_in_ms": 40
+        }
+      ]
+    },
+    "potion_throw": {
+      "length_ms": 650,
+      "fade_out_ms": 200,
+      "master": {
+        "hp_hz": 80,
+        "lp_hz": 13000
+      },
+      "layers": [
+        {
+          "file": "potion_throw/tr_cork.mp3",
+          "onset_floor_db": -15,
+          "hp_hz": 300,
+          "lp_hz": 10000,
+          "gain_db": -2,
+          "length_ms": 200,
+          "decay": {
+            "hold_ms": 20,
+            "tau_ms": 50
+          }
+        },
+        {
+          "file": "potion_throw/bd_whoosh.mp3",
+          "onset_floor_db": -20,
+          "offset_ms": 60,
+          "hp_hz": 200,
+          "lp_hz": 9000,
+          "gain_db": 0
+        },
+        {
+          "file": "potion_throw/tl_slosh.mp3",
+          "align": "start",
+          "offset_ms": 30,
+          "hp_hz": 250,
+          "lp_hz": 8000,
+          "gain_db": -9,
+          "length_ms": 450
+        }
+      ]
+    },
+    "potion_explode": {
+      "channels": 2,
+      "length_ms": 1600,
+      "fade_out_ms": 600,
+      "limit_db": 4,
+      "master": {
+        "hp_hz": 30,
+        "lp_hz": 13500
+      },
+      "layers": [
+        {
+          "file": "potion_explode/sb_boom.mp3",
+          "onset_floor_db": -12,
+          "hp_hz": 30,
+          "lp_hz": 300,
+          "lp_order": 4,
+          "saturate_db": 4,
+          "gain_db": -1,
+          "length_ms": 900,
+          "fade_out_ms": 300
+        },
+        {
+          "file": "potion_explode/tr_glass.mp3",
+          "onset_floor_db": -12,
+          "hp_hz": 1500,
+          "lp_hz": 13000,
+          "gain_db": -3,
+          "length_ms": 700,
+          "fade_out_ms": 200
+        },
+        {
+          "file": "potion_explode/bd_fire.mp3",
+          "onset_floor_db": -18,
+          "offset_ms": 15,
+          "hp_hz": 120,
+          "lp_hz": 9000,
+          "gain_db": -1
+        }
+      ]
+    },
+    "charm_nudge": {
+      "channels": 2,
+      "length_ms": 1100,
+      "fade_out_ms": 380,
+      "master": {
+        "hp_hz": 80,
+        "lp_hz": 14500
+      },
+      "layers": [
+        {
+          "file": "charm_nudge/tr_click.mp3",
+          "onset_floor_db": -15,
+          "hp_hz": 200,
+          "lp_hz": 9000,
+          "gain_db": -2,
+          "length_ms": 160,
+          "decay": {
+            "hold_ms": 15,
+            "tau_ms": 40
+          }
+        },
+        {
+          "file": "charm_nudge/bd_chime.mp3",
+          "onset_floor_db": -18,
+          "offset_ms": 35,
+          "hp_hz": 400,
+          "lp_hz": 13000,
+          "gain_db": 0
+        },
+        {
+          "file": "charm_nudge/tl_sparkle.mp3",
+          "align": "start",
+          "offset_ms": 60,
+          "hp_hz": 3500,
+          "lp_hz": 14500,
+          "gain_db": -8,
+          "fade_in_ms": 25
+        }
+      ]
+    },
+    "mimic_chomp": {
+      "channels": 2,
+      "length_ms": 1100,
+      "fade_out_ms": 380,
+      "master": {
+        "hp_hz": 45,
+        "lp_hz": 12000
+      },
+      "layers": [
+        {
+          "file": "mimic_chomp/tr_chomp.mp3",
+          "onset_index": -1,
+          "onset_floor_db": -8,
+          "hp_hz": 60,
+          "lp_hz": 8000,
+          "gain_db": 0,
+          "length_ms": 500,
+          "fade_out_ms": 150
+        },
+        {
+          "file": "mimic_chomp/bd_growl.mp3",
+          "onset_floor_db": -18,
+          "offset_ms": -60,
+          "hp_hz": 80,
+          "lp_hz": 6000,
+          "gain_db": -4
+        },
+        {
+          "file": "mimic_chomp/tl_coins.mp3",
+          "onset_floor_db": -18,
+          "offset_ms": 60,
+          "hp_hz": 1200,
+          "lp_hz": 12000,
+          "gain_db": -9
+        }
+      ]
+    },
+    "venom_spit": {
+      "channels": 2,
+      "length_ms": 1200,
+      "fade_out_ms": 450,
+      "master": {
+        "hp_hz": 60,
+        "lp_hz": 12500
+      },
+      "layers": [
+        {
+          "file": "venom_spit/tr_spit.mp3",
+          "onset_floor_db": -15,
+          "hp_hz": 120,
+          "lp_hz": 9000,
+          "gain_db": 0,
+          "length_ms": 450,
+          "fade_out_ms": 150
+        },
+        {
+          "file": "venom_spit/bd_hiss.mp3",
+          "onset_floor_db": -18,
+          "offset_ms": -40,
+          "hp_hz": 300,
+          "lp_hz": 11000,
+          "gain_db": -3
+        },
+        {
+          "file": "venom_spit/tl_sizzle.mp3",
+          "align": "start",
+          "offset_ms": 180,
+          "hp_hz": 1500,
+          "lp_hz": 12000,
+          "gain_db": -10,
+          "fade_in_ms": 80
+        }
+      ]
     }
   }
 }

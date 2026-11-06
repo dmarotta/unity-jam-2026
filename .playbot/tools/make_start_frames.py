@@ -1,7 +1,10 @@
 # Composite character sprites onto flat chroma backdrops as video start frames.
+import os, sys
 from PIL import Image
-CH = "F:/unity-jam-2026/Assets/Art/Characters/"
-OUT = "F:/unity-jam-2026/.playbot/anim-src/"
+# Project root, three levels above this file (.playbot/tools/<script>.py).
+ROOT = os.path.abspath(__file__).replace("\\", "/").rsplit("/", 3)[0] + "/"
+CH = ROOT + "Assets/Art/Characters/"
+OUT = ROOT + ".playbot/anim-src/"
 GREEN, MAGENTA = (0, 255, 0), (255, 0, 255)
 SIZES = {"3:4": (960, 1280), "4:3": (1280, 960), "1:1": (1152, 1152)}
 # name: (source sprite, aspect, chroma, height fraction, x center fraction)
@@ -19,8 +22,14 @@ JOBS = {
     "dragon_attack": ("boss4_dragon_idle",   "4:3", GREEN,   0.68, 0.64),
     "lich_idle":     ("boss5_lich_idle",     "3:4", MAGENTA, 0.76, 0.50),
     "lich_attack":   ("boss5_lich_idle",     "4:3", MAGENTA, 0.72, 0.64),
+    "mimic_idle":    ("boss_mimic_idle",     "1:1", GREEN,   0.70, 0.50),
+    "knight_idle":   ("boss_knight_idle",    "3:4", MAGENTA, 0.76, 0.50),
+    "spider_idle":   ("boss_spider_idle",    "4:3", MAGENTA, 0.70, 0.50),
 }
+# Optional job names on the command line limit the run to those frames.
 for name, (src, aspect, key, hfrac, xfrac) in JOBS.items():
+    if sys.argv[1:] and name not in sys.argv[1:]:
+        continue
     W, H = SIZES[aspect]
     sprite = Image.open(CH + src + ".png").convert("RGBA")
     sprite = sprite.crop(sprite.getbbox())
