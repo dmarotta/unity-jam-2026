@@ -1,0 +1,15 @@
+# Written by the Animation Studio. Everything else in this folder can be committed and shared.
+# Unsaved editor drafts and staged uploads stay local.
+/drafts/
+/uploads/
+# Processing scratch
+.playbot/
+/generations/*/editor-*/
+/generations/*/reviews/
+/generations/*/processing.json
+/generations/*/selection-*.png
+/generations/*/replaced-export.png
+*.tmp
+*.tmp.json
+*.pending
+*.migrating

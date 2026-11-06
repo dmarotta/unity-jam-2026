@@ -1,0 +1,2184 @@
+fileFormatVersion: 2
+guid: cb7495655c8a4ef4ba836ebf5b787c1e
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -518536822605663972
+    second: lich_idle_0
+  - first:
+      213: -3894025028517424618
+    second: lich_idle_1
+  - first:
+      213: -2105983770940490371
+    second: lich_idle_2
+  - first:
+      213: 1633383797446092791
+    second: lich_idle_3
+  - first:
+      213: -8622329796666808448
+    second: lich_idle_4
+  - first:
+      213: -6493767740880651680
+    second: lich_idle_5
+  - first:
+      213: -4938330811887395101
+    second: lich_idle_6
+  - first:
+      213: -286769423105227740
+    second: lich_idle_7
+  - first:
+      213: -1225333689075965346
+    second: lich_idle_8
+  - first:
+      213: 3983261603430975385
+    second: lich_idle_9
+  - first:
+      213: 6961789997771814146
+    second: lich_idle_10
+  - first:
+      213: -3727046482722147936
+    second: lich_idle_11
+  - first:
+      213: -3034887826138303130
+    second: lich_idle_12
+  - first:
+      213: -7122947157529628678
+    second: lich_idle_13
+  - first:
+      213: 7571206592333095867
+    second: lich_idle_14
+  - first:
+      213: 4860851323581034845
+    second: lich_idle_15
+  - first:
+      213: -2845655506503986052
+    second: lich_idle_16
+  - first:
+      213: -5754855985942938175
+    second: lich_idle_17
+  - first:
+      213: -486135693750298893
+    second: lich_idle_18
+  - first:
+      213: -9102789169705227152
+    second: lich_idle_19
+  - first:
+      213: 7557684085735573016
+    second: lich_idle_20
+  - first:
+      213: -407844570418196797
+    second: lich_idle_21
+  - first:
+      213: 3419681855333693494
+    second: lich_idle_22
+  - first:
+      213: 5875446134117242462
+    second: lich_idle_23
+  - first:
+      213: -2683130037304554382
+    second: lich_idle_24
+  - first:
+      213: -3019844231117329955
+    second: lich_idle_25
+  - first:
+      213: -4036480430862616044
+    second: lich_idle_26
+  - first:
+      213: -6818809485744558885
+    second: lich_idle_27
+  - first:
+      213: -4672377515584532723
+    second: lich_idle_28
+  - first:
+      213: -6499168276146841785
+    second: lich_idle_29
+  - first:
+      213: -7564185699921274553
+    second: lich_idle_30
+  - first:
+      213: -4580636095356436502
+    second: lich_idle_31
+  - first:
+      213: 3747562919110292987
+    second: lich_idle_32
+  - first:
+      213: -2632122924216868752
+    second: lich_idle_33
+  - first:
+      213: 8754786228988299546
+    second: lich_idle_34
+  - first:
+      213: 5467641649696041573
+    second: lich_idle_35
+  - first:
+      213: 3500335907083515633
+    second: lich_idle_36
+  - first:
+      213: -2737847874635738490
+    second: lich_idle_37
+  - first:
+      213: -1169976488069489225
+    second: lich_idle_38
+  - first:
+      213: -1138272863833095359
+    second: lich_idle_39
+  - first:
+      213: -5862173125618885327
+    second: lich_idle_40
+  - first:
+      213: 8848704746752918981
+    second: lich_idle_41
+  - first:
+      213: 3095055941532177073
+    second: lich_idle_42
+  - first:
+      213: -4632083523470516235
+    second: lich_idle_43
+  - first:
+      213: 15439504067555454
+    second: lich_idle_44
+  - first:
+      213: 1253005661451041894
+    second: lich_idle_45
+  - first:
+      213: 4765961443186331594
+    second: lich_idle_46
+  - first:
+      213: 4142835832124303349
+    second: lich_idle_47
+  - first:
+      213: 8456767545412521272
+    second: lich_idle_48
+  - first:
+      213: -144566690446291541
+    second: lich_idle_49
+  - first:
+      213: -5876132623934983207
+    second: lich_idle_50
+  - first:
+      213: -5214696146365105383
+    second: lich_idle_51
+  - first:
+      213: -884309259833283529
+    second: lich_idle_52
+  - first:
+      213: 7437298575007313216
+    second: lich_idle_53
+  - first:
+      213: -8283052362430959297
+    second: lich_idle_54
+  - first:
+      213: -4892483234158959669
+    second: lich_idle_55
+  - first:
+      213: 1660719636321505220
+    second: lich_idle_56
+  - first:
+      213: 1957616976083283617
+    second: lich_idle_57
+  - first:
+      213: -4524355783510966497
+    second: lich_idle_58
+  - first:
+      213: -400029436162765181
+    second: lich_idle_59
+  - first:
+      213: -2146225541089298864
+    second: lich_idle_60
+  - first:
+      213: 4598930942919263765
+    second: lich_idle_61
+  - first:
+      213: 1177989013710321657
+    second: lich_idle_62
+  - first:
+      213: 5434165756254417214
+    second: lich_idle_63
+  - first:
+      213: 6377634231244958974
+    second: lich_idle_64
+  - first:
+      213: -8614731696209031125
+    second: lich_idle_65
+  - first:
+      213: 2059174778429468146
+    second: lich_idle_66
+  - first:
+      213: 3419352224332759570
+    second: lich_idle_67
+  - first:
+      213: 6588996165247986959
+    second: lich_idle_68
+  - first:
+      213: 8424447117383989793
+    second: lich_idle_69
+  - first:
+      213: 3867682444660579140
+    second: lich_idle_70
+  - first:
+      213: 4444414292721536254
+    second: lich_idle_71
+  - first:
+      213: -9022163308371579808
+    second: lich_idle_72
+  - first:
+      213: -7725358017007237161
+    second: lich_idle_73
+  - first:
+      213: 4013731842083565070
+    second: lich_idle_74
+  - first:
+      213: -7867432045416155572
+    second: lich_idle_75
+  - first:
+      213: 1232358011871886187
+    second: lich_idle_76
+  - first:
+      213: 3562059206525318930
+    second: lich_idle_77
+  - first:
+      213: -4778138002685697000
+    second: lich_idle_78
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 0
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 60
+    crunchedCompression: 1
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: lich_idle_0
+      rect:
+        serializedVersion: 2
+        x: 23
+        y: 1441
+        width: 322
+        height: 413
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c1131a5d189cdc8f0800000000000000
+      internalID: -518536822605663972
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_1
+      rect:
+        serializedVersion: 2
+        x: 396
+        y: 1441
+        width: 325
+        height: 416
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6121db43ed4a5f9c0800000000000000
+      internalID: -3894025028517424618
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_2
+      rect:
+        serializedVersion: 2
+        x: 771
+        y: 1441
+        width: 328
+        height: 415
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d7dba561bea06c2e0800000000000000
+      internalID: -2105983770940490371
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_3
+      rect:
+        serializedVersion: 2
+        x: 1145
+        y: 1441
+        width: 332
+        height: 430
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7f727a4e8e1faa610800000000000000
+      internalID: 1633383797446092791
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_4
+      rect:
+        serializedVersion: 2
+        x: 1521
+        y: 1441
+        width: 333
+        height: 437
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 087a865abb4575880800000000000000
+      internalID: -8622329796666808448
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_5
+      rect:
+        serializedVersion: 2
+        x: 1897
+        y: 1441
+        width: 333
+        height: 414
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 06afae625a081e5a0800000000000000
+      internalID: -6493767740880651680
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_6
+      rect:
+        serializedVersion: 2
+        x: 1959
+        y: 1821
+        width: 77
+        height: 68
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3eed51e7a46877bb0800000000000000
+      internalID: -4938330811887395101
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_7
+      rect:
+        serializedVersion: 2
+        x: 2191
+        y: 1713
+        width: 44
+        height: 42
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4248e53aab0350cf0800000000000000
+      internalID: -286769423105227740
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_8
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1606
+        width: 81
+        height: 77
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e52ee4b708dbefee0800000000000000
+      internalID: -1225333689075965346
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_9
+      rect:
+        serializedVersion: 2
+        x: 311
+        y: 1610
+        width: 42
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 997c4f7f253674730800000000000000
+      internalID: 3983261603430975385
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_10
+      rect:
+        serializedVersion: 2
+        x: 376
+        y: 1645
+        width: 32
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2057e0a2e1f3d9060800000000000000
+      internalID: 6961789997771814146
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_11
+      rect:
+        serializedVersion: 2
+        x: 694
+        y: 1613
+        width: 50
+        height: 68
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0a13aff78fed64cc0800000000000000
+      internalID: -3727046482722147936
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_12
+      rect:
+        serializedVersion: 2
+        x: 1072
+        y: 1615
+        width: 54
+        height: 72
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6657ed50a99e1e5d0800000000000000
+      internalID: -3034887826138303130
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_13
+      rect:
+        serializedVersion: 2
+        x: 1130
+        y: 1656
+        width: 23
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aff61999c45362d90800000000000000
+      internalID: -7122947157529628678
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_14
+      rect:
+        serializedVersion: 2
+        x: 1450
+        y: 1622
+        width: 79
+        height: 77
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bb32c112844521960800000000000000
+      internalID: 7571206592333095867
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_15
+      rect:
+        serializedVersion: 2
+        x: 1828
+        y: 1625
+        width: 58
+        height: 77
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d51f8006686357340800000000000000
+      internalID: 4860851323581034845
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_16
+      rect:
+        serializedVersion: 2
+        x: 2207
+        y: 1631
+        width: 55
+        height: 77
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c7412bdc4633288d0800000000000000
+      internalID: -2845655506503986052
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_17
+      rect:
+        serializedVersion: 2
+        x: 12
+        y: 961
+        width: 332
+        height: 411
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1cd3758a8f4a220b0800000000000000
+      internalID: -5754855985942938175
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_18
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 1344
+        width: 76
+        height: 73
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3f610658926e049f0800000000000000
+      internalID: -486135693750298893
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_19
+      rect:
+        serializedVersion: 2
+        x: 390
+        y: 961
+        width: 330
+        height: 413
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 07c62729a756ca180800000000000000
+      internalID: -9102789169705227152
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_20
+      rect:
+        serializedVersion: 2
+        x: 442
+        y: 1347
+        width: 74
+        height: 77
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 81644e632a942e860800000000000000
+      internalID: 7557684085735573016
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_21
+      rect:
+        serializedVersion: 2
+        x: 769
+        y: 961
+        width: 330
+        height: 414
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3cec6a8268b075af0800000000000000
+      internalID: -407844570418196797
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_22
+      rect:
+        serializedVersion: 2
+        x: 814
+        y: 1350
+        width: 74
+        height: 78
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 63873087786257f20800000000000000
+      internalID: 3419681855333693494
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_23
+      rect:
+        serializedVersion: 2
+        x: 1147
+        y: 961
+        width: 328
+        height: 412
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e5610092127c98150800000000000000
+      internalID: 5875446134117242462
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_24
+      rect:
+        serializedVersion: 2
+        x: 1184
+        y: 1352
+        width: 73
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 27c0848627b93cad0800000000000000
+      internalID: -2683130037304554382
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_25
+      rect:
+        serializedVersion: 2
+        x: 1528
+        y: 961
+        width: 322
+        height: 412
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dd92d3febab5716d0800000000000000
+      internalID: -3019844231117329955
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_26
+      rect:
+        serializedVersion: 2
+        x: 1555
+        y: 1354
+        width: 70
+        height: 81
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 41a3e9f2f6a8bf7c0800000000000000
+      internalID: -4036480430862616044
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_27
+      rect:
+        serializedVersion: 2
+        x: 1907
+        y: 961
+        width: 324
+        height: 414
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bdca12b76e8be51a0800000000000000
+      internalID: -6818809485744558885
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_28
+      rect:
+        serializedVersion: 2
+        x: 1927
+        y: 1356
+        width: 66
+        height: 82
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d0fcf07a761682fb0800000000000000
+      internalID: -4672377515584532723
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_29
+      rect:
+        serializedVersion: 2
+        x: 318
+        y: 1236
+        width: 44
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 74797cc03e05ec5a0800000000000000
+      internalID: -6499168276146841785
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_30
+      rect:
+        serializedVersion: 2
+        x: 702
+        y: 1157
+        width: 65
+        height: 106
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7495a15ce2d960790800000000000000
+      internalID: -7564185699921274553
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_31
+      rect:
+        serializedVersion: 2
+        x: 712
+        y: 1240
+        width: 43
+        height: 53
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aef72f29dbf4e60c0800000000000000
+      internalID: -4580636095356436502
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_32
+      rect:
+        serializedVersion: 2
+        x: 1079
+        y: 1160
+        width: 66
+        height: 111
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bf5bef69e94020430800000000000000
+      internalID: 3747562919110292987
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_33
+      rect:
+        serializedVersion: 2
+        x: 1098
+        y: 1245
+        width: 34
+        height: 54
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 07024e06522d87bd0800000000000000
+      internalID: -2632122924216868752
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_34
+      rect:
+        serializedVersion: 2
+        x: 1485
+        y: 1253
+        width: 24
+        height: 43
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a19445fb0bf3f7970800000000000000
+      internalID: 8754786228988299546
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_35
+      rect:
+        serializedVersion: 2
+        x: 323
+        y: 1154
+        width: 55
+        height: 78
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 56a63419c17f0eb40800000000000000
+      internalID: 5467641649696041573
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_36
+      rect:
+        serializedVersion: 2
+        x: 1456
+        y: 1162
+        width: 53
+        height: 73
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1f6f14046f0b39030800000000000000
+      internalID: 3500335907083515633
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_37
+      rect:
+        serializedVersion: 2
+        x: 1833
+        y: 1163
+        width: 53
+        height: 71
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 682574f1dd5310ad0800000000000000
+      internalID: -2737847874635738490
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_38
+      rect:
+        serializedVersion: 2
+        x: 2211
+        y: 1164
+        width: 51
+        height: 69
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7bd1f09359863cfe0800000000000000
+      internalID: -1169976488069489225
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_39
+      rect:
+        serializedVersion: 2
+        x: 631
+        y: 1029
+        width: 100
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 14303c57cda0430f0800000000000000
+      internalID: -1138272863833095359
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_40
+      rect:
+        serializedVersion: 2
+        x: 1018
+        y: 1023
+        width: 103
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 13d15a3f99065aea0800000000000000
+      internalID: -5862173125618885327
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_41
+      rect:
+        serializedVersion: 2
+        x: 1408
+        y: 1015
+        width: 101
+        height: 61
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5c54580b51aecca70800000000000000
+      internalID: 8848704746752918981
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_42
+      rect:
+        serializedVersion: 2
+        x: 1799
+        y: 1011
+        width: 87
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1b2dcf20bf8d3fa20800000000000000
+      internalID: 3095055941532177073
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_43
+      rect:
+        serializedVersion: 2
+        x: 2189
+        y: 1012
+        width: 73
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5ff9995c39887bfb0800000000000000
+      internalID: -4632083523470516235
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_44
+      rect:
+        serializedVersion: 2
+        x: 25
+        y: 481
+        width: 320
+        height: 412
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e70747ba52ad63000800000000000000
+      internalID: 15439504067555454
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_45
+      rect:
+        serializedVersion: 2
+        x: 35
+        y: 877
+        width: 62
+        height: 83
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 66cb758a202936110800000000000000
+      internalID: 1253005661451041894
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_46
+      rect:
+        serializedVersion: 2
+        x: 403
+        y: 481
+        width: 317
+        height: 411
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: acf44527ea8142240800000000000000
+      internalID: 4765961443186331594
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_47
+      rect:
+        serializedVersion: 2
+        x: 406
+        y: 879
+        width: 60
+        height: 82
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5f767885d3f4e7930800000000000000
+      internalID: 4142835832124303349
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_48
+      rect:
+        serializedVersion: 2
+        x: 776
+        y: 881
+        width: 56
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 83d8d54d6497c5570800000000000000
+      internalID: 8456767545412521272
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_49
+      rect:
+        serializedVersion: 2
+        x: 781
+        y: 481
+        width: 319
+        height: 414
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bad48996c556efdf0800000000000000
+      internalID: -144566690446291541
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_50
+      rect:
+        serializedVersion: 2
+        x: 1148
+        y: 883
+        width: 52
+        height: 78
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9d37549f288c37ea0800000000000000
+      internalID: -5876132623934983207
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_51
+      rect:
+        serializedVersion: 2
+        x: 1159
+        y: 481
+        width: 318
+        height: 414
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 91b3f48cb7da1a7b0800000000000000
+      internalID: -5214696146365105383
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_52
+      rect:
+        serializedVersion: 2
+        x: 1512
+        y: 884
+        width: 62
+        height: 75
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 73c6c08d96d4ab3f0800000000000000
+      internalID: -884309259833283529
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_53
+      rect:
+        serializedVersion: 2
+        x: 1537
+        y: 481
+        width: 315
+        height: 420
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 04d64d346a7963760800000000000000
+      internalID: 7437298575007313216
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_54
+      rect:
+        serializedVersion: 2
+        x: 1884
+        y: 882
+        width: 63
+        height: 78
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f31b75903cfac0d80800000000000000
+      internalID: -8283052362430959297
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_55
+      rect:
+        serializedVersion: 2
+        x: 1912
+        y: 481
+        width: 320
+        height: 429
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bc3a6668b686a1cb0800000000000000
+      internalID: -4892483234158959669
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_56
+      rect:
+        serializedVersion: 2
+        x: 753
+        y: 778
+        width: 15
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4cf857ad5bf0c0710800000000000000
+      internalID: 1660719636321505220
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_57
+      rect:
+        serializedVersion: 2
+        x: 1130
+        y: 788
+        width: 21
+        height: 54
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1aee7b1944ada2b10800000000000000
+      internalID: 1957616976083283617
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_58
+      rect:
+        serializedVersion: 2
+        x: 1516
+        y: 799
+        width: 23
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f1f385ec2624631c0800000000000000
+      internalID: -4524355783510966497
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_59
+      rect:
+        serializedVersion: 2
+        x: 330
+        y: 683
+        width: 48
+        height: 67
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 38e81d5e85fc27af0800000000000000
+      internalID: -400029436162765181
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_60
+      rect:
+        serializedVersion: 2
+        x: 711
+        y: 683
+        width: 44
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0567087dd331732e0800000000000000
+      internalID: -2146225541089298864
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_61
+      rect:
+        serializedVersion: 2
+        x: 1094
+        y: 681
+        width: 38
+        height: 68
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 516414f835fa2df30800000000000000
+      internalID: 4598930942919263765
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_62
+      rect:
+        serializedVersion: 2
+        x: 1469
+        y: 679
+        width: 40
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9f7348744ce095010800000000000000
+      internalID: 1177989013710321657
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_63
+      rect:
+        serializedVersion: 2
+        x: 1841
+        y: 678
+        width: 45
+        height: 85
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e31f220c6f80a6b40800000000000000
+      internalID: 5434165756254417214
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_64
+      rect:
+        serializedVersion: 2
+        x: 2218
+        y: 678
+        width: 44
+        height: 85
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: efc2abc0b88e18850800000000000000
+      internalID: 6377634231244958974
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_65
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 537
+        width: 58
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b2099244a23527880800000000000000
+      internalID: -8614731696209031125
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_66
+      rect:
+        serializedVersion: 2
+        x: 713
+        y: 543
+        width: 42
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2fd6bbe0d88a39c10800000000000000
+      internalID: 2059174778429468146
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_67
+      rect:
+        serializedVersion: 2
+        x: 1025
+        y: 504
+        width: 83
+        height: 42
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 212cb454bbaf37f20800000000000000
+      internalID: 3419352224332759570
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_68
+      rect:
+        serializedVersion: 2
+        x: 1412
+        y: 496
+        width: 84
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f0d64003a11d07b50800000000000000
+      internalID: 6588996165247986959
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_69
+      rect:
+        serializedVersion: 2
+        x: 1802
+        y: 490
+        width: 84
+        height: 54
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 12a7cb4c406a9e470800000000000000
+      internalID: 8424447117383989793
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_70
+      rect:
+        serializedVersion: 2
+        x: 2191
+        y: 486
+        width: 71
+        height: 52
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 44b120a01b4cca530800000000000000
+      internalID: 3867682444660579140
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_71
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 400
+        width: 54
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: efc0650704bbdad30800000000000000
+      internalID: 4444414292721536254
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_72
+      rect:
+        serializedVersion: 2
+        x: 27
+        y: 1
+        width: 321
+        height: 442
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 06ce2f2c546dac280800000000000000
+      internalID: -9022163308371579808
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_73
+      rect:
+        serializedVersion: 2
+        x: 376
+        y: 401
+        width: 47
+        height: 77
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7d7419170d30ac490800000000000000
+      internalID: -7725358017007237161
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_74
+      rect:
+        serializedVersion: 2
+        x: 402
+        y: 1
+        width: 333
+        height: 452
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e0ea01f38d3a3b730800000000000000
+      internalID: 4013731842083565070
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_75
+      rect:
+        serializedVersion: 2
+        x: 338
+        y: 199
+        width: 40
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c46f176fc3441d290800000000000000
+      internalID: -7867432045416155572
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_76
+      rect:
+        serializedVersion: 2
+        x: 723
+        y: 202
+        width: 32
+        height: 54
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b6bfabd15173a1110800000000000000
+      internalID: 1232358011871886187
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_77
+      rect:
+        serializedVersion: 2
+        x: 322
+        y: 4
+        width: 56
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 217f9d9c9f9fe6130800000000000000
+      internalID: 3562059206525318930
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lich_idle_78
+      rect:
+        serializedVersion: 2
+        x: 712
+        y: 3
+        width: 43
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 814ef1e5dc4a0bdb0800000000000000
+      internalID: -4778138002685697000
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      lich_idle_0: -518536822605663972
+      lich_idle_1: -3894025028517424618
+      lich_idle_10: 6961789997771814146
+      lich_idle_11: -3727046482722147936
+      lich_idle_12: -3034887826138303130
+      lich_idle_13: -7122947157529628678
+      lich_idle_14: 7571206592333095867
+      lich_idle_15: 4860851323581034845
+      lich_idle_16: -2845655506503986052
+      lich_idle_17: -5754855985942938175
+      lich_idle_18: -486135693750298893
+      lich_idle_19: -9102789169705227152
+      lich_idle_2: -2105983770940490371
+      lich_idle_20: 7557684085735573016
+      lich_idle_21: -407844570418196797
+      lich_idle_22: 3419681855333693494
+      lich_idle_23: 5875446134117242462
+      lich_idle_24: -2683130037304554382
+      lich_idle_25: -3019844231117329955
+      lich_idle_26: -4036480430862616044
+      lich_idle_27: -6818809485744558885
+      lich_idle_28: -4672377515584532723
+      lich_idle_29: -6499168276146841785
+      lich_idle_3: 1633383797446092791
+      lich_idle_30: -7564185699921274553
+      lich_idle_31: -4580636095356436502
+      lich_idle_32: 3747562919110292987
+      lich_idle_33: -2632122924216868752
+      lich_idle_34: 8754786228988299546
+      lich_idle_35: 5467641649696041573
+      lich_idle_36: 3500335907083515633
+      lich_idle_37: -2737847874635738490
+      lich_idle_38: -1169976488069489225
+      lich_idle_39: -1138272863833095359
+      lich_idle_4: -8622329796666808448
+      lich_idle_40: -5862173125618885327
+      lich_idle_41: 8848704746752918981
+      lich_idle_42: 3095055941532177073
+      lich_idle_43: -4632083523470516235
+      lich_idle_44: 15439504067555454
+      lich_idle_45: 1253005661451041894
+      lich_idle_46: 4765961443186331594
+      lich_idle_47: 4142835832124303349
+      lich_idle_48: 8456767545412521272
+      lich_idle_49: -144566690446291541
+      lich_idle_5: -6493767740880651680
+      lich_idle_50: -5876132623934983207
+      lich_idle_51: -5214696146365105383
+      lich_idle_52: -884309259833283529
+      lich_idle_53: 7437298575007313216
+      lich_idle_54: -8283052362430959297
+      lich_idle_55: -4892483234158959669
+      lich_idle_56: 1660719636321505220
+      lich_idle_57: 1957616976083283617
+      lich_idle_58: -4524355783510966497
+      lich_idle_59: -400029436162765181
+      lich_idle_6: -4938330811887395101
+      lich_idle_60: -2146225541089298864
+      lich_idle_61: 4598930942919263765
+      lich_idle_62: 1177989013710321657
+      lich_idle_63: 5434165756254417214
+      lich_idle_64: 6377634231244958974
+      lich_idle_65: -8614731696209031125
+      lich_idle_66: 2059174778429468146
+      lich_idle_67: 3419352224332759570
+      lich_idle_68: 6588996165247986959
+      lich_idle_69: 8424447117383989793
+      lich_idle_7: -286769423105227740
+      lich_idle_70: 3867682444660579140
+      lich_idle_71: 4444414292721536254
+      lich_idle_72: -9022163308371579808
+      lich_idle_73: -7725358017007237161
+      lich_idle_74: 4013731842083565070
+      lich_idle_75: -7867432045416155572
+      lich_idle_76: 1232358011871886187
+      lich_idle_77: 3562059206525318930
+      lich_idle_78: -4778138002685697000
+      lich_idle_8: -1225333689075965346
+      lich_idle_9: 3983261603430975385
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -1,0 +1,6 @@
+id,name,title,arena,hp,dmg_min,dmg_max,attack,height,gold_bonus,accent,idle_sprite,attack_sprite,hurt_sprite,background,offset_x
+goblin,Grubb the Card Goblin,Trickster of the Deck,The Goblin Warren,10,5,6,cards,4.9,40,#7CFF6B,boss1_goblin_idle,boss1_goblin_attack,boss1_goblin_hurt,bg_floor1_warren,0
+golem,The Loaded Golem,Weighted Against You,The Rune Vault,14,6,7,melee,5.9,60,#FFB347,boss2_golem_idle,boss2_golem_attack,boss2_golem_hurt,bg_floor2_vault,0.3
+witch,Madame Fortuna,Reader of Ruin,The Tarot Sanctum,18,6,7,magic,6.0,90,#C77DFF,boss3_witch_idle,boss3_witch_attack,boss3_witch_hurt,bg_floor3_sanctum,0
+dragon,Snake-Eyes,The Dice Dragon,The Dragon's Hoard,22,6,7,fire,5.9,130,#FF6A3D,boss4_dragon_idle,boss4_dragon_attack,boss4_dragon_hurt,bg_floor4_dicepit,0.4
+lich,Mortis,The Lich of Ill Fortune,The Throne of Fate,25,7,8,magic,6.6,250,#5CFFB0,boss5_lich_idle,boss5_lich_attack,boss5_lich_hurt,bg_floor5_throne,0

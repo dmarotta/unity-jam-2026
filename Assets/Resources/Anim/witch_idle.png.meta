@@ -1,0 +1,1248 @@
+fileFormatVersion: 2
+guid: ab5352cb7de204344bc46cea5110da7e
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 2917350467636519215
+    second: witch_idle_0
+  - first:
+      213: -4844256462114672469
+    second: witch_idle_1
+  - first:
+      213: -2327352570440091428
+    second: witch_idle_2
+  - first:
+      213: 3218019842676992335
+    second: witch_idle_3
+  - first:
+      213: -9035241072009983643
+    second: witch_idle_4
+  - first:
+      213: 522364055479548633
+    second: witch_idle_5
+  - first:
+      213: 1033404124302558254
+    second: witch_idle_6
+  - first:
+      213: 8064190635539877711
+    second: witch_idle_7
+  - first:
+      213: -5294156374122083705
+    second: witch_idle_8
+  - first:
+      213: 2849939293721295972
+    second: witch_idle_9
+  - first:
+      213: 4668476913858988984
+    second: witch_idle_10
+  - first:
+      213: -2117201530204427167
+    second: witch_idle_11
+  - first:
+      213: 1007046557284082743
+    second: witch_idle_12
+  - first:
+      213: 5320348502681025623
+    second: witch_idle_13
+  - first:
+      213: -4173502841920546062
+    second: witch_idle_14
+  - first:
+      213: 2566847605651975788
+    second: witch_idle_15
+  - first:
+      213: 2966548965655514074
+    second: witch_idle_16
+  - first:
+      213: -4879095126687009674
+    second: witch_idle_17
+  - first:
+      213: -7892093309049914108
+    second: witch_idle_18
+  - first:
+      213: 1276154612858011530
+    second: witch_idle_19
+  - first:
+      213: -1275584583656332123
+    second: witch_idle_20
+  - first:
+      213: 8228438005475228868
+    second: witch_idle_21
+  - first:
+      213: -927154224820865054
+    second: witch_idle_22
+  - first:
+      213: -6578379845631308637
+    second: witch_idle_23
+  - first:
+      213: -8071559954662341998
+    second: witch_idle_24
+  - first:
+      213: 8458617874131420187
+    second: witch_idle_25
+  - first:
+      213: 6181045672365433714
+    second: witch_idle_26
+  - first:
+      213: 2731696123359201648
+    second: witch_idle_27
+  - first:
+      213: 7061257196262625378
+    second: witch_idle_28
+  - first:
+      213: -9104025809630587076
+    second: witch_idle_29
+  - first:
+      213: -178007354598677213
+    second: witch_idle_30
+  - first:
+      213: 3763370410894396342
+    second: witch_idle_31
+  - first:
+      213: 8885026879605170732
+    second: witch_idle_32
+  - first:
+      213: 2117617189126006384
+    second: witch_idle_33
+  - first:
+      213: -824762974911722023
+    second: witch_idle_34
+  - first:
+      213: 2821146109403053655
+    second: witch_idle_35
+  - first:
+      213: -6418787577516196921
+    second: witch_idle_36
+  - first:
+      213: 6949551908379984105
+    second: witch_idle_37
+  - first:
+      213: 9182439066116478415
+    second: witch_idle_38
+  - first:
+      213: 4133623304405456112
+    second: witch_idle_39
+  - first:
+      213: 3924492278074006828
+    second: witch_idle_40
+  - first:
+      213: -9094754927499383263
+    second: witch_idle_41
+  - first:
+      213: -6847485686749642240
+    second: witch_idle_42
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 0
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 60
+    crunchedCompression: 1
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: witch_idle_0
+      rect:
+        serializedVersion: 2
+        x: 4
+        y: 1654
+        width: 21
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f216bc42bc28c7820800000000000000
+      internalID: 2917350467636519215
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: witch_idle_1
+      rect:
+        serializedVersion: 2
+        x: 24
+        y: 1697
+        width: 28
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ba0b3c6e96eb5ccb0800000000000000
+      internalID: -4844256462114672469
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: witch_idle_2
+      rect:
+        serializedVersion: 2
+        x: 43
+        y: 1442
+        width: 319
+        height: 476
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cd873d30b2593bfd0800000000000000
+      internalID: -2327352570440091428
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: witch_idle_3
+      rect:
+        serializedVersion: 2
+        x: 395
+        y: 1693
+        width: 27
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f49abe24ff3b8ac20800000000000000
+      internalID: 3218019842676992335
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: witch_idle_4
+      rect:
+        serializedVersion: 2
+        x: 413
+        y: 1442
+        width: 325
+        height: 476
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 56943d2ad106c9280800000000000000
+      internalID: -9035241072009983643
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: witch_idle_5
+      rect:
+        serializedVersion: 2
+        x: 767
+        y: 1689
+        width: 26
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9da7a42475fcf3700800000000000000
+      internalID: 522364055479548633
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: witch_idle_6
+      rect:
+        serializedVersion: 2
+        x: 795
+        y: 1442
+        width: 319
+        height: 476
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e244a7a6393675e00800000000000000
+      internalID: 1033404124302558254
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: witch_idle_7
+      rect:
+        serializedVersion: 2
+        x: 1141
+        y: 1685
+        width: 24
+        height: 52
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f4fc26838a2c9ef60800000000000000
+      internalID: 8064190635539877711
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: witch_idle_8
+      rect:
+        serializedVersion: 2
+        x: 1171
+        y: 1442
+        width: 319
+        height: 476
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 78a451fc3d06786b0800000000000000
+      internalID: -5294156374122083705
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: witch_idle_9
+      rect:
+        serializedVersion: 2
+        x: 1512
+        y: 1635
+        width: 29
+        height: 99
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 46c7fa120b40d8720800000000000000
+      internalID: 2849939293721295972
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: witch_idle_10
+      rect:
+        serializedVersion: 2
+        x: 1547
+        y: 1441
+        width: 319
+        height: 477
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8bb4dacb403c9c040800000000000000
+      internalID: 4668476913858988984
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: witch_idle_11
+      rect:
+        serializedVersion: 2
+        x: 1886
+        y: 1632
+        width: 38
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 16c604afc603e92e0800000000000000
+      internalID: -2117201530204427167
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: witch_idle_12
+      rect:
+        serializedVersion: 2
+        x: 1918
+        y: 1441
+        width: 324
+        height: 477
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 734a23f128fb9fd00800000000000000
+      internalID: 1007046557284082743
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: witch_idle_13
+      rect:
+        serializedVersion: 2
+        x: 27
+        y: 1621
+        width: 48
+        height: 61
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 75c759756cca5d940800000000000000
+      internalID: 5320348502681025623
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: witch_idle_14
+      rect:
+        serializedVersion: 2
+        x: 4
+        y: 1147
+        width: 51
+        height: 99
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2fa1e36074db416c0800000000000000
+      internalID: -4173502841920546062
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: witch_idle_15
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 962
+        width: 331
+        height: 476
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c6ea27f2c464f9320800000000000000
+      internalID: 2566847605651975788
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: witch_idle_16
+      rect:
+        serializedVersion: 2
+        x: 378
+        y: 1181
+        width: 21
+        height: 57
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: adb03ba119c4b2920800000000000000
+      internalID: 2966548965655514074
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: witch_idle_17
+      rect:
+        serializedVersion: 2
+        x: 399
+        y: 966
+        width: 345
+        height: 472
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6743b7435d8f94cb0800000000000000
+      internalID: -4879095126687009674
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: witch_idle_18
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 1211
+        width: 27
+        height: 54
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 40db7d313f6a97290800000000000000
+      internalID: -7892093309049914108
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: witch_idle_19
+      rect:
+        serializedVersion: 2
+        x: 795
+        y: 970
+        width: 330
+        height: 468
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a8fb0e9ebdfc5b110800000000000000
+      internalID: 1276154612858011530
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: witch_idle_20
+      rect:
+        serializedVersion: 2
+        x: 1132
+        y: 1158
+        width: 26
+        height: 65
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5a4233a54963c4ee0800000000000000
+      internalID: -1275584583656332123
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: witch_idle_21
+      rect:
+        serializedVersion: 2
+        x: 1139
+        y: 1202
+        width: 25
+        height: 56
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4ccbca415c8413270800000000000000
+      internalID: 8228438005475228868
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: witch_idle_22
+      rect:
+        serializedVersion: 2
+        x: 1167
+        y: 969
+        width: 334
+        height: 469
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2e7bc8115261223f0800000000000000
+      internalID: -927154224820865054
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: witch_idle_23
+      rect:
+        serializedVersion: 2
+        x: 1510
+        y: 1151
+        width: 38
+        height: 99
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3ac8e875266e4b4a0800000000000000
+      internalID: -6578379845631308637
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: witch_idle_24
+      rect:
+        serializedVersion: 2
+        x: 1541
+        y: 969
+        width: 331
+        height: 469
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 29245177cfe0cff80800000000000000
+      internalID: -8071559954662341998
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: witch_idle_25
+      rect:
+        serializedVersion: 2
+        x: 1885
+        y: 1144
+        width: 58
+        height: 96
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b148f5e042c036570800000000000000
+      internalID: 8458617874131420187
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: witch_idle_26
+      rect:
+        serializedVersion: 2
+        x: 1906
+        y: 965
+        width: 335
+        height: 473
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 273aec95a4c77c550800000000000000
+      internalID: 6181045672365433714
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: witch_idle_27
+      rect:
+        serializedVersion: 2
+        x: 17
+        y: 728
+        width: 29
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 079032ba62fe8e520800000000000000
+      internalID: 2731696123359201648
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: witch_idle_28
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 483
+        width: 325
+        height: 475
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 26097e20200aef160800000000000000
+      internalID: 7061257196262625378
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: witch_idle_29
+      rect:
+        serializedVersion: 2
+        x: 382
+        y: 673
+        width: 36
+        height: 105
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c371bf6e2c008a180800000000000000
+      internalID: -9104025809630587076
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: witch_idle_30
+      rect:
+        serializedVersion: 2
+        x: 419
+        y: 482
+        width: 318
+        height: 476
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3252dbd0147978df0800000000000000
+      internalID: -178007354598677213
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: witch_idle_31
+      rect:
+        serializedVersion: 2
+        x: 755
+        y: 665
+        width: 61
+        height: 105
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6bb8393137d2a3430800000000000000
+      internalID: 3763370410894396342
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: witch_idle_32
+      rect:
+        serializedVersion: 2
+        x: 786
+        y: 486
+        width: 334
+        height: 472
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c22e9a24fd4fd4b70800000000000000
+      internalID: 8885026879605170732
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: witch_idle_33
+      rect:
+        serializedVersion: 2
+        x: 1130
+        y: 696
+        width: 22
+        height: 65
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 076ed182d99436d10800000000000000
+      internalID: 2117617189126006384
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: witch_idle_34
+      rect:
+        serializedVersion: 2
+        x: 1153
+        y: 490
+        width: 349
+        height: 468
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9dd0e70b17add84f0800000000000000
+      internalID: -824762974911722023
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: witch_idle_35
+      rect:
+        serializedVersion: 2
+        x: 1522
+        y: 730
+        width: 29
+        height: 55
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 75eb17e7079b62720800000000000000
+      internalID: 2821146109403053655
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: witch_idle_36
+      rect:
+        serializedVersion: 2
+        x: 1543
+        y: 489
+        width: 336
+        height: 469
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7cbf479d4b2ebe6a0800000000000000
+      internalID: -6418787577516196921
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: witch_idle_37
+      rect:
+        serializedVersion: 2
+        x: 1892
+        y: 721
+        width: 27
+        height: 57
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9e0802fe3a4c17060800000000000000
+      internalID: 6949551908379984105
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: witch_idle_38
+      rect:
+        serializedVersion: 2
+        x: 1915
+        y: 489
+        width: 336
+        height: 469
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fc5da831ea39e6f70800000000000000
+      internalID: 9182439066116478415
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: witch_idle_39
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 189
+        width: 37
+        height: 102
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0f41d569e749d5930800000000000000
+      internalID: 4133623304405456112
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: witch_idle_40
+      rect:
+        serializedVersion: 2
+        x: 43
+        y: 8
+        width: 320
+        height: 470
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c2d5d5e1fe8967630800000000000000
+      internalID: 3924492278074006828
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: witch_idle_41
+      rect:
+        serializedVersion: 2
+        x: 380
+        y: 184
+        width: 55
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 12e6a2b5490f8c180800000000000000
+      internalID: -9094754927499383263
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: witch_idle_42
+      rect:
+        serializedVersion: 2
+        x: 409
+        y: 4
+        width: 329
+        height: 474
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 00247b42c08d8f0a0800000000000000
+      internalID: -6847485686749642240
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      witch_idle_0: 2917350467636519215
+      witch_idle_1: -4844256462114672469
+      witch_idle_10: 4668476913858988984
+      witch_idle_11: -2117201530204427167
+      witch_idle_12: 1007046557284082743
+      witch_idle_13: 5320348502681025623
+      witch_idle_14: -4173502841920546062
+      witch_idle_15: 2566847605651975788
+      witch_idle_16: 2966548965655514074
+      witch_idle_17: -4879095126687009674
+      witch_idle_18: -7892093309049914108
+      witch_idle_19: 1276154612858011530
+      witch_idle_2: -2327352570440091428
+      witch_idle_20: -1275584583656332123
+      witch_idle_21: 8228438005475228868
+      witch_idle_22: -927154224820865054
+      witch_idle_23: -6578379845631308637
+      witch_idle_24: -8071559954662341998
+      witch_idle_25: 8458617874131420187
+      witch_idle_26: 6181045672365433714
+      witch_idle_27: 2731696123359201648
+      witch_idle_28: 7061257196262625378
+      witch_idle_29: -9104025809630587076
+      witch_idle_3: 3218019842676992335
+      witch_idle_30: -178007354598677213
+      witch_idle_31: 3763370410894396342
+      witch_idle_32: 8885026879605170732
+      witch_idle_33: 2117617189126006384
+      witch_idle_34: -824762974911722023
+      witch_idle_35: 2821146109403053655
+      witch_idle_36: -6418787577516196921
+      witch_idle_37: 6949551908379984105
+      witch_idle_38: 9182439066116478415
+      witch_idle_39: 4133623304405456112
+      witch_idle_4: -9035241072009983643
+      witch_idle_40: 3924492278074006828
+      witch_idle_41: -9094754927499383263
+      witch_idle_42: -6847485686749642240
+      witch_idle_5: 522364055479548633
+      witch_idle_6: 1033404124302558254
+      witch_idle_7: 8064190635539877711
+      witch_idle_8: -5294156374122083705
+      witch_idle_9: 2849939293721295972
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

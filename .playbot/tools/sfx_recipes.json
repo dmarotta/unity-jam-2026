@@ -1,0 +1,1554 @@
+{
+  "_doc": "Recipes for mix_sfx.py (python mix_sfx.py [names]). Layer files are relative to layers_root. Filename prefixes give the layer role: tr_=transient/attack, bd_=body, tl_=tail/sweetener, sb_=sub. Gains are applied after each layer is peak-normalised, so they are relative levels. offset_ms places the layer anchor (detected onset by default; or start/peak/end via align) on the timeline. See the docstring in mix_sfx.py for every key.",
+  "layers_root": ".playbot/audio-layers",
+  "output_dir": "Assets/Audio/SFX",
+  "defaults": {
+    "channels": 1,
+    "peak_dbfs": -1.0,
+    "trim_db": -50,
+    "pre_roll_ms": 0,
+    "limit_db": 3,
+    "knee": 0.5,
+    "fade_in_ms": 0.5,
+    "fade_out_ms": 15,
+    "master": {
+      "hp_hz": 30
+    }
+  },
+  "sfx": {
+    "ui_click": {
+      "length_ms": 260,
+      "fade_out_ms": 90,
+      "limit_db": 3,
+      "master": {
+        "hp_hz": 90,
+        "lp_hz": 14000
+      },
+      "layers": [
+        {
+          "file": "ui_click/click.mp3",
+          "onset_floor_db": -15,
+          "trim_before_anchor_ms": 1,
+          "hp_hz": 150,
+          "lp_hz": 7000,
+          "length_ms": 140,
+          "decay": {
+            "hold_ms": 15,
+            "tau_ms": 30
+          },
+          "gain_db": 0
+        },
+        {
+          "file": "ui_click/tr_dice_clack.mp3",
+          "slice": {
+            "onset_index": 0,
+            "pre_ms": 0.5,
+            "length_ms": 45
+          },
+          "hp_hz": 1200,
+          "lp_hz": 10000,
+          "gain_db": -3
+        },
+        {
+          "file": "ui_click/tl_sparkle.mp3",
+          "hp_hz": 5000,
+          "lp_hz": 14000,
+          "length_ms": 230,
+          "decay": {
+            "hold_ms": 10,
+            "tau_ms": 60
+          },
+          "gain_db": -15,
+          "offset_ms": 6,
+          "align": "start",
+          "fade_in_ms": 3
+        }
+      ]
+    },
+    "ui_hover": {
+      "length_ms": 90,
+      "fade_out_ms": 35,
+      "limit_db": 1,
+      "trim_db": -40,
+      "master": {
+        "hp_hz": 200,
+        "lp_hz": 10000
+      },
+      "layers": [
+        {
+          "file": "ui_hover/tr_tick.mp3",
+          "onset_floor_db": -15,
+          "trim_before_anchor_ms": 1,
+          "hp_hz": 400,
+          "lp_hz": 8000,
+          "length_ms": 55,
+          "decay": {
+            "hold_ms": 5,
+            "tau_ms": 12
+          },
+          "gain_db": 0
+        },
+        {
+          "file": "ui_hover/tl_glint2.mp3",
+          "hp_hz": 1500,
+          "lp_hz": 9000,
+          "length_ms": 85,
+          "decay": {
+            "hold_ms": 5,
+            "tau_ms": 25
+          },
+          "gain_db": -9,
+          "align": "start",
+          "offset_ms": 1
+        }
+      ]
+    },
+    "wheel_tick_1": {
+      "length_ms": 70,
+      "fade_out_ms": 20,
+      "limit_db": 2,
+      "trim_db": -30,
+      "master": {
+        "hp_hz": 50,
+        "lp_hz": 9000
+      },
+      "layers": [
+        {
+          "file": "wheel_tick/bd_pegs.mp3",
+          "slice": {
+            "onset_index": 9,
+            "pre_ms": 0.5,
+            "length_ms": 65
+          },
+          "hp_hz": 400,
+          "lp_hz": 7500,
+          "decay": {
+            "hold_ms": 6,
+            "tau_ms": 14
+          },
+          "gain_db": 0,
+          "trim_before_anchor_ms": 0.3
+        },
+        {
+          "file": "wheel_tick/tr_snap.mp3",
+          "length_ms": 40,
+          "hp_hz": 1500,
+          "lp_hz": 8000,
+          "decay": {
+            "hold_ms": 2,
+            "tau_ms": 6
+          },
+          "gain_db": -9,
+          "trim_before_anchor_ms": 0.3
+        },
+        {
+          "file": "wheel_tick/tr_bronze2.mp3",
+          "slice": {
+            "onset_index": 0,
+            "pre_ms": 0.5,
+            "length_ms": 45
+          },
+          "hp_hz": 1200,
+          "lp_hz": 8500,
+          "decay": {
+            "hold_ms": 3,
+            "tau_ms": 8
+          },
+          "gain_db": -12,
+          "offset_ms": 1,
+          "trim_before_anchor_ms": 0.3
+        },
+        {
+          "file": "wheel_tick/sb_knock.mp3",
+          "slice": {
+            "onset_index": 1,
+            "pre_ms": 1,
+            "length_ms": 70
+          },
+          "hp_hz": 45,
+          "lp_hz": 260,
+          "lp_order": 4,
+          "decay": {
+            "hold_ms": 10,
+            "tau_ms": 14
+          },
+          "gain_db": -5,
+          "trim_before_anchor_ms": 0.3
+        }
+      ]
+    },
+    "wheel_tick_2": {
+      "length_ms": 60,
+      "fade_out_ms": 18,
+      "limit_db": 2,
+      "trim_db": -30,
+      "master": {
+        "hp_hz": 50,
+        "lp_hz": 9000
+      },
+      "layers": [
+        {
+          "file": "wheel_tick/bd_pegs.mp3",
+          "slice": {
+            "onset_index": 4,
+            "pre_ms": 0.5,
+            "length_ms": 46
+          },
+          "hp_hz": 400,
+          "lp_hz": 7500,
+          "decay": {
+            "hold_ms": 5,
+            "tau_ms": 12
+          },
+          "gain_db": 0,
+          "pitch_semitones": 0.6,
+          "trim_before_anchor_ms": 0.3
+        },
+        {
+          "file": "wheel_tick/tr_snap.mp3",
+          "length_ms": 40,
+          "hp_hz": 1500,
+          "lp_hz": 8000,
+          "decay": {
+            "hold_ms": 2,
+            "tau_ms": 6
+          },
+          "gain_db": -10,
+          "pitch_semitones": 0.8,
+          "trim_before_anchor_ms": 0.3
+        },
+        {
+          "file": "wheel_tick/tr_bronze2.mp3",
+          "slice": {
+            "onset_index": 0,
+            "pre_ms": 0.5,
+            "length_ms": 45
+          },
+          "hp_hz": 1200,
+          "lp_hz": 8500,
+          "decay": {
+            "hold_ms": 3,
+            "tau_ms": 8
+          },
+          "gain_db": -14,
+          "pitch_semitones": 1.0,
+          "trim_before_anchor_ms": 0.3
+        },
+        {
+          "file": "wheel_tick/sb_knock.mp3",
+          "slice": {
+            "onset_index": 1,
+            "pre_ms": 1,
+            "length_ms": 60
+          },
+          "hp_hz": 45,
+          "lp_hz": 260,
+          "lp_order": 4,
+          "decay": {
+            "hold_ms": 8,
+            "tau_ms": 12
+          },
+          "gain_db": -6,
+          "pitch_semitones": 0.5,
+          "trim_before_anchor_ms": 0.3
+        }
+      ]
+    },
+    "wheel_tick_3": {
+      "length_ms": 75,
+      "fade_out_ms": 22,
+      "limit_db": 2,
+      "trim_db": -30,
+      "master": {
+        "hp_hz": 50,
+        "lp_hz": 9000
+      },
+      "layers": [
+        {
+          "file": "wheel_tick/bd_pegs.mp3",
+          "slice": {
+            "onset_index": 11,
+            "pre_ms": 0.5,
+            "length_ms": 50
+          },
+          "hp_hz": 350,
+          "lp_hz": 7000,
+          "decay": {
+            "hold_ms": 6,
+            "tau_ms": 14
+          },
+          "gain_db": 0,
+          "pitch_semitones": -0.5,
+          "trim_before_anchor_ms": 0.3
+        },
+        {
+          "file": "wheel_tick/tr_snap.mp3",
+          "length_ms": 40,
+          "hp_hz": 1500,
+          "lp_hz": 7500,
+          "decay": {
+            "hold_ms": 2,
+            "tau_ms": 6
+          },
+          "gain_db": -11,
+          "pitch_semitones": -0.6,
+          "trim_before_anchor_ms": 0.3
+        },
+        {
+          "file": "wheel_tick/tr_bronze2.mp3",
+          "slice": {
+            "onset_index": 0,
+            "pre_ms": 0.5,
+            "length_ms": 45
+          },
+          "hp_hz": 1200,
+          "lp_hz": 8000,
+          "decay": {
+            "hold_ms": 3,
+            "tau_ms": 8
+          },
+          "gain_db": -11,
+          "pitch_semitones": -0.4,
+          "offset_ms": 2,
+          "trim_before_anchor_ms": 0.3
+        },
+        {
+          "file": "wheel_tick/sb_knock.mp3",
+          "slice": {
+            "onset_index": 1,
+            "pre_ms": 1,
+            "length_ms": 75
+          },
+          "hp_hz": 40,
+          "lp_hz": 240,
+          "lp_order": 4,
+          "decay": {
+            "hold_ms": 12,
+            "tau_ms": 16
+          },
+          "gain_db": -4,
+          "pitch_semitones": -0.7,
+          "trim_before_anchor_ms": 0.3
+        }
+      ]
+    },
+    "spin_start": {
+      "length_ms": 850,
+      "fade_out_ms": 220,
+      "layers": [
+        {
+          "file": "spin_start/sb_thud.mp3",
+          "hp_hz": 35,
+          "lp_hz": 220,
+          "lp_order": 4,
+          "gain_db": -3,
+          "fade_out_ms": 120
+        },
+        {
+          "file": "spin_start/bd_creak.mp3",
+          "hp_hz": 80,
+          "lp_hz": 5000,
+          "gain_db": -4,
+          "offset_ms": 5,
+          "eq": [
+            {
+              "type": "peak",
+              "hz": 300,
+              "db": -3,
+              "q": 1.0
+            }
+          ]
+        },
+        {
+          "file": "spin_start/bd_ratchet.mp3",
+          "hp_hz": 350,
+          "lp_hz": 9000,
+          "gain_db": -1,
+          "offset_ms": 70
+        },
+        {
+          "file": "spin_start/tl_rune.mp3",
+          "hp_hz": 2500,
+          "lp_hz": 12000,
+          "gain_db": -11,
+          "offset_ms": 300,
+          "fade_out_ms": 200
+        }
+      ]
+    },
+    "wheel_stop": {
+      "length_ms": 650,
+      "fade_out_ms": 200,
+      "layers": [
+        {
+          "file": "wheel_stop/tr_thunk.mp3",
+          "onset_floor_db": -15,
+          "trim_before_anchor_ms": 2,
+          "hp_hz": 40,
+          "lp_hz": 6000,
+          "gain_db": 0,
+          "eq": [
+            {
+              "type": "peak",
+              "hz": 120,
+              "db": 2,
+              "q": 1.0
+            }
+          ]
+        },
+        {
+          "file": "wheel_stop/bd_wobble.mp3",
+          "hp_hz": 160,
+          "lp_hz": 7000,
+          "gain_db": -7,
+          "offset_ms": 12,
+          "fade_out_ms": 120
+        },
+        {
+          "file": "wheel_stop/tl_chime.mp3",
+          "hp_hz": 800,
+          "lp_hz": 9000,
+          "gain_db": -14,
+          "offset_ms": 40,
+          "fade_out_ms": 300
+        }
+      ]
+    },
+    "reveal_small": {
+      "length_ms": 650,
+      "fade_out_ms": 260,
+      "master": {
+        "hp_hz": 40,
+        "lp_hz": 14000
+      },
+      "layers": [
+        {
+          "file": "reveal_small/tr_glock_b.mp3",
+          "pitch_semitones": 3,
+          "hp_hz": 300,
+          "lp_hz": 9000,
+          "gain_db": 0
+        },
+        {
+          "file": "reveal_small/tl_shimmer_b.mp3",
+          "hp_hz": 4000,
+          "lp_hz": 13000,
+          "gain_db": -11,
+          "offset_ms": 15,
+          "align": "start",
+          "fade_in_ms": 10,
+          "fade_out_ms": 250
+        },
+        {
+          "file": "reveal_big/sb_boom_b.mp3",
+          "hp_hz": 40,
+          "lp_hz": 150,
+          "lp_order": 4,
+          "gain_db": -12,
+          "length_ms": 160,
+          "fade_out_ms": 80
+        }
+      ]
+    },
+    "reveal_big": {
+      "channels": 2,
+      "length_ms": 1050,
+      "fade_out_ms": 420,
+      "limit_db": 3,
+      "master": {
+        "hp_hz": 30,
+        "lp_hz": 15000
+      },
+      "layers": [
+        {
+          "file": "reveal_big/tr_bell_b.mp3",
+          "hp_hz": 200,
+          "lp_hz": 11000,
+          "gain_db": 0
+        },
+        {
+          "file": "reveal_big/sb_boom_b.mp3",
+          "hp_hz": 30,
+          "lp_hz": 160,
+          "lp_order": 4,
+          "gain_db": -3,
+          "length_ms": 500,
+          "fade_out_ms": 200
+        },
+        {
+          "file": "reveal_big/bd_whoosh_up_b.mp3",
+          "align": "start",
+          "hp_hz": 600,
+          "lp_hz": 10000,
+          "gain_db": -8,
+          "fade_in_ms": 40,
+          "length_ms": 500,
+          "fade_out_ms": 220
+        },
+        {
+          "file": "reveal_big/tl_sparkle_b.mp3",
+          "align": "start",
+          "offset_ms": 30,
+          "hp_hz": 5000,
+          "lp_hz": 14000,
+          "gain_db": -9,
+          "fade_in_ms": 10,
+          "fade_out_ms": 450
+        }
+      ]
+    },
+    "hit_light": {
+      "length_ms": 480,
+      "fade_out_ms": 180,
+      "limit_db": 4,
+      "master": {
+        "hp_hz": 35,
+        "lp_hz": 14000
+      },
+      "layers": [
+        {
+          "file": "hit_light/tr_blade.mp3",
+          "hp_hz": 700,
+          "lp_hz": 12000,
+          "gain_db": -1,
+          "fade_out_ms": 150
+        },
+        {
+          "file": "hit_light/bd_smack.mp3",
+          "hp_hz": 150,
+          "lp_hz": 9000,
+          "gain_db": -2,
+          "length_ms": 220,
+          "fade_out_ms": 80
+        },
+        {
+          "file": "hit_light/sb_punch_b.mp3",
+          "hp_hz": 35,
+          "lp_hz": 150,
+          "lp_order": 4,
+          "gain_db": -3,
+          "length_ms": 200,
+          "fade_out_ms": 90
+        },
+        {
+          "file": "hit_light/tl_coin_b.mp3",
+          "hp_hz": 3000,
+          "lp_hz": 11000,
+          "gain_db": -11,
+          "offset_ms": 22,
+          "length_ms": 320,
+          "fade_out_ms": 120
+        }
+      ]
+    },
+    "hit_heavy": {
+      "channels": 2,
+      "length_ms": 950,
+      "fade_out_ms": 420,
+      "limit_db": 4.5,
+      "master": {
+        "hp_hz": 28,
+        "lp_hz": 15000
+      },
+      "layers": [
+        {
+          "file": "hit_heavy/bd_slash_b.mp3",
+          "hp_hz": 800,
+          "lp_hz": 12000,
+          "gain_db": -4,
+          "length_ms": 450,
+          "fade_out_ms": 200
+        },
+        {
+          "file": "hit_heavy/tr_crack_b.mp3",
+          "hp_hz": 120,
+          "lp_hz": 12000,
+          "gain_db": 0,
+          "length_ms": 600,
+          "fade_out_ms": 200
+        },
+        {
+          "file": "hit_heavy/sb_boom_b.mp3",
+          "hp_hz": 28,
+          "lp_hz": 140,
+          "lp_order": 4,
+          "gain_db": -1,
+          "length_ms": 900,
+          "fade_out_ms": 420
+        },
+        {
+          "file": "hit_heavy/tl_coins_b.mp3",
+          "hp_hz": 2500,
+          "lp_hz": 12000,
+          "gain_db": -10,
+          "offset_ms": 60,
+          "length_ms": 880,
+          "fade_out_ms": 400
+        }
+      ]
+    },
+    "jackpot": {
+      "channels": 2,
+      "length_ms": 3100,
+      "fade_out_ms": 900,
+      "limit_db": 4,
+      "master": {
+        "hp_hz": 25,
+        "lp_hz": 15500
+      },
+      "layers": [
+        {
+          "file": "jackpot/sb_impact_b.mp3",
+          "hp_hz": 25,
+          "lp_hz": 220,
+          "lp_order": 4,
+          "gain_db": 0,
+          "eq": [
+            {
+              "type": "peak",
+              "hz": 90,
+              "db": 2,
+              "q": 0.9
+            }
+          ]
+        },
+        {
+          "file": "jackpot/bd_choir_b.mp3",
+          "pitch_semitones": 3,
+          "align": "start",
+          "hp_hz": 150,
+          "lp_hz": 9000,
+          "gain_db": -3,
+          "fade_in_ms": 3
+        },
+        {
+          "file": "jackpot/tl_crystal_b.mp3",
+          "align": "start",
+          "offset_ms": 0,
+          "hp_hz": 3000,
+          "lp_hz": 14000,
+          "gain_db": -7
+        },
+        {
+          "file": "jackpot/bd_coins_b.mp3",
+          "offset_ms": 150,
+          "hp_hz": 1500,
+          "lp_hz": 13000,
+          "gain_db": -6
+        }
+      ]
+    },
+    "bust": {
+      "channels": 2,
+      "length_ms": 1400,
+      "fade_out_ms": 220,
+      "limit_db": 3.5,
+      "master": {
+        "hp_hz": 28,
+        "lp_hz": 14000
+      },
+      "layers": [
+        {
+          "file": "bust/sb_stinger_b.mp3",
+          "hp_hz": 30,
+          "lp_hz": 400,
+          "gain_db": -4,
+          "length_ms": 1400,
+          "fade_out_ms": 500
+        },
+        {
+          "file": "bust/bd_rewind_b.mp3",
+          "align": "start",
+          "offset_ms": 30,
+          "hp_hz": 200,
+          "lp_hz": 10000,
+          "gain_db": 0,
+          "fade_in_ms": 20
+        },
+        {
+          "file": "bust/tl_glass_b.mp3",
+          "reverse": true,
+          "align": "end",
+          "offset_ms": 1150,
+          "hp_hz": 4000,
+          "lp_hz": 13000,
+          "gain_db": -9,
+          "tail_ms": 1100,
+          "tail_fade_ms": 300
+        },
+        {
+          "file": "bust/bd_whoosh_b.mp3",
+          "reverse": true,
+          "align": "end",
+          "offset_ms": 1150,
+          "hp_hz": 30,
+          "lp_hz": 300,
+          "gain_db": -8,
+          "fade_out_ms": 30,
+          "tail_ms": 900,
+          "tail_fade_ms": 250
+        }
+      ]
+    },
+    "hp_refill": {
+      "channels": 2,
+      "length_ms": 1100,
+      "fade_out_ms": 320,
+      "master": {
+        "hp_hz": 40,
+        "lp_hz": 14000
+      },
+      "layers": [
+        {
+          "file": "hp_refill/bd_whoosh_b.mp3",
+          "reverse": true,
+          "align": "end",
+          "offset_ms": 750,
+          "hp_hz": 300,
+          "lp_hz": 9000,
+          "gain_db": 0,
+          "fade_out_ms": 40,
+          "tail_ms": 700,
+          "tail_fade_ms": 250
+        },
+        {
+          "file": "hp_refill/bd_hum_b.mp3",
+          "reverse": true,
+          "align": "end",
+          "offset_ms": 800,
+          "hp_hz": 80,
+          "lp_hz": 2000,
+          "gain_db": -5,
+          "fade_out_ms": 60,
+          "tail_ms": 750,
+          "tail_fade_ms": 300
+        },
+        {
+          "file": "hp_refill/tl_shimmer_b.mp3",
+          "align": "start",
+          "offset_ms": 250,
+          "hp_hz": 1500,
+          "lp_hz": 13000,
+          "gain_db": -3,
+          "fade_in_ms": 150
+        }
+      ]
+    },
+    "boss_attack_swipe": {
+      "length_ms": 750,
+      "fade_out_ms": 220,
+      "limit_db": 4,
+      "master": {
+        "hp_hz": 30,
+        "lp_hz": 13000
+      },
+      "layers": [
+        {
+          "file": "boss_attack_swipe/bd_whoosh.mp3",
+          "align": "start",
+          "hp_hz": 150,
+          "lp_hz": 9000,
+          "gain_db": -2,
+          "length_ms": 600,
+          "fade_out_ms": 200
+        },
+        {
+          "file": "boss_attack_swipe/tr_impact.mp3",
+          "offset_ms": 200,
+          "hp_hz": 200,
+          "lp_hz": 11000,
+          "gain_db": 0,
+          "length_ms": 500,
+          "fade_out_ms": 200
+        },
+        {
+          "file": "boss_attack_swipe/sb_thump.mp3",
+          "offset_ms": 200,
+          "hp_hz": 30,
+          "lp_hz": 160,
+          "lp_order": 4,
+          "gain_db": -3,
+          "length_ms": 400,
+          "fade_out_ms": 150
+        }
+      ]
+    },
+    "boss_attack_magic": {
+      "channels": 2,
+      "length_ms": 1150,
+      "fade_out_ms": 350,
+      "limit_db": 4,
+      "master": {
+        "hp_hz": 28,
+        "lp_hz": 14000
+      },
+      "layers": [
+        {
+          "file": "boss_attack_magic/bd_charge.mp3",
+          "align": "start",
+          "hp_hz": 300,
+          "lp_hz": 12000,
+          "gain_db": -3,
+          "length_ms": 480,
+          "fade_in_ms": 300,
+          "fade_out_ms": 40
+        },
+        {
+          "file": "boss_attack_magic/tr_blast.mp3",
+          "offset_ms": 450,
+          "hp_hz": 60,
+          "lp_hz": 12000,
+          "gain_db": 0,
+          "length_ms": 800,
+          "fade_out_ms": 350
+        },
+        {
+          "file": "boss_attack_magic/boom.mp3",
+          "offset_ms": 450,
+          "hp_hz": 28,
+          "lp_hz": 150,
+          "lp_order": 4,
+          "gain_db": -2,
+          "length_ms": 700,
+          "fade_out_ms": 300
+        }
+      ]
+    },
+    "hero_hurt": {
+      "length_ms": 400,
+      "fade_out_ms": 150,
+      "limit_db": 4,
+      "master": {
+        "hp_hz": 40,
+        "lp_hz": 12000
+      },
+      "layers": [
+        {
+          "file": "hero_hurt/tr_thud.mp3",
+          "onset_floor_db": -15,
+          "trim_before_anchor_ms": 1,
+          "hp_hz": 50,
+          "lp_hz": 3000,
+          "gain_db": 0,
+          "length_ms": 350,
+          "fade_out_ms": 150
+        },
+        {
+          "file": "hero_hurt/tr_crunch2.mp3",
+          "hp_hz": 600,
+          "lp_hz": 10000,
+          "gain_db": -5,
+          "length_ms": 250,
+          "fade_out_ms": 100
+        },
+        {
+          "file": "hero_hurt/bd_cloth.mp3",
+          "align": "start",
+          "offset_ms": 10,
+          "hp_hz": 500,
+          "lp_hz": 8000,
+          "gain_db": -8,
+          "length_ms": 300,
+          "fade_out_ms": 120
+        }
+      ]
+    },
+    "boss_hurt": {
+      "length_ms": 620,
+      "fade_out_ms": 220,
+      "limit_db": 4,
+      "master": {
+        "hp_hz": 30,
+        "lp_hz": 12000
+      },
+      "layers": [
+        {
+          "file": "boss_hurt/tr_smack.mp3",
+          "hp_hz": 40,
+          "lp_hz": 3000,
+          "gain_db": 0,
+          "length_ms": 300,
+          "fade_out_ms": 120
+        },
+        {
+          "file": "boss_hurt/impact.mp3",
+          "hp_hz": 30,
+          "lp_hz": 140,
+          "lp_order": 4,
+          "gain_db": -4,
+          "length_ms": 350,
+          "fade_out_ms": 150
+        },
+        {
+          "file": "boss_hurt/bd_growl.mp3",
+          "align": "start",
+          "offset_ms": 40,
+          "hp_hz": 100,
+          "lp_hz": 5000,
+          "gain_db": -1,
+          "length_ms": 560,
+          "fade_in_ms": 10,
+          "fade_out_ms": 200,
+          "eq": [
+            {
+              "type": "peak",
+              "hz": 1800,
+              "db": 3,
+              "q": 0.8
+            }
+          ]
+        },
+        {
+          "file": "hero_hurt/tr_crunch2.mp3",
+          "pitch_semitones": -4,
+          "hp_hz": 500,
+          "lp_hz": 8000,
+          "gain_db": -9,
+          "length_ms": 200,
+          "fade_out_ms": 80
+        }
+      ]
+    },
+    "boss_roar": {
+      "channels": 2,
+      "length_ms": 1900,
+      "fade_out_ms": 300,
+      "limit_db": 3,
+      "master": {
+        "hp_hz": 25,
+        "lp_hz": 12000
+      },
+      "layers": [
+        {
+          "file": "boss_roar/bd_roar.mp3",
+          "align": "start",
+          "hp_hz": 60,
+          "lp_hz": 9000,
+          "gain_db": 0,
+          "eq": [
+            {
+              "type": "peak",
+              "hz": 1500,
+              "db": 4,
+              "q": 0.8
+            }
+          ]
+        },
+        {
+          "file": "boss_roar/bd_brass.mp3",
+          "align": "start",
+          "hp_hz": 40,
+          "lp_hz": 3000,
+          "gain_db": -4
+        },
+        {
+          "file": "boss_roar/sb_rumble.mp3",
+          "align": "start",
+          "hp_hz": 25,
+          "lp_hz": 120,
+          "lp_order": 4,
+          "gain_db": -5
+        }
+      ]
+    },
+    "boss_death": {
+      "channels": 2,
+      "length_ms": 2600,
+      "fade_out_ms": 900,
+      "limit_db": 4,
+      "master": {
+        "hp_hz": 25,
+        "lp_hz": 15000
+      },
+      "layers": [
+        {
+          "file": "boss_death/sb_boom.mp3",
+          "hp_hz": 25,
+          "lp_hz": 160,
+          "lp_order": 4,
+          "gain_db": 0
+        },
+        {
+          "file": "boss_death/tr_magic.mp3",
+          "hp_hz": 80,
+          "lp_hz": 13000,
+          "gain_db": -2,
+          "length_ms": 1600,
+          "fade_out_ms": 600
+        },
+        {
+          "file": "boss_death/bd_coins.mp3",
+          "offset_ms": 120,
+          "hp_hz": 2000,
+          "lp_hz": 13000,
+          "gain_db": -5
+        },
+        {
+          "file": "boss_death/tl_dissolve.mp3",
+          "align": "peak",
+          "offset_ms": 700,
+          "hp_hz": 1500,
+          "lp_hz": 14000,
+          "gain_db": -6
+        }
+      ]
+    },
+    "boss_intro": {
+      "channels": 2,
+      "length_ms": 2100,
+      "fade_out_ms": 700,
+      "limit_db": 3,
+      "master": {
+        "hp_hz": 28,
+        "lp_hz": 13000
+      },
+      "layers": [
+        {
+          "file": "boss_intro/tr_brass.mp3",
+          "align": "start",
+          "hp_hz": 80,
+          "lp_hz": 10000,
+          "gain_db": 0
+        },
+        {
+          "file": "boss_intro/bd_gong.mp3",
+          "hp_hz": 60,
+          "lp_hz": 8000,
+          "gain_db": -5
+        },
+        {
+          "file": "boss_intro/sb_timpani.mp3",
+          "hp_hz": 35,
+          "lp_hz": 3000,
+          "gain_db": -2
+        }
+      ]
+    },
+    "coin_tick": {
+      "length_ms": 90,
+      "fade_out_ms": 30,
+      "limit_db": 2,
+      "trim_db": -40,
+      "master": {
+        "hp_hz": 300,
+        "lp_hz": 9000,
+        "lp_order": 4
+      },
+      "layers": [
+        {
+          "file": "coin_tick/tr_clink2.mp3",
+          "onset_floor_db": -15,
+          "trim_before_anchor_ms": 0.5,
+          "hp_hz": 2000,
+          "lp_hz": 10000,
+          "length_ms": 85,
+          "decay": {
+            "hold_ms": 8,
+            "tau_ms": 22
+          },
+          "gain_db": 0
+        },
+        {
+          "file": "coin_tick/tl_tink.mp3",
+          "pitch_semitones": -2,
+          "hp_hz": 3000,
+          "lp_hz": 10000,
+          "length_ms": 75,
+          "decay": {
+            "hold_ms": 5,
+            "tau_ms": 18
+          },
+          "gain_db": -9
+        },
+        {
+          "file": "wheel_tick/tr_bronze2.mp3",
+          "slice": {
+            "onset_index": 0,
+            "pre_ms": 0.5,
+            "length_ms": 30
+          },
+          "hp_hz": 1500,
+          "lp_hz": 8000,
+          "gain_db": -12
+        }
+      ]
+    },
+    "coin_burst": {
+      "channels": 2,
+      "length_ms": 1250,
+      "fade_out_ms": 450,
+      "limit_db": 3,
+      "master": {
+        "hp_hz": 30,
+        "lp_hz": 13500
+      },
+      "layers": [
+        {
+          "file": "coin_burst/sb_thud.mp3",
+          "hp_hz": 35,
+          "lp_hz": 250,
+          "lp_order": 4,
+          "gain_db": -5,
+          "length_ms": 300,
+          "fade_out_ms": 120
+        },
+        {
+          "file": "coin_burst/bd_spill.mp3",
+          "onset_floor_db": -15,
+          "trim_before_anchor_ms": 2,
+          "hp_hz": 400,
+          "lp_hz": 12500,
+          "gain_db": 0,
+          "eq": [
+            {
+              "type": "highshelf",
+              "hz": 8000,
+              "db": -2,
+              "q": 0.7
+            }
+          ]
+        },
+        {
+          "file": "coin_burst/tl_jingle.mp3",
+          "align": "start",
+          "offset_ms": 50,
+          "hp_hz": 3000,
+          "lp_hz": 12000,
+          "gain_db": -10,
+          "fade_in_ms": 20
+        }
+      ]
+    },
+    "near_miss": {
+      "channels": 2,
+      "length_ms": 1250,
+      "fade_out_ms": 420,
+      "master": {
+        "hp_hz": 40,
+        "lp_hz": 12000
+      },
+      "layers": [
+        {
+          "file": "near_miss/tr_pluck.mp3",
+          "hp_hz": 60,
+          "lp_hz": 2500,
+          "gain_db": -2,
+          "length_ms": 900,
+          "fade_out_ms": 400
+        },
+        {
+          "file": "near_miss/bd_gasp.mp3",
+          "align": "start",
+          "offset_ms": 20,
+          "hp_hz": 250,
+          "lp_hz": 9000,
+          "gain_db": -2,
+          "fade_in_ms": 60
+        },
+        {
+          "file": "near_miss/tl_whisper.mp3",
+          "align": "start",
+          "hp_hz": 600,
+          "lp_hz": 10000,
+          "gain_db": -7,
+          "fade_in_ms": 200
+        }
+      ]
+    },
+    "tension_riser": {
+      "channels": 2,
+      "length_ms": 2500,
+      "fade_out_ms": 25,
+      "trim_db": -60,
+      "limit_db": 2,
+      "master": {
+        "hp_hz": 40,
+        "lp_hz": 14000
+      },
+      "layers": [
+        {
+          "file": "tension_riser/bd_strings.mp3",
+          "reverse": true,
+          "align": "peak",
+          "offset_ms": 2450,
+          "hp_hz": 120,
+          "lp_hz": 10000,
+          "gain_db": 0
+        },
+        {
+          "file": "tension_riser/bd_synth.mp3",
+          "align": "start",
+          "hp_hz": 200,
+          "lp_hz": 12000,
+          "gain_db": -4,
+          "length_ms": 2500
+        },
+        {
+          "file": "tension_riser/tl_noise.mp3",
+          "align": "start",
+          "hp_hz": 2000,
+          "lp_hz": 13000,
+          "gain_db": -8,
+          "length_ms": 2500
+        }
+      ]
+    },
+    "run_steps": {
+      "loop": {
+        "mode": "wrap",
+        "length_ms": 1200
+      },
+      "limit_db": 2,
+      "master": {
+        "hp_hz": 40,
+        "lp_hz": 11000
+      },
+      "layers": [
+        {
+          "file": "run_steps/tr_steps.mp3",
+          "slice": {
+            "onset_index": 1,
+            "onset_floor_db": -12,
+            "pre_ms": 2,
+            "length_ms": 240,
+            "fade_out_ms": 60
+          },
+          "offset_ms": 0,
+          "hp_hz": 60,
+          "lp_hz": 9000,
+          "gain_db": 0
+        },
+        {
+          "file": "run_steps/tr_steps.mp3",
+          "slice": {
+            "onset_index": 3,
+            "onset_floor_db": -12,
+            "pre_ms": 2,
+            "length_ms": 240,
+            "fade_out_ms": 60
+          },
+          "offset_ms": 300,
+          "hp_hz": 60,
+          "lp_hz": 9000,
+          "gain_db": -1.5,
+          "pitch_semitones": 0.3
+        },
+        {
+          "file": "run_steps/tr_steps.mp3",
+          "slice": {
+            "onset_index": 4,
+            "onset_floor_db": -12,
+            "pre_ms": 2,
+            "length_ms": 240,
+            "fade_out_ms": 60
+          },
+          "offset_ms": 600,
+          "hp_hz": 60,
+          "lp_hz": 9000,
+          "gain_db": -0.5,
+          "pitch_semitones": -0.2
+        },
+        {
+          "file": "run_steps/tr_steps.mp3",
+          "slice": {
+            "onset_index": 6,
+            "onset_floor_db": -12,
+            "pre_ms": 2,
+            "length_ms": 240,
+            "fade_out_ms": 60
+          },
+          "offset_ms": 900,
+          "hp_hz": 60,
+          "lp_hz": 9000,
+          "gain_db": -2,
+          "pitch_semitones": 0.4
+        },
+        {
+          "file": "run_steps/bd_cloth.mp3",
+          "slice": {
+            "onset_index": 1,
+            "onset_floor_db": -12,
+            "pre_ms": 30,
+            "length_ms": 300,
+            "fade_in_ms": 30,
+            "fade_out_ms": 120
+          },
+          "offset_ms": 20,
+          "hp_hz": 400,
+          "lp_hz": 8000,
+          "gain_db": -12
+        },
+        {
+          "file": "run_steps/bd_cloth.mp3",
+          "slice": {
+            "onset_index": 2,
+            "onset_floor_db": -12,
+            "pre_ms": 30,
+            "length_ms": 300,
+            "fade_in_ms": 30,
+            "fade_out_ms": 120
+          },
+          "offset_ms": 620,
+          "hp_hz": 400,
+          "lp_hz": 8000,
+          "gain_db": -13
+        }
+      ]
+    },
+    "heartbeat": {
+      "loop": {
+        "mode": "wrap",
+        "length_ms": 1600
+      },
+      "limit_db": 3,
+      "master": {
+        "hp_hz": 25,
+        "lp_hz": 3000
+      },
+      "layers": [
+        {
+          "file": "heartbeat/bd_beat.mp3",
+          "slice": {
+            "onset_index": 0,
+            "onset_floor_db": -15,
+            "pre_ms": 3,
+            "length_ms": 600,
+            "fade_out_ms": 150
+          },
+          "offset_ms": 0,
+          "hp_hz": 28,
+          "lp_hz": 1200,
+          "saturate_db": 10,
+          "eq": [
+            {
+              "type": "peak",
+              "hz": 180,
+              "db": 5,
+              "q": 0.8
+            }
+          ],
+          "gain_db": 0
+        },
+        {
+          "file": "heartbeat/bd_beat.mp3",
+          "slice": {
+            "onset_index": 0,
+            "onset_floor_db": -15,
+            "pre_ms": 3,
+            "length_ms": 320,
+            "fade_out_ms": 120
+          },
+          "offset_ms": 230,
+          "pitch_semitones": 2,
+          "hp_hz": 35,
+          "lp_hz": 1200,
+          "saturate_db": 10,
+          "eq": [
+            {
+              "type": "peak",
+              "hz": 200,
+              "db": 5,
+              "q": 0.8
+            }
+          ],
+          "gain_db": -6
+        },
+        {
+          "file": "heartbeat/bd_beat.mp3",
+          "slice": {
+            "onset_index": 2,
+            "onset_floor_db": -15,
+            "pre_ms": 3,
+            "length_ms": 600,
+            "fade_out_ms": 150
+          },
+          "offset_ms": 800,
+          "hp_hz": 28,
+          "lp_hz": 1200,
+          "saturate_db": 10,
+          "eq": [
+            {
+              "type": "peak",
+              "hz": 180,
+              "db": 5,
+              "q": 0.8
+            }
+          ],
+          "gain_db": -0.5
+        },
+        {
+          "file": "heartbeat/bd_beat.mp3",
+          "slice": {
+            "onset_index": 2,
+            "onset_floor_db": -15,
+            "pre_ms": 3,
+            "length_ms": 320,
+            "fade_out_ms": 120
+          },
+          "offset_ms": 1030,
+          "pitch_semitones": 2,
+          "hp_hz": 35,
+          "lp_hz": 1200,
+          "saturate_db": 10,
+          "eq": [
+            {
+              "type": "peak",
+              "hz": 200,
+              "db": 5,
+              "q": 0.8
+            }
+          ],
+          "gain_db": -6.5
+        },
+        {
+          "file": "heartbeat/sb_sub.mp3",
+          "offset_ms": 0,
+          "hp_hz": 25,
+          "lp_hz": 100,
+          "lp_order": 4,
+          "gain_db": -9,
+          "length_ms": 300,
+          "fade_out_ms": 120
+        },
+        {
+          "file": "heartbeat/sb_sub.mp3",
+          "offset_ms": 800,
+          "hp_hz": 25,
+          "lp_hz": 100,
+          "lp_order": 4,
+          "gain_db": -9,
+          "length_ms": 300,
+          "fade_out_ms": 120
+        }
+      ]
+    },
+    "whoosh_ui": {
+      "length_ms": 420,
+      "fade_out_ms": 120,
+      "master": {
+        "hp_hz": 120,
+        "lp_hz": 12500
+      },
+      "layers": [
+        {
+          "file": "whoosh_ui/tl_swish.mp3",
+          "align": "start",
+          "hp_hz": 800,
+          "lp_hz": 12000,
+          "gain_db": 0,
+          "fade_in_ms": 15,
+          "fade_out_ms": 120
+        },
+        {
+          "file": "whoosh_ui/bd_whoosh.mp3",
+          "align": "start",
+          "offset_ms": 20,
+          "hp_hz": 250,
+          "lp_hz": 3000,
+          "gain_db": -8,
+          "fade_out_ms": 100
+        },
+        {
+          "file": "whoosh_ui/tr_click.mp3",
+          "offset_ms": 290,
+          "hp_hz": 1000,
+          "lp_hz": 8000,
+          "gain_db": -14,
+          "length_ms": 60,
+          "fade_out_ms": 30
+        }
+      ]
+    },
+    "victory_stinger": {
+      "channels": 2,
+      "length_ms": 3200,
+      "fade_out_ms": 900,
+      "limit_db": 2.5,
+      "master": {
+        "hp_hz": 30,
+        "lp_hz": 15000
+      },
+      "layers": [
+        {
+          "file": "victory_stinger/bd_fanfare_music.mp3",
+          "pitch_semitones": 1,
+          "align": "start",
+          "hp_hz": 40,
+          "gain_db": 0
+        },
+        {
+          "file": "victory_stinger/tl_bells.mp3",
+          "pitch_semitones": 1,
+          "hp_hz": 1500,
+          "lp_hz": 12000,
+          "gain_db": -10
+        },
+        {
+          "file": "victory_stinger/tl_cymbal.mp3",
+          "hp_hz": 3000,
+          "lp_hz": 14000,
+          "gain_db": -12
+        },
+        {
+          "file": "reveal_big/sb_boom_b.mp3",
+          "hp_hz": 30,
+          "lp_hz": 140,
+          "lp_order": 4,
+          "gain_db": -8,
+          "length_ms": 450,
+          "fade_out_ms": 200
+        }
+      ]
+    },
+    "gameover_stinger": {
+      "channels": 2,
+      "length_ms": 3400,
+      "fade_out_ms": 1000,
+      "limit_db": 2.5,
+      "master": {
+        "hp_hz": 30,
+        "lp_hz": 13000
+      },
+      "layers": [
+        {
+          "file": "gameover_stinger/bd_stinger_music_c.mp3",
+          "align": "start",
+          "hp_hz": 40,
+          "gain_db": 0,
+          "eq": [
+            {
+              "type": "lowshelf",
+              "hz": 120,
+              "db": -3,
+              "q": 0.7
+            },
+            {
+              "type": "peak",
+              "hz": 1500,
+              "db": 3,
+              "q": 0.8
+            }
+          ]
+        },
+        {
+          "file": "gameover_stinger/tr_dice.mp3",
+          "onset_floor_db": -15,
+          "offset_ms": 2000,
+          "hp_hz": 400,
+          "lp_hz": 11000,
+          "gain_db": -5
+        },
+        {
+          "file": "reveal_big/sb_boom_b.mp3",
+          "offset_ms": 2805,
+          "hp_hz": 30,
+          "lp_hz": 120,
+          "lp_order": 4,
+          "gain_db": -9,
+          "length_ms": 450,
+          "fade_out_ms": 220
+        }
+      ]
+    }
+  }
+}

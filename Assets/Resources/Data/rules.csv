@@ -1,0 +1,6 @@
+key,value,notes
+hero_hp,100,Hero max HP; fully restored between bosses
+pity_per_miss,0.4,Extra weight added to the exact-kill slice for each spin that misses it while it is on the wheel (0 disables)
+spin_seconds,3.1,Base wheel spin duration in seconds
+auto_spin_seconds,2.4,Spin duration while AUTO is on
+gold_per_damage,1,Gold earned per point of damage dealt

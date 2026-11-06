@@ -1,0 +1,111 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/Main.uss" />
+    <ui:VisualElement name="root" class="root" picking-mode="Ignore">
+
+        <ui:VisualElement name="hud" class="hud" picking-mode="Ignore">
+            <ui:VisualElement name="hero-panel" class="side-panel hero-panel" picking-mode="Ignore">
+                <ui:VisualElement name="hero-portrait" class="portrait" picking-mode="Ignore" />
+                <ui:VisualElement class="side-info" picking-mode="Ignore">
+                    <ui:Label name="hero-name" text="ACE" class="name title-font" picking-mode="Ignore" />
+                    <ui:VisualElement name="hero-bar" class="bar" picking-mode="Ignore">
+                        <ui:VisualElement name="hero-ghost" class="bar-ghost" picking-mode="Ignore" />
+                        <ui:VisualElement name="hero-fill" class="bar-fill hero-fill" picking-mode="Ignore" />
+                        <ui:VisualElement class="bar-shine" picking-mode="Ignore" />
+                        <ui:Label name="hero-hp" text="100 / 100" class="bar-label" picking-mode="Ignore" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+
+            <ui:VisualElement name="center-panel" class="center-panel" picking-mode="Ignore">
+                <ui:VisualElement name="depth-pips" class="pips" picking-mode="Ignore" />
+                <ui:Label name="depth-label" text="DEPTH 1 / 5" class="depth-label" picking-mode="Ignore" />
+                <ui:VisualElement name="gold-box" class="gold-box" picking-mode="Ignore">
+                    <ui:VisualElement name="gold-icon" class="gold-icon" picking-mode="Ignore" />
+                    <ui:Label name="gold-label" text="0" class="gold-label" picking-mode="Ignore" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+
+            <ui:VisualElement name="boss-panel" class="side-panel boss-panel" picking-mode="Ignore">
+                <ui:VisualElement name="boss-portrait" class="portrait" picking-mode="Ignore" />
+                <ui:VisualElement class="side-info right" picking-mode="Ignore">
+                    <ui:Label name="boss-name" text="BOSS" class="name title-font" picking-mode="Ignore" />
+                    <ui:Label name="boss-title" text="Title" class="subtitle" picking-mode="Ignore" />
+                    <ui:VisualElement name="boss-bar" class="bar" picking-mode="Ignore">
+                        <ui:VisualElement name="boss-ghost" class="bar-ghost" picking-mode="Ignore" />
+                        <ui:VisualElement name="boss-fill" class="bar-fill boss-fill" picking-mode="Ignore" />
+                        <ui:VisualElement class="bar-shine" picking-mode="Ignore" />
+                        <ui:Label name="boss-hp" text="10 / 10" class="bar-label" picking-mode="Ignore" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+
+            <ui:VisualElement name="need-pill" class="need-pill" picking-mode="Ignore">
+                <ui:VisualElement name="need-icon" class="need-icon" picking-mode="Ignore" />
+                <ui:Label name="need-caption" text="TO GO" class="need-caption" picking-mode="Ignore" />
+                <ui:Label name="need-value" text="10" class="need-value" picking-mode="Ignore" />
+            </ui:VisualElement>
+
+            <ui:Button name="spin-button" class="spin-button">
+                <ui:Label name="spin-label" text="SPIN" class="spin-label" picking-mode="Ignore" />
+            </ui:Button>
+            <ui:Label name="spin-hint" text="SPACE  ·  CLICK" class="spin-hint" picking-mode="Ignore" />
+            <ui:Button name="auto-button" text="AUTO" class="pill-button auto-button" />
+            <ui:Button name="settings-button" text="OPTIONS" class="pill-button settings-button" />
+        </ui:VisualElement>
+
+        <ui:VisualElement name="banner" class="banner" picking-mode="Ignore">
+            <ui:Label name="banner-title" text="" class="banner-title" picking-mode="Ignore" />
+            <ui:Label name="banner-sub" text="" class="banner-sub" picking-mode="Ignore" />
+        </ui:VisualElement>
+
+        <ui:VisualElement name="flash" class="flash" picking-mode="Ignore" />
+        <ui:VisualElement name="fade" class="fade" picking-mode="Ignore" />
+
+        <ui:VisualElement name="title-screen" class="screen title-screen">
+            <ui:VisualElement name="title-logo" class="title-logo" picking-mode="Ignore" />
+            <ui:Label text="Spin the Wheel of Fate. Hit the exact number. Break the curse." class="tagline" picking-mode="Ignore" />
+            <ui:Button name="title-play" text="BEGIN" class="big-button" />
+            <ui:Label name="title-stats" text="" class="stats-line" picking-mode="Ignore" />
+            <ui:Label text="Team Lucky Number  ·  Unity Game Jam 2026" class="credits" picking-mode="Ignore" />
+        </ui:VisualElement>
+
+        <ui:VisualElement name="end-screen" class="screen end-screen">
+            <ui:VisualElement name="end-panel" class="panel">
+                <ui:Label name="end-title" text="" class="panel-title title-font" picking-mode="Ignore" />
+                <ui:Label name="end-sub" text="" class="panel-sub" picking-mode="Ignore" />
+                <ui:VisualElement name="end-stats" class="stats" picking-mode="Ignore" />
+                <ui:VisualElement class="button-row">
+                    <ui:Button name="end-retry" text="SPIN AGAIN" class="big-button" />
+                    <ui:Button name="end-menu" text="TITLE" class="pill-button" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <ui:VisualElement name="settings-screen" class="screen settings-screen">
+            <ui:VisualElement class="panel settings-panel">
+                <ui:Label text="OPTIONS" class="panel-title title-font" picking-mode="Ignore" />
+                <ui:VisualElement class="setting-row">
+                    <ui:Label text="Music" class="setting-name" picking-mode="Ignore" />
+                    <ui:Button name="music-down" text="−" class="step-button" />
+                    <ui:Label name="music-value" text="70%" class="setting-value" picking-mode="Ignore" />
+                    <ui:Button name="music-up" text="+" class="step-button" />
+                </ui:VisualElement>
+                <ui:VisualElement class="setting-row">
+                    <ui:Label text="Sound" class="setting-name" picking-mode="Ignore" />
+                    <ui:Button name="sfx-down" text="−" class="step-button" />
+                    <ui:Label name="sfx-value" text="100%" class="setting-value" picking-mode="Ignore" />
+                    <ui:Button name="sfx-up" text="+" class="step-button" />
+                </ui:VisualElement>
+                <ui:VisualElement class="setting-row">
+                    <ui:Label text="Screen shake" class="setting-name" picking-mode="Ignore" />
+                    <ui:Button name="shake-toggle" text="ON" class="pill-button toggle-button" />
+                </ui:VisualElement>
+                <ui:VisualElement class="setting-row">
+                    <ui:Label text="Screen flash effects" class="setting-name" picking-mode="Ignore" />
+                    <ui:Button name="flash-toggle" text="ON" class="pill-button toggle-button" />
+                </ui:VisualElement>
+                <ui:Button name="settings-close" text="RESUME" class="big-button small" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
