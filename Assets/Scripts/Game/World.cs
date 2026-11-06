@@ -18,7 +18,7 @@ namespace Lucky
         [System.Serializable] class ArenaLights { public string background; public LightSpot[] lights; }
         [System.Serializable] class LightSheet { public ArenaLights[] arenas; }
 
-        struct Flicker { public Light2D Light; public float Base, Seed; }
+        struct Flicker { public Light2D Light; public Vector3 Home; public float Base, Seed; }
 
         /// <summary>Animated backdrop: a lit quad fed by a looping video, fading in over the still once frames arrive.</summary>
         class LiveBackdrop
@@ -26,6 +26,7 @@ namespace Lucky
             public VideoPlayer Player;
             public Material Material;
             public float X, Alpha;
+            public bool Failed;
         }
 
         readonly List<Transform> pillars = new();
@@ -37,6 +38,23 @@ namespace Lucky
         float emberTimer;
 
         public static float ArenaX(int index) => index * Spacing;
+
+        /// <summary>0..1 how far the backdrops near the camera have faded into live video; failed videos count as done.</summary>
+        public float BackdropProgress
+        {
+            get
+            {
+                float sum = 0f;
+                int count = 0;
+                foreach (var b in backdrops)
+                {
+                    if (Mathf.Abs(b.X - CameraRig.I.BaseX) >= Spacing) continue;
+                    sum += b.Failed ? 1f : b.Alpha;
+                    count++;
+                }
+                return count == 0 ? 1f : sum / count;
+            }
+        }
 
         public void Build(GameConfig cfg, List<BossDef> bosses)
         {
@@ -70,7 +88,7 @@ namespace Lucky
                         light.color = Color.Lerp(color, Color.white, 0.15f);
                         light.pointLightOuterRadius = Mathf.Clamp(spot.size * bgWidth * 9f, 3f, 7.5f);
                         light.intensity = 1.1f;
-                        flickers.Add(new Flicker { Light = light, Base = light.intensity, Seed = Random.value * 50f });
+                        flickers.Add(new Flicker { Light = light, Home = pos, Base = light.intensity, Seed = Random.value * 50f });
                     }
 
                 foreach (float side in new[] { -1f, 1f })
@@ -124,10 +142,15 @@ namespace Lucky
             vp.renderMode = VideoRenderMode.RenderTexture;
             vp.targetTexture = rt;
             vp.audioOutputMode = VideoAudioOutputMode.None;
-            vp.errorReceived += (_, msg) => Debug.LogWarning($"Backdrop video {name}: {msg}");
+            var backdrop = new LiveBackdrop { Player = vp, Material = mat, X = pos.x };
+            vp.errorReceived += (_, msg) =>
+            {
+                backdrop.Failed = true;
+                Debug.LogWarning($"Backdrop video {name}: {msg}");
+            };
             mat.mainTexture = rt;
             vp.Prepare();
-            return new LiveBackdrop { Player = vp, Material = mat, X = pos.x };
+            return backdrop;
         }
 
         static Mesh quadMesh;
@@ -177,7 +200,7 @@ namespace Lucky
                 b.Material.SetFloat("_Alpha", b.Alpha);
             }
 
-            // Fire flicker: layered noise on every torch/candle light near the camera.
+            // Fire flicker: layered noise on every torch/candle light near the camera, with a small flame sway.
             float t = Time.time;
             foreach (var f in flickers)
             {
@@ -186,6 +209,7 @@ namespace Lucky
                 if (!near) continue;
                 float n = Mathf.PerlinNoise(f.Seed, t * 7f) * 0.6f + Mathf.PerlinNoise(f.Seed + 3f, t * 19f) * 0.4f;
                 f.Light.intensity = f.Base * (0.7f + n * 0.6f);
+                f.Light.transform.position = f.Home + new Vector3(Mathf.PerlinNoise(f.Seed + 7f, t * 3f) - 0.5f, Mathf.PerlinNoise(f.Seed + 11f, t * 4f) - 0.5f) * 0.35f;
             }
 
             emberTimer -= Time.deltaTime;

@@ -1,5 +1,38 @@
-id,name,kind,max,cost,value,requires,icon,desc
-vitality,Vitality,max_hp,8,25;50;85;125;170;225;290;370,15,,icon_heart,+{value} max HP per level. Ace starts with only {base}.
-loaded_die,Loaded Die,plus_one,1,120,1,,icon_loaded_die,Passive. Land 1 short of the Lucky Number and the die tips it over: +1.
-horseshoe,Lucky Horseshoe,plus_minus_one,1,380,1,loaded_die,icon_horseshoe,"Passive. Land 1 off the Lucky Number, either way, and it's pulled in: ±1."
-firebomb,Firebomb Flask,bomb,3,30,5,,icon_firebomb,Consumable. Throw for exactly {value} damage before you spin. Overshoot still busts. One per turn.
+id,name,type,stat,x,y,max,cost,value,requires,icon,desc
+vitality,Vitality I,passive,max_hp,0,-1,4,20;35;55;80,5,,icon_heart,+{value} max HP per level. Ace starts with only {base}.
+potion,Health Potion,consumable,potion,-1,-1,2,30;70;130;210;320,10,vitality,icon_potion,Restocks every run. Drink before you spin to heal {value} HP. One item per turn.
+mending,Mending I,passive,regen,1,-1,3,45;75;110,5,vitality,icon_mending,+{value}% of max HP healed after each boss.
+vitality_2,Vitality II,passive,max_hp,0,-2,4,110;150;195;250,10,vitality,icon_heart,+{value} max HP per level.
+brew,Potent Brew,passive,potion_heal,-1,-2,3,90;140;200,5,potion;vitality_2,icon_potion,Health Potions heal +{value} HP per level.
+mending_2,Mending II,passive,regen,1,-2,3,180;250;330,8,mending;vitality_2,icon_mending,+{value}% of max HP healed after each boss.
+seal_heart,Seal of the Golem,gate,,0,-3,1,0,3,vitality_2,,"Defeat {boss} (reach Depth {value}) to break this seal."
+vitality_3,Vitality III,passive,max_hp,0,-4,4,320;400;490;600,15,seal_heart,icon_heart,+{value} max HP per level.
+elixir,Elixir Mastery,passive,potion_heal,-1,-4,2,300;450,10,vitality_3,icon_potion,Health Potions heal +{value} HP per level.
+mending_3,Mending III,passive,regen,1,-4,3,450;600;780,12,vitality_3,icon_mending,+{value}% of max HP healed after each boss.
+seal_phoenix,Seal of the Knight,gate,,2,-4,1,0,6,mending_3,,"Defeat {boss} (reach Depth {value}) to break this seal."
+vitality_4,Vitality IV,passive,max_hp,3,-4,3,750;950;1200,25,seal_phoenix,icon_heart,+{value} max HP per level.
+phoenix,Phoenix Feather,passive,revive,4,-4,1,1500,1,vitality_4,icon_mending,"Once per run, rise from defeat with half your HP."
+fortune,Fortune I,passive,pity,1,0,3,60;100;150,20,,icon_fortune,Every miss makes the Lucky Number +{value}% more likely to come up.
+loaded_die,Loaded Die,passive,charm_below,2,0,1,120,1,fortune,icon_loaded_die,Land 1 short of the Lucky Number and the die tips it over: +1.
+clover,Four-Leaf Clover,consumable,clover,1,1,2,45;100;180;280;400,6,fortune,icon_clover,Restocks every run. Your next spin is far more likely to hit the Lucky Number. One item per turn.
+clover_bloom,Clover Bloom,passive,clover_bonus,2,1,2,140;220,3,clover;loaded_die,icon_clover,Four-Leaf Clovers pull +{value} harder toward the Lucky Number per level.
+seal_luck,Seal of the Mimic,gate,,3,0,1,0,4,loaded_die,,"Defeat {boss} (reach Depth {value}) to break this seal."
+horseshoe,Lucky Horseshoe,passive,charm_above,4,0,1,380,1,seal_luck,icon_horseshoe,"Land 1 off the Lucky Number, either way, and it's pulled in: ±1."
+fortune_2,Fortune II,passive,pity,4,-1,2,300;450,40,horseshoe,icon_fortune,Every miss makes the Lucky Number +{value}% more likely to come up.
+seal_fate,Seal of the Dragon,gate,,5,0,1,0,7,horseshoe,,"Defeat {boss} (reach Depth {value}) to break this seal."
+fortune_3,Fortune III,passive,pity,6,0,2,900;1200,60,seal_fate,icon_fortune,Every miss makes the Lucky Number +{value}% more likely to come up.
+firebomb,Firebomb Flask,consumable,bomb,-1,0,3,35;75;130;200;290;400,5,,icon_firebomb,Restocks every run. Throw for exactly {value} damage before you spin. Overshoot still busts. One item per turn.
+iron_hide,Iron Hide I,passive,armor,-2,0,2,70;130,1,firebomb,icon_armor,Armor: a shield soaks {value} damage from every boss hit per level.
+satchel,Satchel,passive,carry,-1,1,2,150;300,1,firebomb,icon_satchel,Stock +{value} more of every consumable per level.
+ward,Warding Charm,consumable,ward,-2,1,1,80;220;420;700,0,iron_hide;satchel,icon_ward,Restocks every run. Completely blocks the boss's next attack. One item per turn.
+seal_iron,Seal of the Golem,gate,,-3,0,1,0,3,iron_hide,,"Defeat {boss} (reach Depth {value}) to break this seal."
+iron_hide_2,Iron Hide II,passive,armor,-4,0,2,350;500,1,seal_iron,icon_armor,Armor: a shield soaks {value} damage from every boss hit per level.
+bandolier,Bandolier,passive,carry,-4,1,1,600,1,iron_hide_2,icon_satchel,Stock +{value} more of every consumable.
+seal_war,Seal of the Knight,gate,,-5,0,1,0,6,iron_hide_2,,"Defeat {boss} (reach Depth {value}) to break this seal."
+iron_hide_3,Iron Hide III,passive,armor,-6,0,2,900;1200,1,seal_war,icon_armor,Armor: a shield soaks {value} damage from every boss hit per level.
+greed,Greed I,passive,gold,0,1,3,50;90;140,10,,icon_greed,+{value}% gold from every hit per level.
+greed_2,Greed II,passive,gold,0,2,3,220;300;400,20,greed,icon_greed,+{value}% gold from every hit per level.
+bounty,Bounty Hunter,passive,boss_gold,1,2,3,120;200;300,25,greed_2,icon_greed,+{value}% boss-defeat gold per level.
+seal_gold,Seal of the Mimic,gate,,0,3,1,0,4,greed_2,,"Defeat {boss} (reach Depth {value}) to break this seal."
+greed_3,Greed III,passive,gold,0,4,2,600;850,35,seal_gold,icon_greed,+{value}% gold from every hit per level.
+bounty_2,Bounty Hunter II,passive,boss_gold,1,4,2,700;1000,50,greed_3,icon_greed,+{value}% boss-defeat gold per level.

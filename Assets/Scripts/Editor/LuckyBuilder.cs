@@ -184,7 +184,7 @@ namespace Lucky.EditorTools
             light.pointLightInnerRadius = 0f;
             light.pointLightOuterRadius = 4f;
             light.falloffIntensity = 0.6f;
-            ConfigureLight(light, Light2D.NormalMapQuality.Fast, 2.5f);
+            ConfigureLight(light, Light2D.NormalMapQuality.Fast, 1.5f);
             var prefab = PrefabUtility.SaveAsPrefabAsset(go, path);
             Object.DestroyImmediate(go);
             return prefab;
@@ -303,7 +303,7 @@ namespace Lucky.EditorTools
             // Dim, warm ambient so torches, spells and impacts do the lighting.
             var global = new GameObject("Global Light 2D").AddComponent<Light2D>();
             global.lightType = Light2D.LightType.Global;
-            global.intensity = 0.62f;
+            global.intensity = 0.5f;
             global.color = new Color(1f, 0.9f, 0.82f);
             ConfigureLight(global, Light2D.NormalMapQuality.Disabled, 1f);
 

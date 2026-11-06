@@ -11,25 +11,34 @@ namespace Lucky
     /// <summary>UI Toolkit HUD and menus. All animation runs on unscaled time so hitstop never freezes the UI.</summary>
     public class HUD : MonoBehaviour
     {
-        public event Action SpinPressed, PlayPressed, RetryPressed, MenuPressed, BombPressed;
+        public event Action SpinPressed, PlayPressed, RetryPressed, MenuPressed, QuitPressed;
+        public event Action<ShopItem> ItemPressed;
 
         VisualElement root, hud, flash, fade, banner, titleScreen, endScreen, settingsScreen, shopScreen;
         VisualElement heroFill, heroGhost, bossFill, bossGhost, heroBar, bossBar, heroPortrait, bossPortrait;
-        VisualElement pips, goldBox, needPill, endStats, shopItems, charmBadge, charmIcon;
-        Label heroHp, bossHp, bossName, bossTitle, depthLabel, goldLabel, needCaption, needValue, spinLabel;
-        Label bannerTitle, bannerSub, titleStats, endTitle, endSub, musicValue, sfxValue, shopGold, bombCount, bombHint, charmLabel;
-        Button spinButton, autoButton, shakeToggle, flashToggle, titlePlay, bombButton;
-        VisualElement titleLogo;
+        VisualElement pips, goldBox, needPill, endStats, shopStats, shopDetail, shopDetailIcon, shopDetailCoin, charmBadge, charmIcon, itemBar;
+        Label heroHp, bossHp, bossName, bossTitle, depthLabel, goldLabel, needValue, spinLabel;
+        Label bannerTitle, bannerSub, endTitle, endSub, endNote, endRibbon, shopGold, charmLabel;
+        Label shopDetailName, shopDetailLevel, shopDetailDesc, shopDetailCost;
+        Button spinButton, autoButton, shakeToggle, flashToggle, titlePlay, endRetry, settingsQuit;
+        VisualElement titleLogo, titleTagline, titleButtons, titleStats, titleWinsStat, titlePlayGlow;
+        Label titleGold, titleDepth, titleWins, titleShopBadge, endShopBadge;
+        VisualElement endPanel, endButtons, endFx, settingsPanel, musicPips, sfxPips;
+        VisualElement loadingScreen, loadingLogo, loadingRing, loadingHub, loadingFill;
+        Label loadingLabel;
+        List<VisualElement> shines;
         FontAsset titleFont;
         GameConfig config;
-        bool bombUsable;
 
         int shownGold, targetGold;
         float goldTick, lastInputTime;
-        bool spinReady;
-        Coroutine heroGhostRoutine, bossGhostRoutine, bannerRoutine, flashRoutine;
+        bool spinReady, endReady, quitArmed;
+        Coroutine heroGhostRoutine, bossGhostRoutine, bannerRoutine, flashRoutine, titleRoutine, endRoutine;
 
         public bool SettingsOpen => settingsScreen.style.display == DisplayStyle.Flex;
+        public bool ShopOpen => shopScreen.style.display == DisplayStyle.Flex;
+        bool TitleOpen => titleScreen.style.display == DisplayStyle.Flex && !ShopOpen;
+        bool EndOpen => endScreen.style.display == DisplayStyle.Flex && !ShopOpen;
 
         public void Init(GameConfig cfg)
         {
@@ -63,29 +72,56 @@ namespace Lucky
             bossTitle = Q<Label>("boss-title");
             depthLabel = Q<Label>("depth-label");
             goldLabel = Q<Label>("gold-label");
-            needCaption = Q<Label>("need-caption");
             needValue = Q<Label>("need-value");
             spinLabel = Q<Label>("spin-label");
             bannerTitle = Q<Label>("banner-title");
             bannerSub = Q<Label>("banner-sub");
-            titleStats = Q<Label>("title-stats");
+            titleTagline = Q<VisualElement>("title-tagline");
+            titleButtons = Q<VisualElement>("title-buttons");
+            titleStats = Q<VisualElement>("title-stats");
+            titleWinsStat = Q<VisualElement>("title-wins-stat");
+            titlePlayGlow = Q<VisualElement>("title-play-glow");
+            titleGold = Q<Label>("title-gold");
+            titleDepth = Q<Label>("title-depth");
+            titleWins = Q<Label>("title-wins");
+            titleShopBadge = Q<Label>("title-shop-badge");
+            endPanel = Q<VisualElement>("end-panel");
             endTitle = Q<Label>("end-title");
             endSub = Q<Label>("end-sub");
-            musicValue = Q<Label>("music-value");
-            sfxValue = Q<Label>("sfx-value");
+            endRibbon = Q<Label>("end-ribbon");
+            endNote = Q<Label>("end-note");
+            endButtons = Q<VisualElement>("end-buttons");
+            endFx = Q<VisualElement>("end-fx");
+            endRetry = Q<Button>("end-retry");
+            endShopBadge = Q<Label>("end-shop-badge");
+            settingsPanel = Q<VisualElement>("settings-panel");
+            settingsQuit = Q<Button>("settings-quit");
+            musicPips = Q<VisualElement>("music-pips");
+            sfxPips = Q<VisualElement>("sfx-pips");
             spinButton = Q<Button>("spin-button");
             autoButton = Q<Button>("auto-button");
             shakeToggle = Q<Button>("shake-toggle");
             flashToggle = Q<Button>("flash-toggle");
             shopScreen = Q<VisualElement>("shop-screen");
-            shopItems = Q<VisualElement>("shop-items");
             shopGold = Q<Label>("shop-gold-label");
-            bombButton = Q<Button>("bomb-button");
-            bombCount = Q<Label>("bomb-count");
-            bombHint = Q<Label>("bomb-hint");
+            shopStats = Q<VisualElement>("shop-stats");
+            shopDetail = Q<VisualElement>("shop-detail");
+            shopDetailIcon = Q<VisualElement>("shop-detail-icon");
+            shopDetailCoin = Q<VisualElement>("shop-detail-coin");
+            shopDetailName = Q<Label>("shop-detail-name");
+            shopDetailLevel = Q<Label>("shop-detail-level");
+            shopDetailDesc = Q<Label>("shop-detail-desc");
+            shopDetailCost = Q<Label>("shop-detail-cost");
+            itemBar = Q<VisualElement>("item-bar");
             charmBadge = Q<VisualElement>("charm-badge");
             charmIcon = Q<VisualElement>("charm-icon");
             charmLabel = Q<Label>("charm-label");
+            loadingScreen = Q<VisualElement>("loading-screen");
+            loadingLogo = Q<VisualElement>("loading-logo");
+            loadingRing = Q<VisualElement>("loading-ring");
+            loadingHub = Q<VisualElement>("loading-hub");
+            loadingFill = Q<VisualElement>("loading-fill");
+            loadingLabel = Q<Label>("loading-label");
 
             if (titleFont != null)
                 root.Query(className: "title-font").ForEach(e => e.style.unityFontDefinition = FontDefinition.FromSDFFont(titleFont));
@@ -102,18 +138,28 @@ namespace Lucky
             titlePlay = Q<Button>("title-play");
             titleLogo = Q<VisualElement>("title-logo");
             titlePlay.clicked += () => { Click(); PlayPressed?.Invoke(); };
-            Q<Button>("end-retry").clicked += () => { Click(); RetryPressed?.Invoke(); };
+            endRetry.clicked += () => { Click(); RetryPressed?.Invoke(); };
+            settingsQuit.clicked += () =>
+            {
+                Click();
+                if (quitArmed) QuitPressed?.Invoke();
+                else ArmQuit(true);
+            };
+            shines = root.Query(className: "btn-shine").ToList();
             Q<Button>("end-menu").clicked += () => { Click(); MenuPressed?.Invoke(); };
             Q<Button>("title-shop").clicked += () => { Click(); ShowShop(true); };
             Q<Button>("end-shop").clicked += () => { Click(); ShowShop(true); };
             Q<Button>("shop-back").clicked += () => { Click(); ShowShop(false); };
             Q<Button>("shop-begin").clicked += () => { Click(); PlayPressed?.Invoke(); };
-            bombButton.clicked += () => { if (bombUsable) BombPressed?.Invoke(); };
-            BuildShop();
-            Q<Button>("music-down").clicked += () => StepVolume(true, -0.1f);
-            Q<Button>("music-up").clicked += () => StepVolume(true, 0.1f);
-            Q<Button>("sfx-down").clicked += () => StepVolume(false, -0.1f);
-            Q<Button>("sfx-up").clicked += () => StepVolume(false, 0.1f);
+            tree = new SkillTree(Q<VisualElement>("tree-viewport"), cfg, this);
+            tree.Hovered += ShowDetail;
+            tree.Bought += OnBought;
+            Q<Button>("music-down").clicked += () => SetVolume(true, SaveData.MusicVolume - 0.1f);
+            Q<Button>("music-up").clicked += () => SetVolume(true, SaveData.MusicVolume + 0.1f);
+            Q<Button>("sfx-down").clicked += () => SetVolume(false, SaveData.SfxVolume - 0.1f);
+            Q<Button>("sfx-up").clicked += () => SetVolume(false, SaveData.SfxVolume + 0.1f);
+            BuildVolumePips(musicPips, true);
+            BuildVolumePips(sfxPips, false);
             shakeToggle.clicked += () => { SaveData.ScreenShake = !SaveData.ScreenShake; RefreshSettings(); Click(); };
             flashToggle.clicked += () => { SaveData.Flashes = !SaveData.Flashes; RefreshSettings(); Click(); };
             root.Query<Button>().ForEach(b => b.RegisterCallback<PointerEnterEvent>(_ => AudioManager.I?.Play("ui_hover", 0.5f)));
@@ -178,6 +224,23 @@ namespace Lucky
             StartCoroutine(Shake(bossBar, 18f, 0.4f));
             StartCoroutine(PopScale(bossHp, 1.6f, 0.45f));
             StartCoroutine(FlashFill(bossFill));
+        }
+
+        /// <summary>Healing: the bar surges up to the new value with a pop.</summary>
+        public void HealHero(int hp, int max)
+        {
+            heroHp.text = $"{hp} / {max}";
+            if (heroGhostRoutine != null) StopCoroutine(heroGhostRoutine);
+            float from = heroFill.resolvedStyle.width, to = TrackWidth * hp / max;
+            StartCoroutine(Tween.Run(0.5f, t =>
+            {
+                float w = Mathf.Lerp(from, to, t);
+                heroFill.style.width = w;
+                heroGhost.style.width = w;
+            }, Ease.OutCubic, true));
+            StartCoroutine(PopScale(heroHp, 1.6f, 0.5f));
+            StartCoroutine(PopScale(heroBar, 1.08f, 0.4f));
+            StartCoroutine(FlashFill(heroFill));
         }
 
         /// <summary>BUST: the bar drains to empty, then visibly refills to the wrapped value.</summary>
@@ -269,13 +332,13 @@ namespace Lucky
         /// <summary>Dim the pill while the wheel spins so the revealed number owns the moment.</summary>
         public void DimNeed(bool dim) => needPill.style.opacity = dim ? 0.15f : 1f;
 
+        /// <summary>Shown only while some slice can land exactly on the boss's HP.</summary>
         public void SetNeed(int hp, bool lucky)
         {
             DimNeed(false);
-            needPill.EnableInClassList("lucky", lucky);
-            needCaption.text = lucky ? "LUCKY NUMBER" : "EXACTLY";
+            needPill.style.display = lucky ? DisplayStyle.Flex : DisplayStyle.None;
             needValue.text = hp.ToString();
-            StartCoroutine(PopScale(needPill, lucky ? 1.25f : 1.1f, 0.45f));
+            if (lucky) StartCoroutine(PopScale(needPill, 1.25f, 0.45f));
         }
 
         // ---------- Spin button ----------
@@ -290,15 +353,90 @@ namespace Lucky
 
         void RefreshAuto() => autoButton.EnableInClassList("on", SaveData.AutoSpin);
 
-        // ---------- Loadout: firebomb button and charm badge ----------
+        // ---------- Loadout: consumable bar and charm badge ----------
 
-        public void SetBomb(int count, bool usable)
+        readonly List<(ShopItem item, Button button)> itemButtons = new();
+        readonly Dictionary<ShopItem, string> itemBlockers = new();
+        VisualElement itemTip;
+        Label itemTipName, itemTipDesc, itemTipStatus;
+        ShopItem tipItem;
+
+        /// <summary>One button per consumable, hotkeyed 1..n in shop order; unbought ones hide, spent ones grey out.</summary>
+        public void BuildItems(List<ShopItem> items)
         {
-            bombUsable = usable;
-            bombCount.text = "×" + count;
-            bombButton.EnableInClassList("empty", count == 0);
-            bombHint.EnableInClassList("empty", count == 0);
-            bombButton.EnableInClassList("locked", !usable);
+            itemBar.Clear();
+            itemButtons.Clear();
+            itemTip = new VisualElement { pickingMode = PickingMode.Ignore };
+            itemTip.AddToClassList("item-tip");
+            itemTip.Add(itemTipName = CardLabel("item-tip-name", ""));
+            itemTipName.AddToClassList("title-font");
+            itemTip.Add(itemTipDesc = CardLabel("item-tip-desc", ""));
+            itemTip.Add(itemTipStatus = CardLabel("item-tip-status", ""));
+            itemBar.Add(itemTip);
+            tipItem = null;
+            for (int i = 0; i < items.Count; i++)
+            {
+                var item = items[i];
+                var button = new Button(() => ItemPressed?.Invoke(item));
+                button.AddToClassList("item-button");
+                var icon = new VisualElement { pickingMode = PickingMode.Ignore };
+                icon.AddToClassList("item-icon");
+                var sprite = config.Sprite(item.Icon);
+                if (sprite != null) icon.style.backgroundImage = new StyleBackground(sprite);
+                button.Add(icon);
+                button.Add(CardLabel("item-count", ""));
+                button.Add(CardLabel("item-key", (i + 1).ToString()));
+                button.RegisterCallback<PointerEnterEvent>(_ =>
+                {
+                    AudioManager.I?.Play("ui_hover", 0.5f);
+                    tipItem = item;
+                    itemTip.style.top = button.layout.center.y;
+                    RefreshTip();
+                });
+                button.RegisterCallback<PointerLeaveEvent>(_ =>
+                {
+                    if (tipItem != item) return;
+                    tipItem = null;
+                    RefreshTip();
+                });
+                itemBar.Add(button);
+                itemButtons.Add((item, button));
+            }
+        }
+
+        /// <summary><paramref name="blocker"/> gives why an item can't be used right now, or null if it can.</summary>
+        public void RefreshItems(Func<ShopItem, string> blocker, Dictionary<ShopItem, int> charges)
+        {
+            foreach (var (item, button) in itemButtons)
+            {
+                int left = charges.GetValueOrDefault(item), stock = Mathf.Min(item.Level, item.Max);
+                itemBlockers[item] = blocker(item);
+                button.EnableInClassList("empty", stock == 0);
+                button.EnableInClassList("spent", stock > 0 && left == 0);
+                button.EnableInClassList("locked", itemBlockers[item] != null);
+                button.Q<Label>(className: "item-count").text = $"{left}/{stock}";
+            }
+            RefreshTip();
+        }
+
+        /// <summary>Hover card beside the toolbar: what the item does, and why it's locked or its hotkey.</summary>
+        void RefreshTip()
+        {
+            itemTip.style.display = tipItem != null ? DisplayStyle.Flex : DisplayStyle.None;
+            if (tipItem == null) return;
+            itemTipName.text = tipItem.Name.ToUpperInvariant();
+            itemTipDesc.text = tipItem.Desc.Replace("{value}", tipItem.Value.ToString());
+            var reason = itemBlockers.GetValueOrDefault(tipItem);
+            itemTipStatus.text = reason ?? $"Click or press {itemButtons.FindIndex(b => b.item == tipItem) + 1} to use";
+            itemTipStatus.EnableInClassList("blocked", reason != null);
+        }
+
+        public void PopItem(ShopItem item)
+        {
+            var (_, button) = itemButtons.Find(b => b.item == item);
+            if (button == null) return;
+            StartCoroutine(PopScale(button, 1.45f, 0.5f));
+            StartCoroutine(FlashFill(button));
         }
 
         public void SetCharm(Sprite icon, string label)
@@ -380,6 +518,34 @@ namespace Lucky
             yield return Tween.Run(duration, t => fade.style.opacity = Mathf.Lerp(from, to, t), Ease.InOutQuad, true);
         }
 
+        // ---------- Loading screen ----------
+
+        static readonly string[] LoadingLines =
+        {
+            "Shuffling the cards of fate", "Oiling the Wheel of Fate", "Lighting the torches", "Waking the bosses", "Loading the dice",
+        };
+
+        bool Loading => loadingScreen.style.display != DisplayStyle.None;
+
+        public void SetLoading(float progress)
+        {
+            loadingFill.style.width = Length.Percent(progress * 100f);
+            loadingLabel.text = LoadingLines[Mathf.Min(LoadingLines.Length - 1, (int)(progress * LoadingLines.Length))];
+        }
+
+        /// <summary>Fades the loading screen off the title; the title is clickable as soon as the fade starts.</summary>
+        public IEnumerator HideLoading()
+        {
+            loadingScreen.pickingMode = PickingMode.Ignore;
+            yield return Tween.Run(0.6f, t =>
+            {
+                loadingScreen.style.opacity = 1f - t;
+                float s = 1f + t * 0.08f;
+                loadingLogo.style.scale = new Scale(new Vector3(s, s, 1f));
+            }, Ease.InOutQuad, true);
+            loadingScreen.style.display = DisplayStyle.None;
+        }
+
         // ---------- Element animation helpers ----------
 
         IEnumerator PopScale(VisualElement e, float amount, float duration)
@@ -401,26 +567,124 @@ namespace Lucky
             e.style.translate = new Translate(0, 0);
         }
 
+        /// <summary>Fade in while rising <paramref name="distance"/> px into place.</summary>
+        IEnumerator Rise(VisualElement e, float distance, float duration)
+        {
+            yield return Tween.Run(duration, t =>
+            {
+                e.style.opacity = t;
+                e.style.translate = new Translate(0f, distance * (1f - t));
+            }, Ease.OutCubic, true);
+        }
+
+        /// <summary>Gold sparkles that burst up from <paramref name="around"/> and fall away, drawn in the end panel's fx layer.</summary>
+        IEnumerator Sparkles(VisualElement around, int count)
+        {
+            var origin = around.worldBound.center - endFx.worldBound.position;
+            var parts = new List<(VisualElement e, Vector2 velocity, float size, float spin)>();
+            for (int i = 0; i < count; i++)
+            {
+                var e = Box("fx-sparkle");
+                float size = UnityEngine.Random.Range(18f, 42f);
+                e.style.width = size;
+                e.style.height = size;
+                endFx.Add(e);
+                parts.Add((e, new Vector2(UnityEngine.Random.Range(-280f, 280f), UnityEngine.Random.Range(-460f, -160f)), size, UnityEngine.Random.Range(-360f, 360f)));
+            }
+            yield return Tween.Run(0.9f, t =>
+            {
+                foreach (var (e, velocity, size, spin) in parts)
+                {
+                    var p = origin + velocity * t + new Vector2(0f, 520f * t * t);
+                    e.style.left = p.x - size * 0.5f;
+                    e.style.top = p.y - size * 0.5f;
+                    e.style.opacity = 1f - t * t;
+                    e.style.rotate = new Rotate(spin * t);
+                }
+            }, Ease.Linear, true);
+            foreach (var part in parts) part.e.RemoveFromHierarchy();
+        }
+
         // ---------- Screens ----------
 
         public void ShowTitle(bool on)
         {
             titleScreen.style.display = on ? DisplayStyle.Flex : DisplayStyle.None;
             if (!on) return;
+            // A run quit from the pause menu can leave a banner mid-animation.
+            if (bannerRoutine != null) StopCoroutine(bannerRoutine);
+            banner.style.opacity = 0f;
             RefreshTitleStats();
-            StartCoroutine(PopScale(titleLogo, 1.12f, 0.9f));
+            RefreshShopBadges();
+            Restart(ref titleRoutine, TitleIntro());
+        }
+
+        /// <summary>Logo settles in, then tagline, buttons and stats rise into place one after another.</summary>
+        IEnumerator TitleIntro()
+        {
+            var parts = new[] { titleTagline, titleButtons, titleStats };
+            foreach (var p in parts) p.style.opacity = 0f;
+            StartCoroutine(Tween.Run(0.7f, t =>
+            {
+                float s = Mathf.LerpUnclamped(1.25f, 1f, Ease.OutBack(t));
+                titleLogo.style.scale = new Scale(new Vector3(s, s, 1f));
+                titleLogo.style.opacity = Mathf.Clamp01(t * 3f);
+            }, Ease.Linear, true));
+            yield return new WaitForSecondsRealtime(0.25f);
+            foreach (var p in parts)
+            {
+                StartCoroutine(Rise(p, 40f, 0.45f));
+                yield return new WaitForSecondsRealtime(0.12f);
+            }
         }
 
         void RefreshTitleStats()
         {
-            titleStats.text = SaveData.Runs > 0
-                ? $"Gold banked: {Num(SaveData.Gold)}   ·   Deepest: Depth {Mathf.Max(1, SaveData.BestDepth)}   ·   Curses broken: {SaveData.Wins}"
-                : "Click BEGIN to descend";
+            titleStats.style.display = SaveData.Runs > 0 ? DisplayStyle.Flex : DisplayStyle.None;
+            titleGold.text = Num(SaveData.Gold);
+            titleDepth.text = $"Best depth {Mathf.Max(1, SaveData.BestDepth)}";
+            titleWinsStat.style.display = SaveData.Wins > 0 ? DisplayStyle.Flex : DisplayStyle.None;
+            titleWins.text = $"{SaveData.Wins} curse{(SaveData.Wins == 1 ? "" : "s")} broken";
+        }
+
+        /// <summary>The SHOP buttons show how many upgrades the banked gold can buy right now.</summary>
+        void RefreshShopBadges()
+        {
+            int count = Balance.Shop.FindAll(i => i.Affordable).Count;
+            foreach (var badge in new[] { titleShopBadge, endShopBadge })
+            {
+                badge.text = count.ToString();
+                badge.EnableInClassList("on", count > 0);
+            }
+        }
+
+        /// <summary>Keyboard confirm (Enter/Space) presses the current screen's primary button.</summary>
+        public void Confirm()
+        {
+            if (TitleOpen) Press(titlePlay, PlayPressed);
+            else if (EndOpen && endReady) Press(endRetry, RetryPressed);
+        }
+
+        /// <summary>Keyboard back (Esc) closes the shop.</summary>
+        public void Back()
+        {
+            if (!ShopOpen) return;
+            Click();
+            ShowShop(false);
+        }
+
+        void Press(Button button, Action action)
+        {
+            Click();
+            StartCoroutine(PopScale(button, 0.9f, 0.25f));
+            action?.Invoke();
         }
 
         // ---------- Shop ----------
 
-        readonly List<(ShopItem item, VisualElement card)> shopCards = new();
+        SkillTree tree;
+        (string label, string value)[] shownStats;
+        int shownShopGold;
 
         public void ShowShop(bool on)
         {
@@ -428,45 +692,23 @@ namespace Lucky
             shopScreen.style.display = on ? DisplayStyle.Flex : DisplayStyle.None;
             if (!on)
             {
+                tree.Hide();
                 if (wasOpen) AudioManager.I?.Play("whoosh_ui", 0.6f, 0.85f);
                 RefreshTitleStats();
+                RefreshShopBadges();
                 return;
             }
-            AudioManager.I?.Play("whoosh_ui", 0.7f);
-            RefreshShop();
-            var panel = Q<VisualElement>("shop-panel");
-            StartCoroutine(Tween.Run(0.35f, t =>
-            {
-                float s = Mathf.LerpUnclamped(0.7f, 1f, Ease.OutBack(t));
-                panel.style.scale = new Scale(new Vector3(s, s, 1f));
-                panel.style.opacity = t;
-            }, Ease.Linear, true));
+            RefreshShopHeader();
+            ShowDetail(null);
+            tree.Show();
+            StartCoroutine(Tween.Run(0.3f, t => shopScreen.style.opacity = t, Ease.OutQuad, true));
         }
 
-        void BuildShop()
+        static VisualElement Box(string className)
         {
-            foreach (var item in Balance.Shop)
-            {
-                var card = new VisualElement();
-                card.AddToClassList("shop-card");
-                var icon = new VisualElement { pickingMode = PickingMode.Ignore };
-                icon.AddToClassList("card-icon");
-                var sprite = config.Sprite(item.Icon);
-                if (sprite != null) icon.style.backgroundImage = new StyleBackground(sprite);
-                card.Add(icon);
-                card.Add(CardLabel("card-name", item.Name));
-                card.Add(CardLabel("card-level", ""));
-                card.Add(CardLabel("card-desc", item.Desc.Replace("{value}", item.Value.ToString()).Replace("{base}", Balance.HeroHp.ToString())));
-                var buy = new Button(() => Buy(item, card));
-                buy.AddToClassList("card-buy");
-                var coin = new VisualElement { pickingMode = PickingMode.Ignore };
-                coin.AddToClassList("card-coin");
-                buy.Add(coin);
-                buy.Add(CardLabel("card-price", ""));
-                card.Add(buy);
-                shopItems.Add(card);
-                shopCards.Add((item, card));
-            }
+            var e = new VisualElement { pickingMode = PickingMode.Ignore };
+            e.AddToClassList(className);
+            return e;
         }
 
         static Label CardLabel(string className, string text)
@@ -476,97 +718,257 @@ namespace Lucky
             return label;
         }
 
-        void RefreshShop()
+        /// <summary>The card in the corner describing the hovered node (null: the wheel hub).</summary>
+        void ShowDetail(ShopItem item)
         {
-            shopGold.text = Num(SaveData.Gold);
-            foreach (var (item, card) in shopCards)
+            bool fog = item != null && item.Locked && !item.Owned;
+            shopDetail.EnableInClassList("fog", fog);
+            shopDetail.EnableInClassList("gate", item != null && item.Gate);
+            var icon = item == null ? "wheel_hub" : item.Gate ? "portrait_" + item.GateBoss.Id : item.Icon;
+            shopDetailIcon.style.backgroundImage = new StyleBackground(config.Sprite(icon));
+            if (item == null)
             {
-                int level = item.Level;
-                card.EnableInClassList("done", item.Maxed);
-                card.EnableInClassList("locked", !item.Maxed && item.Locked);
-                card.EnableInClassList("poor", !item.Maxed && !item.Locked && item.Price > SaveData.Gold);
-                card.Q<Label>(className: "card-level").text = item.Consumable ? $"Carrying {level} / {item.Max}"
-                    : item.Max > 1 ? $"Level {level} / {item.Max}"
-                    : level > 0 ? "Owned" : "";
-                var requires = Balance.Shop.Find(i => i.Id == item.Requires);
-                card.Q<Label>(className: "card-price").text = item.Maxed ? (item.Consumable ? "FULL" : item.Max > 1 ? "MAXED" : "OWNED")
-                    : item.Locked ? $"Needs {requires?.Name}"
-                    : Num(item.Price);
-            }
-        }
-
-        void Buy(ShopItem item, VisualElement card)
-        {
-            int before = SaveData.Gold;
-            if (!item.TryBuy())
-            {
-                AudioManager.I?.Play("shop_deny", 0.6f);
-                StartCoroutine(Shake(card, 12f, 0.3f));
+                shopDetailName.text = "THE WHEEL OF FATE";
+                shopDetailLevel.text = "";
+                shopDetailDesc.text = "Every path grows from here. Buy a node to light its path and open the ones beyond it. Seals break as you reach deeper depths.";
+                shopDetailCost.text = "";
+                shopDetailCoin.style.display = DisplayStyle.None;
                 return;
             }
-            AudioManager.I?.Play("shop_buy");
-            if (item.Kind == ItemKind.MaxHp) AudioManager.I?.Play("hp_upgrade", 0.8f);
-            RefreshShop();
-            StartCoroutine(PopScale(card, 1.1f, 0.45f));
-            StartCoroutine(PopScale(card.Q(className: "card-icon"), 1.4f, 0.6f));
-            int after = SaveData.Gold;
-            StartCoroutine(Tween.Run(0.45f, t => shopGold.text = Num(Mathf.RoundToInt(Mathf.Lerp(before, after, t))), Ease.OutCubic, true));
+            if (fog)
+            {
+                shopDetailName.text = "???";
+                shopDetailLevel.text = "UNDISCOVERED";
+                shopDetailDesc.text = "Light the path leading here to find out what it is.";
+                shopDetailCost.text = "";
+                shopDetailCoin.style.display = DisplayStyle.None;
+                return;
+            }
+            shopDetailName.text = item.Name.ToUpperInvariant();
+            shopDetailDesc.text = item.Desc.Replace("{value}", item.Value.ToString()).Replace("{base}", Balance.HeroHp.ToString())
+                .Replace("{boss}", item.Gate ? item.GateBoss.Name : "");
+            shopDetailLevel.text = item.Gate ? (item.Owned ? "SEAL BROKEN" : "SEALED")
+                : item.Consumable ? $"STOCK {item.Level} / {item.Max} · REFILLS EVERY RUN"
+                : $"LEVEL {Mathf.Min(item.Level, item.Max)} / {item.Max}";
+            var missing = Array.ConvertAll(Array.FindAll(item.Requires, r => !Balance.Item(r).Owned), Balance.Item);
+            bool priced = !item.Gate && !item.Maxed && missing.Length == 0;
+            shopDetailCoin.style.display = priced ? DisplayStyle.Flex : DisplayStyle.None;
+            shopDetailCost.EnableInClassList("poor", priced && item.Price > SaveData.Gold);
+            shopDetailCost.text = priced ? Num(item.Price)
+                : missing.Length > 0 ? "Needs " + string.Join(" + ", Array.ConvertAll(missing, r => r.Name))
+                : item.Gate ? (item.Owned ? "Path open" : $"Reach Depth {item.Value}")
+                : item.Consumable ? "Satchel full" : "Fully upgraded";
         }
 
-        public void ShowEnd(bool victory, string title, string sub, IEnumerable<(string name, string value, bool gold)> stats)
+        void RefreshShopHeader()
+        {
+            shownShopGold = SaveData.Gold;
+            shopGold.text = Num(shownShopGold);
+            var stats = Stats.Current().Summary();
+            if (shopStats.childCount != stats.Length)
+            {
+                shopStats.Clear();
+                foreach (var (label, _) in stats)
+                {
+                    var chip = Box("stat-chip");
+                    chip.Add(CardLabel("chip-value", ""));
+                    chip.Add(CardLabel("chip-name", label));
+                    shopStats.Add(chip);
+                }
+            }
+            for (int i = 0; i < stats.Length; i++)
+            {
+                var chip = shopStats[i];
+                chip.Q<Label>(className: "chip-value").text = stats[i].value;
+                if (shownStats == null || shownStats[i].value == stats[i].value) continue;
+                StartCoroutine(PopScale(chip, 1.45f, 0.7f));
+                StartCoroutine(Glow(chip, "fresh", 0.9f));
+            }
+            shownStats = stats;
+        }
+
+        void OnBought(ShopItem item)
+        {
+            int goldBefore = shownShopGold;
+            RefreshShopHeader();
+            ShowDetail(item);
+            Flash(new Color(1f, 0.85f, 0.45f), 0.12f, 0.2f);
+            StartCoroutine(PopScale(shopDetail, 1.06f, 0.4f));
+            var gold = Q<VisualElement>("shop-gold");
+            StartCoroutine(PopScale(gold, 1.25f, 0.45f));
+            StartCoroutine(Shake(gold, 8f, 0.25f));
+            int after = SaveData.Gold;
+            StartCoroutine(Tween.Run(0.5f, t => shopGold.text = Num(Mathf.RoundToInt(Mathf.Lerp(goldBefore, after, t))), Ease.OutCubic, true));
+        }
+
+        IEnumerator Glow(VisualElement e, string className, float duration)
+        {
+            e.AddToClassList(className);
+            yield return new WaitForSecondsRealtime(duration);
+            e.RemoveFromClassList(className);
+        }
+
+        /// <param name="ribbon">Record callout under the subtitle (e.g. NEW BEST DEPTH!), or null.</param>
+        /// <param name="stats">Tiles in order; gold tiles read "+N" and burst into sparkles.</param>
+        public void ShowEnd(bool victory, string title, string sub, string note, string ribbon, IEnumerable<(string name, int value, string icon, bool gold)> stats)
         {
             endScreen.style.display = DisplayStyle.Flex;
+            endReady = false;
             endTitle.text = title;
             endTitle.style.color = victory ? new Color(1f, 0.84f, 0.36f) : new Color(1f, 0.42f, 0.45f);
             endSub.text = sub;
+            endNote.text = note;
+            endRibbon.text = ribbon ?? "";
+            endRibbon.EnableInClassList("on", !string.IsNullOrEmpty(ribbon));
             endStats.Clear();
-            foreach (var (name, value, gold) in stats)
+            var tiles = new List<(VisualElement tile, Label label, int value, bool gold)>();
+            foreach (var (name, value, icon, gold) in stats)
             {
-                var row = new VisualElement { pickingMode = PickingMode.Ignore };
-                row.AddToClassList("stat-row");
-                var n = new Label(name) { pickingMode = PickingMode.Ignore };
-                n.AddToClassList("stat-name");
-                var v = new Label(value) { pickingMode = PickingMode.Ignore };
-                v.AddToClassList("stat-value");
-                v.EnableInClassList("gold", gold);
-                row.Add(n);
-                row.Add(v);
-                endStats.Add(row);
+                var tile = Box("stat-tile");
+                tile.EnableInClassList("gold", gold);
+                var iconBox = Box("stat-tile-icon");
+                iconBox.style.backgroundImage = new StyleBackground(config.Sprite(icon));
+                tile.Add(iconBox);
+                var label = CardLabel("stat-tile-value", gold ? "+0" : "0");
+                tile.Add(label);
+                tile.Add(CardLabel("stat-tile-name", name));
+                endStats.Add(tile);
+                tiles.Add((tile, label, value, gold));
             }
-            var panel = Q<VisualElement>("end-panel");
-            StartCoroutine(Tween.Run(0.45f, t =>
-            {
-                float s = Mathf.LerpUnclamped(0.6f, 1f, Ease.OutBack(t));
-                panel.style.scale = new Scale(new Vector3(s, s, 1f));
-                panel.style.opacity = t;
-            }, Ease.Linear, true));
+            RefreshShopBadges();
+            Restart(ref endRoutine, EndReveal(victory, tiles));
         }
 
-        public void HideEnd() => endScreen.style.display = DisplayStyle.None;
+        /// <summary>Panel pops, the title slams down, then the tiles pop in one by one and count up before the buttons rise.</summary>
+        IEnumerator EndReveal(bool victory, List<(VisualElement tile, Label label, int value, bool gold)> tiles)
+        {
+            foreach (var e in new[] { endTitle, endSub, endRibbon, endNote, endButtons }) e.style.opacity = 0f;
+            foreach (var entry in tiles) entry.tile.style.opacity = 0f;
+
+            StartCoroutine(Tween.Run(0.3f, t => endScreen.style.opacity = t, Ease.OutQuad, true));
+            yield return Tween.Run(0.35f, t =>
+            {
+                float s = Mathf.LerpUnclamped(0.7f, 1f, Ease.OutBack(t));
+                endPanel.style.scale = new Scale(new Vector3(s, s, 1f));
+                endPanel.style.opacity = t;
+            }, Ease.Linear, true);
+
+            yield return Tween.Run(0.22f, t =>
+            {
+                float s = Mathf.Lerp(2.2f, 1f, t);
+                endTitle.style.scale = new Scale(new Vector3(s, s, 1f));
+                endTitle.style.opacity = t;
+            }, Ease.InQuad, true);
+            AudioManager.I?.Play(victory ? "reveal_big" : "hit_heavy", 0.6f, victory ? 1f : 0.8f);
+            StartCoroutine(Shake(endPanel, 12f, 0.3f));
+            if (victory) StartCoroutine(Sparkles(endTitle, 28));
+
+            StartCoroutine(Rise(endSub, 16f, 0.3f));
+            yield return new WaitForSecondsRealtime(0.12f);
+            if (endRibbon.ClassListContains("on"))
+            {
+                endRibbon.style.opacity = 1f;
+                StartCoroutine(PopScale(endRibbon, 1.7f, 0.6f));
+                AudioManager.I?.Play("reveal_small", 0.6f, 1.2f);
+                yield return new WaitForSecondsRealtime(0.15f);
+            }
+
+            foreach (var (tile, label, value, gold) in tiles)
+            {
+                tile.style.opacity = 1f;
+                StartCoroutine(PopScale(tile, 1.3f, 0.45f));
+                StartCoroutine(CountUp(label, value, gold, tile));
+                AudioManager.I?.Play("ui_click", 0.5f, 1.25f);
+                yield return new WaitForSecondsRealtime(0.1f);
+            }
+
+            yield return new WaitForSecondsRealtime(0.25f);
+            StartCoroutine(Rise(endNote, 16f, 0.3f));
+            yield return new WaitForSecondsRealtime(0.1f);
+            yield return Rise(endButtons, 30f, 0.3f);
+            endReady = true;
+        }
+
+        IEnumerator CountUp(Label label, int value, bool gold, VisualElement tile)
+        {
+            string prefix = gold ? "+" : "";
+            int shown = 0;
+            yield return Tween.Run(0.5f, t =>
+            {
+                int v = Mathf.RoundToInt(value * t);
+                if (v == shown) return;
+                shown = v;
+                label.text = prefix + Num(v);
+                if (gold) AudioManager.I?.Play("coin_tick", 0.3f, 1f + 0.5f * t, 0.03f, 0.03f);
+            }, Ease.OutCubic, true);
+            label.text = prefix + Num(value);
+            if (!gold || value <= 0) yield break;
+            AudioManager.I?.Play("coin_burst", 0.5f);
+            StartCoroutine(Sparkles(tile, 16));
+            StartCoroutine(PopScale(label, 1.4f, 0.5f));
+        }
+
+        public void HideEnd()
+        {
+            if (endRoutine != null) StopCoroutine(endRoutine);
+            endScreen.style.display = DisplayStyle.None;
+            endFx.Clear();
+        }
 
         public void ShowSettings(bool on)
         {
             Click();
             settingsScreen.style.display = on ? DisplayStyle.Flex : DisplayStyle.None;
-            RefreshSettings();
             Juice.I.Paused = on;
+            if (!on) return;
+            ArmQuit(false);
+            RefreshSettings();
+            StartCoroutine(Tween.Run(0.25f, t =>
+            {
+                settingsScreen.style.opacity = t;
+                float s = Mathf.LerpUnclamped(0.85f, 1f, Ease.OutBack(t));
+                settingsPanel.style.scale = new Scale(new Vector3(s, s, 1f));
+            }, Ease.Linear, true));
         }
 
-        void StepVolume(bool music, float delta)
+        /// <summary>Quitting a run takes two clicks; the first only asks for confirmation.</summary>
+        void ArmQuit(bool armed)
         {
-            if (music) SaveData.MusicVolume = Mathf.Clamp01(Mathf.Round((SaveData.MusicVolume + delta) * 10f) / 10f);
-            else SaveData.SfxVolume = Mathf.Clamp01(Mathf.Round((SaveData.SfxVolume + delta) * 10f) / 10f);
+            quitArmed = armed;
+            settingsQuit.text = armed ? "Click again to quit (gold is kept)" : "Quit to menu";
+            settingsQuit.EnableInClassList("confirm", armed);
+        }
+
+        void BuildVolumePips(VisualElement row, bool music)
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                var pip = Box("volume-pip");
+                pip.pickingMode = PickingMode.Position;
+                pip.style.height = 14f + i * 2.8f;
+                float volume = (i + 1) / 10f;
+                pip.RegisterCallback<PointerDownEvent>(_ => SetVolume(music, volume));
+                row.Add(pip);
+            }
+        }
+
+        void SetVolume(bool music, float volume)
+        {
+            volume = Mathf.Clamp01(Mathf.Round(volume * 10f) / 10f);
+            if (music) SaveData.MusicVolume = volume;
+            else SaveData.SfxVolume = volume;
             RefreshSettings();
             Click();
         }
 
         void RefreshSettings()
         {
-            musicValue.text = $"{Mathf.RoundToInt(SaveData.MusicVolume * 100)}%";
-            sfxValue.text = $"{Mathf.RoundToInt(SaveData.SfxVolume * 100)}%";
-            shakeToggle.text = SaveData.ScreenShake ? "ON" : "OFF";
+            for (int i = 0; i < 10; i++)
+            {
+                musicPips[i].EnableInClassList("on", i < Mathf.RoundToInt(SaveData.MusicVolume * 10f));
+                sfxPips[i].EnableInClassList("on", i < Mathf.RoundToInt(SaveData.SfxVolume * 10f));
+            }
             shakeToggle.EnableInClassList("on", SaveData.ScreenShake);
-            flashToggle.text = SaveData.Flashes ? "ON" : "OFF";
             flashToggle.EnableInClassList("on", SaveData.Flashes);
         }
 
@@ -586,13 +988,38 @@ namespace Lucky
                 }
             }
 
-            // Title: floating logo and a breathing BEGIN button.
+            // Loading: the rune ring winds like the wheel, the hub breathes and the logo floats.
+            if (Loading)
+            {
+                float t = Time.unscaledTime;
+                loadingRing.style.rotate = new Rotate(t * 140f);
+                float hub = 1f + Mathf.Sin(t * 4f) * 0.06f;
+                loadingHub.style.scale = new Scale(new Vector3(hub, hub, 1f));
+                loadingLogo.style.translate = new Translate(0f, Mathf.Sin(t * 1.6f) * 8f);
+            }
+
+            // Title: floating logo and a warm glow breathing behind PLAY (the button itself keeps its hover scale).
             if (titleScreen.style.display == DisplayStyle.Flex)
             {
                 float t = Time.unscaledTime;
                 titleLogo.style.translate = new Translate(0f, Mathf.Sin(t * 1.6f) * 10f);
-                float s = 1f + Mathf.Max(0f, Mathf.Sin(t * 3.2f)) * 0.05f;
-                titlePlay.style.scale = new Scale(new Vector3(s, s, 1f));
+                float g = 0.5f + 0.5f * Mathf.Sin(t * 3.2f);
+                titlePlayGlow.style.opacity = 0.2f + 0.5f * g;
+                titlePlayGlow.style.scale = new Scale(Vector3.one * (0.95f + 0.1f * g));
+            }
+
+            // Menus: a light sweep crosses each primary button every few seconds, and SHOP badges throb.
+            if (TitleOpen || EndOpen)
+            {
+                float cycle = Time.unscaledTime % 3.2f;
+                foreach (var shine in shines)
+                {
+                    float width = shine.parent.resolvedStyle.width;
+                    shine.style.translate = new Translate(Mathf.Lerp(-120f, width + 60f, Ease.InOutQuad(Mathf.Clamp01(cycle / 0.8f))), 0f);
+                }
+                float b = 1f + 0.1f * Mathf.Max(0f, Mathf.Sin(Time.unscaledTime * 5f));
+                titleShopBadge.style.scale = new Scale(new Vector3(b, b, 1f));
+                endShopBadge.style.scale = new Scale(new Vector3(b, b, 1f));
             }
 
             // Idle nudge: pulse the SPIN button after 4 s without input.

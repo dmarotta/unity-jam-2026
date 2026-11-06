@@ -65,6 +65,9 @@ namespace Lucky
         /// <summary>Fired once per frame in which pegs crossed the flapper; argument is speed in deg/s.</summary>
         public event Action<float> PegCrossed;
 
+        /// <summary>RockBack drama: the wheel comes to rest on the slice before the result (Teased), then snaps onto it (Slipped).</summary>
+        public event Action Teased, Slipped;
+
         public int ValueAt(int slot) => values[slot];
         public int SliceAtPointer() => Mod(Mathf.RoundToInt(Angle / slice), count);
         public Vector3 PointerTip => pointer.position + pointer.rotation * new Vector3(0f, -1.25f, 0f);
@@ -393,9 +396,18 @@ namespace Lucky
             }
             if (drama == Drama.RockBack)
             {
-                yield return new WaitForSeconds(fastForward ? 0.05f : 0.18f);
-                float from = Angle, to = target * slice - half + UnityEngine.Random.Range(1.5f, 3f);
-                yield return Tween.Run(0.42f, k => Angle = Mathf.LerpUnclamped(from, to, k), Ease.OutBack);
+                // Settles on the neighbour, straining against the peg, then snaps off it.
+                Teased?.Invoke();
+                float rest = Angle, hold = fastForward ? 0.12f : 0.3f;
+                for (float h = 0f; h < hold; h += Time.deltaTime)
+                {
+                    Angle = rest + Mathf.Sin(h * 70f) * 0.7f * (h / hold);
+                    yield return null;
+                }
+                Angle = rest;
+                Slipped?.Invoke();
+                float to = target * slice - half + UnityEngine.Random.Range(1.5f, 3f);
+                yield return Tween.Run(0.3f, k => Angle = Mathf.LerpUnclamped(rest, to, k), Ease.OutBack);
             }
             Spinning = false;
         }

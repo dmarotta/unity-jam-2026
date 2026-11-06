@@ -192,15 +192,8 @@
     align-items: center;
     justify-content: center;
     border-radius: 46px;
-    background-color: rgba(12, 8, 12, 0.78);
-    border-width: 3px;
-    border-color: rgba(200, 180, 150, 0.6);
-    transition-property: border-color, background-color;
-    transition-duration: 0.3s;
-}
-
-.need-pill.lucky {
     background-color: rgba(70, 40, 6, 0.9);
+    border-width: 3px;
     border-color: rgb(255, 214, 92);
 }
 
@@ -210,27 +203,20 @@
     margin-right: 8px;
     background-image: url("project://database/Assets/Art/UI/icon_crown.png");
     -unity-background-scale-mode: scale-to-fit;
-    display: none;
 }
-
-.need-pill.lucky .need-icon { display: flex; }
 
 .need-caption {
     font-size: 30px;
-    color: rgb(214, 196, 160);
+    color: rgb(255, 225, 150);
     margin-right: 12px;
     letter-spacing: 1px;
 }
 
-.need-pill.lucky .need-caption { color: rgb(255, 225, 150); }
-
 .need-value {
     font-size: 64px;
-    color: rgb(255, 243, 214);
+    color: rgb(255, 214, 92);
     -unity-text-outline-width: 3px;
 }
-
-.need-pill.lucky .need-value { color: rgb(255, 214, 92); }
 
 /* ---------- Spin button ---------- */
 
@@ -300,7 +286,23 @@
 .pill-button.on { background-color: rgb(130, 82, 18); border-color: rgb(255, 214, 92); color: rgb(255, 240, 200); }
 
 .auto-button { position: absolute; right: 320px; bottom: 82px; }
-.settings-button { position: absolute; left: 30px; bottom: 30px; }
+.settings-button { position: absolute; left: 30px; bottom: 30px; flex-direction: row; align-items: center; padding: 0 14px 0 24px; }
+
+/* Small key hint inside a button, e.g. ESC on PAUSE. */
+.keycap {
+    margin-left: 12px;
+    padding: 0 8px;
+    height: 32px;
+    border-radius: 8px;
+    border-width: 2px;
+    border-bottom-width: 4px;
+    border-color: rgba(255, 205, 110, 0.5);
+    background-color: rgba(0, 0, 0, 0.35);
+    color: rgb(200, 185, 160);
+    font-size: 18px;
+    -unity-text-outline-width: 0;
+    -unity-text-align: middle-center;
+}
 
 .big-button {
     height: 96px;
@@ -322,7 +324,88 @@
 
 .big-button:hover { scale: 1.06 1.06; background-color: rgb(196, 36, 58); }
 .big-button:active { scale: 0.93 0.93; }
-.big-button.small { height: 76px; font-size: 36px; min-width: 260px; margin-top: 24px; }
+
+/* Primary call to action: a light sweep (HUD drives .btn-shine) and a warm glow behind it. */
+.big-button.primary { overflow: hidden; }
+
+.btn-shine {
+    position: absolute;
+    top: -40px;
+    bottom: -40px;
+    left: 0;
+    width: 90px;
+    rotate: 20deg;
+    translate: -120px 0;
+    background-image: url("project://database/Assets/Art/VFX/vfx_glow.png");
+    -unity-background-image-tint-color: rgba(255, 244, 210, 0.55);
+}
+
+.primary-wrap { align-items: center; justify-content: center; }
+
+.primary-glow {
+    position: absolute;
+    left: -60px; top: -50px; right: -60px; bottom: -50px;
+    background-image: url("project://database/Assets/Art/VFX/vfx_glow.png");
+    -unity-background-image-tint-color: rgba(255, 150, 70, 0.8);
+    opacity: 0.4;
+}
+
+/* Count badge on a button's top-right corner (affordable upgrades on SHOP). */
+.badge {
+    position: absolute;
+    top: -14px;
+    right: -10px;
+    min-width: 40px;
+    height: 40px;
+    padding: 0 10px;
+    border-radius: 20px;
+    border-width: 3px;
+    border-color: rgb(255, 240, 200);
+    background-color: rgb(214, 48, 62);
+    color: rgb(255, 248, 230);
+    font-size: 24px;
+    -unity-text-align: middle-center;
+    -unity-text-outline-width: 2px;
+    display: none;
+}
+
+.badge.on { display: flex; }
+
+/* Secondary action: same shape as .big-button, quieter fill and smaller. */
+.secondary-button {
+    height: 76px;
+    min-width: 260px;
+    padding: 0 40px;
+    margin: 12px;
+    border-radius: 38px;
+    border-width: 3px;
+    border-color: rgba(255, 205, 110, 0.75);
+    background-color: rgba(30, 16, 20, 0.85);
+    color: rgb(255, 230, 180);
+    font-size: 36px;
+    -unity-text-outline-width: 2px;
+    transition-property: scale, background-color, border-color;
+    transition-duration: 0.09s;
+    transition-timing-function: ease-out-back;
+}
+
+.secondary-button:hover { scale: 1.05 1.05; border-color: rgb(255, 214, 120); background-color: rgb(60, 32, 30); }
+.secondary-button:active { scale: 0.94 0.94; }
+
+/* Tertiary action: plain text link. */
+.text-button {
+    margin: 10px 0 0 0;
+    padding: 6px 20px;
+    border-width: 0;
+    background-color: rgba(0, 0, 0, 0);
+    color: rgb(190, 175, 150);
+    font-size: 28px;
+    transition-property: color, scale;
+    transition-duration: 0.09s;
+}
+
+.text-button:hover { color: rgb(255, 214, 120); scale: 1.04 1.04; }
+.text-button:active { scale: 0.95 0.95; }
 
 /* ---------- Banner ---------- */
 
@@ -384,27 +467,52 @@
 }
 
 .tagline {
-    font-size: 34px;
-    color: rgb(240, 225, 195);
-    margin-bottom: 26px;
+    font-size: 32px;
+    color: rgb(225, 210, 180);
+    letter-spacing: 1px;
+    margin-bottom: 44px;
 }
 
-.stats-line {
-    font-size: 30px;
-    color: rgb(255, 214, 92);
-    margin-top: 18px;
+.button-column { align-items: center; }
+
+/* Banked progress under the title buttons: icon + value pairs on one backplate. */
+.title-stats {
+    flex-direction: row;
+    align-items: center;
+    margin-top: 36px;
+    padding: 6px 12px;
+    border-radius: 30px;
+    background-color: rgba(10, 5, 8, 0.6);
+    border-width: 2px;
+    border-color: rgba(255, 205, 110, 0.25);
 }
+
+.title-stat { flex-direction: row; align-items: center; margin: 0 14px; }
+
+.title-stat-icon {
+    width: 40px;
+    height: 40px;
+    margin-right: 8px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.icon-coin { background-image: url("project://database/Assets/Art/VFX/vfx_coin.png"); }
+.icon-skull { background-image: url("project://database/Assets/Art/UI/icon_skull.png"); }
+.icon-crown { background-image: url("project://database/Assets/Art/UI/icon_crown.png"); }
+
+.title-stat-label { font-size: 26px; color: rgb(230, 215, 185); }
+.title-stat-label.gold { color: rgb(255, 214, 92); font-size: 30px; }
 
 .credits {
     position: absolute;
     bottom: 24px;
-    font-size: 24px;
-    color: rgb(170, 155, 135);
+    font-size: 20px;
+    color: rgba(170, 155, 135, 0.7);
 }
 
 .panel {
     min-width: 820px;
-    padding: 56px 72px 48px 72px;
+    padding: 64px 80px 52px 80px;
     align-items: center;
     background-image: url("project://database/Assets/Art/UI/panel_frame.png");
     -unity-slice-left: 120;
@@ -423,40 +531,132 @@
 }
 
 .panel-sub {
-    font-size: 34px;
-    color: rgb(240, 225, 195);
-    margin-bottom: 20px;
+    font-size: 30px;
+    color: rgb(225, 210, 180);
+    margin-bottom: 32px;
     -unity-text-align: middle-center;
 }
 
-.stats { align-items: stretch; margin-bottom: 18px; min-width: 560px; }
+/* End screen: a row of stat tiles, then one line about gold. */
+.stats { flex-direction: row; justify-content: center; margin-bottom: 20px; }
 
-.stat-row {
-    flex-direction: row;
-    justify-content: space-between;
-    padding: 6px 4px;
-    border-bottom-width: 2px;
-    border-color: rgba(255, 205, 110, 0.18);
+.stat-tile {
+    align-items: center;
+    width: 156px;
+    margin: 0 8px;
+    padding: 12px 0 10px 0;
+    border-radius: 20px;
+    border-width: 2px;
+    border-color: rgba(255, 205, 110, 0.2);
+    background-color: rgba(0, 0, 0, 0.3);
 }
 
-.stat-name { font-size: 32px; color: rgb(214, 196, 160); }
-.stat-value { font-size: 36px; color: rgb(255, 243, 214); }
-.stat-value.gold { color: rgb(255, 214, 92); }
+.stat-tile-icon { width: 40px; height: 40px; margin-bottom: 2px; -unity-background-scale-mode: scale-to-fit; }
+.stat-tile-value { font-size: 52px; color: rgb(255, 243, 214); -unity-text-outline-width: 3px; }
+.stat-tile-name { font-size: 22px; color: rgb(190, 175, 150); letter-spacing: 1px; }
+.stat-tile.gold { border-color: rgba(255, 205, 110, 0.55); background-color: rgba(60, 36, 6, 0.45); }
+.stat-tile.gold .stat-tile-value { color: rgb(255, 214, 92); }
+
+/* Highlight strip for records (NEW BEST DEPTH, FIRST VICTORY); hidden when empty. */
+.ribbon {
+    margin: -16px 0 22px 0;
+    padding: 4px 26px;
+    border-radius: 8px;
+    background-color: rgb(196, 140, 30);
+    border-width: 2px;
+    border-color: rgb(255, 230, 160);
+    color: rgb(255, 250, 230);
+    font-size: 26px;
+    letter-spacing: 2px;
+    -unity-text-outline-width: 2px;
+    -unity-text-outline-color: rgb(90, 50, 0);
+    display: none;
+}
+
+.ribbon.on { display: flex; }
+
+.end-note {
+    font-size: 26px;
+    color: rgb(190, 175, 150);
+    margin-bottom: 24px;
+    -unity-text-align: middle-center;
+}
+
+.end-buttons { align-items: center; }
+
+/* Free-floating UI particles above a panel (gold sparkles on the end screen). */
+.fx-layer { position: absolute; left: 0; top: 0; right: 0; bottom: 0; }
+
+.fx-sparkle {
+    position: absolute;
+    background-image: url("project://database/Assets/Art/VFX/vfx_sparkle.png");
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-background-image-tint-color: rgb(255, 220, 120);
+}
 
 .button-row { flex-direction: row; align-items: center; }
 
 .settings-panel { min-width: 760px; }
+.settings-title { font-size: 60px; margin-bottom: 20px; }
+
+/* Volume: ten clickable segments between the − and + buttons. */
+.volume-pips { flex-direction: row; align-items: flex-end; height: 40px; margin: 0 14px; }
+
+.volume-pip {
+    width: 14px;
+    margin: 0 2px;
+    border-radius: 4px;
+    background-color: rgba(255, 205, 110, 0.15);
+    transition-property: background-color, scale;
+    transition-duration: 0.12s;
+}
+
+.volume-pip.on { background-color: rgb(255, 205, 100); }
+.volume-pip:hover { scale: 1.2 1.2; }
+
+/* On/off switch: the knob slides across a 104px track. */
+.switch {
+    width: 104px;
+    height: 52px;
+    margin: 0;
+    padding: 0;
+    border-radius: 26px;
+    border-width: 3px;
+    border-color: rgb(150, 120, 80);
+    background-color: rgb(30, 18, 22);
+    transition-property: background-color, border-color, scale;
+    transition-duration: 0.15s;
+}
+
+.switch:hover { scale: 1.05 1.05; border-color: rgb(255, 214, 120); }
+.switch.on { background-color: rgb(70, 140, 60); border-color: rgb(170, 240, 140); }
+
+.switch-knob {
+    position: absolute;
+    left: 4px;
+    top: 4px;
+    width: 38px;
+    height: 38px;
+    border-radius: 19px;
+    background-color: rgb(200, 185, 160);
+    transition-property: translate, background-color;
+    transition-duration: 0.18s;
+    transition-timing-function: ease-out-back;
+}
+
+.switch.on .switch-knob { translate: 52px 0; background-color: rgb(255, 250, 235); }
 
 .setting-row {
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
     width: 600px;
-    margin: 10px 0;
+    padding: 14px 0;
+    border-bottom-width: 2px;
+    border-color: rgba(255, 205, 110, 0.15);
 }
 
-.setting-name { font-size: 32px; flex-grow: 1; }
-.setting-value { font-size: 32px; width: 110px; -unity-text-align: middle-center; }
+.setting-name { font-size: 30px; color: rgb(240, 225, 195); flex-grow: 1; }
 
 .step-button {
     width: 64px;
@@ -476,7 +676,8 @@
 
 .step-button:hover { scale: 1.08 1.08; }
 .step-button:active { scale: 0.9 0.9; }
-.toggle-button { min-width: 130px; }
+.settings-close { height: 80px; min-width: 300px; font-size: 40px; margin-top: 40px; }
+.text-button.confirm { color: rgb(255, 120, 120); }
 
 /* ---------- Charm badge under the hero panel ---------- */
 
@@ -509,44 +710,52 @@
     -unity-text-outline-width: 3px;
 }
 
-/* ---------- Firebomb button (left of AUTO / SPIN) ---------- */
+/* ---------- Consumable toolbar (left edge, vertically centred), hotkeys 1..n ---------- */
 
-.bomb-button {
+.item-bar {
     position: absolute;
-    right: 335px;
-    bottom: 168px;
-    width: 128px;
-    height: 128px;
-    margin: 0;
+    left: 40px;
+    top: 50%;
+    translate: 0 -50%;
+    flex-direction: column;
+    align-items: center;
+}
+
+.item-button {
+    width: 112px;
+    height: 112px;
+    margin: 10px 0;
     padding: 0;
-    border-radius: 64px;
+    border-radius: 56px;
     border-width: 4px;
     border-color: rgb(255, 160, 70);
     background-color: rgb(40, 16, 10);
     align-items: center;
     justify-content: center;
-    transition-property: scale, opacity, border-color;
+    transition-property: scale, opacity, border-color, background-color;
     transition-duration: 0.09s;
     transition-timing-function: ease-out-back;
 }
 
-.bomb-button:hover { scale: 1.08 1.08; border-color: rgb(255, 214, 120); }
-.bomb-button:active { scale: 0.9 0.9; }
-.bomb-button.locked { opacity: 0.45; scale: 0.92 0.92; }
-.bomb-button.empty { display: none; }
+.item-button:hover { scale: 1.1 1.1; border-color: rgb(255, 214, 120); }
+.item-button:active { scale: 0.88 0.88; }
+.item-button.locked { opacity: 0.4; scale: 0.9 0.9; }
+.item-button.empty { display: none; }
+.item-button.spent .item-icon { -unity-background-image-tint-color: rgb(80, 75, 80); }
+.item-button.spent .item-count { background-color: rgb(55, 45, 50); color: rgb(160, 150, 145); }
+.item-button.flash { background-color: rgb(255, 236, 190); border-color: rgb(255, 255, 255); }
 
-.bomb-icon {
-    width: 96px;
-    height: 96px;
-    background-image: url("project://database/Assets/Art/UI/icon_firebomb.png");
+.item-icon {
+    width: 84px;
+    height: 84px;
     -unity-background-scale-mode: scale-to-fit;
 }
 
-.bomb-count {
+.item-count {
     position: absolute;
-    right: -10px;
+    right: -12px;
     bottom: -8px;
-    font-size: 34px;
+    font-size: 32px;
     color: rgb(255, 214, 120);
     padding: 0 10px;
     border-radius: 22px;
@@ -554,115 +763,390 @@
     -unity-text-outline-width: 3px;
 }
 
-.bomb-hint {
+.item-key {
     position: absolute;
-    right: 335px;
-    bottom: 128px;
-    width: 128px;
-    -unity-text-align: middle-center;
+    left: -6px;
+    top: -6px;
+    width: 38px;
+    height: 38px;
+    border-radius: 19px;
     font-size: 24px;
-    color: rgb(200, 185, 160);
-}
-
-.bomb-hint.empty { display: none; }
-
-/* ---------- Shop ---------- */
-
-.shop-button { background-color: rgb(120, 82, 18); }
-.shop-button:hover { background-color: rgb(150, 104, 26); }
-
-.shop-panel { width: 1580px; padding: 44px 60px 36px 60px; }
-
-.shop-gold { margin: 6px 0 18px 0; }
-
-.shop-items {
-    flex-direction: row;
-    justify-content: center;
-    margin-bottom: 16px;
-}
-
-.shop-card {
-    width: 330px;
-    height: 520px;
-    margin: 0 12px;
-    padding: 20px 18px;
-    align-items: center;
-    border-radius: 26px;
-    border-width: 3px;
-    border-color: rgba(255, 205, 110, 0.55);
-    background-color: rgba(18, 10, 14, 0.82);
-    transition-property: border-color, opacity;
-    transition-duration: 0.2s;
-}
-
-.shop-card:hover { border-color: rgb(255, 214, 120); }
-
-.card-icon {
-    width: 136px;
-    height: 136px;
-    -unity-background-scale-mode: scale-to-fit;
-}
-
-.card-name {
-    font-size: 38px;
-    color: rgb(255, 214, 92);
-    margin-top: 6px;
     -unity-text-align: middle-center;
-    -unity-text-outline-width: 3px;
+    color: rgb(30, 16, 8);
+    background-color: rgb(255, 214, 120);
 }
 
-.card-level {
-    font-size: 28px;
-    color: rgb(170, 255, 130);
+.item-tip {
+    position: absolute;
+    left: 140px;
+    translate: 0 -50%;
+    width: 440px;
+    padding: 18px 22px;
+    border-radius: 18px;
+    border-width: 3px;
+    border-color: rgb(255, 160, 70);
+    background-color: rgba(28, 12, 8, 0.94);
+}
+
+.item-tip-name {
+    font-size: 30px;
+    color: rgb(255, 214, 120);
     margin-bottom: 6px;
 }
 
-.card-desc {
-    flex-grow: 1;
-    font-size: 28px;
-    color: rgb(240, 225, 195);
+.item-tip-desc {
+    font-size: 24px;
+    color: rgb(240, 228, 205);
     white-space: normal;
-    -unity-text-align: upper-center;
 }
 
-.card-buy {
-    flex-direction: row;
+.item-tip-status {
+    font-size: 22px;
+    color: rgb(170, 230, 140);
+    margin-top: 10px;
+}
+
+.item-tip-status.blocked { color: rgb(255, 130, 110); }
+
+/* ---------- Shop ---------- */
+
+.shop-screen {
+    background-color: rgb(12, 6, 10);
+    align-items: stretch;
+    justify-content: flex-start;
+}
+
+.tree-backdrop {
+    position: absolute;
+    left: -10%; top: -20%; right: -10%; bottom: -20%;
+    background-image: url("project://database/Assets/Art/VFX/vfx_glow.png");
+    -unity-background-image-tint-color: rgba(150, 40, 60, 0.55);
+}
+
+.tree-vignette {
+    position: absolute;
+    left: 0; top: 0; right: 0; bottom: 0;
+    border-width: 90px;
+    border-color: rgba(0, 0, 0, 0.35);
+}
+
+.tree-viewport {
+    position: absolute;
+    left: 0; top: 0; right: 0; bottom: 0;
+    overflow: hidden;
+}
+
+.tree-shaker { position: absolute; left: 0; top: 0; right: 0; bottom: 0; }
+.tree-content { position: absolute; left: 0; top: 0; transform-origin: 0 0; }
+.tree-edges, .tree-fx { position: absolute; left: 0; top: 0; right: 0; bottom: 0; }
+
+/* ---------- Hub ---------- */
+
+.tree-hub { position: absolute; }
+
+.hub-glow {
+    position: absolute;
+    left: -90%; top: -90%; right: -90%; bottom: -90%;
+    background-image: url("project://database/Assets/Art/VFX/vfx_glow.png");
+    -unity-background-image-tint-color: rgba(255, 170, 70, 0.75);
+}
+
+.hub-rim {
+    position: absolute;
+    left: -14%; top: -14%; right: -14%; bottom: -14%;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.hub-core {
+    position: absolute;
+    left: 10%; top: 10%; right: 10%; bottom: 10%;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+/* ---------- Nodes ---------- */
+
+.tree-node {
+    position: absolute;
     align-items: center;
     justify-content: center;
-    height: 72px;
-    min-width: 220px;
-    margin: 0;
-    padding: 0 22px;
-    border-radius: 36px;
-    border-width: 3px;
-    border-color: rgb(255, 214, 120);
-    background-color: rgb(168, 26, 46);
-    transition-property: scale, background-color;
-    transition-duration: 0.09s;
-    transition-timing-function: ease-out-back;
+    transition-property: opacity;
+    transition-duration: 0.25s;
 }
 
-.card-buy:hover { scale: 1.06 1.06; background-color: rgb(196, 36, 58); }
-.card-buy:active { scale: 0.93 0.93; }
+.node-glow {
+    position: absolute;
+    left: -75%; top: -75%; right: -75%; bottom: -75%;
+    background-image: url("project://database/Assets/Art/VFX/vfx_glow.png");
+    -unity-background-image-tint-color: rgb(255, 196, 90);
+    opacity: 0;
+    transition-property: opacity;
+    transition-duration: 0.2s;
+}
+
+.tree-node.owned .node-glow { opacity: 0.5; }
+.tree-node.affordable .node-glow { -unity-background-image-tint-color: rgb(255, 244, 200); }
+.tree-node.hover .node-glow { opacity: 1; }
+.tree-node.consumable .node-glow { -unity-background-image-tint-color: rgb(255, 140, 70); }
+
+.node-back {
+    position: absolute;
+    left: 10%; top: 10%; right: 10%; bottom: 10%;
+    border-radius: 50%;
+    background-color: rgb(34, 14, 22);
+    transition-property: background-color;
+    transition-duration: 0.12s;
+}
+
+.tree-node.gate .node-back { border-radius: 14px; background-color: rgb(20, 12, 16); }
+.tree-node.owned .node-back { background-color: rgb(70, 26, 34); }
+.tree-node.maxed .node-back { background-color: rgb(90, 50, 20); }
+.tree-node.flash .node-back { background-color: rgb(255, 244, 210); }
+.tree-node.deny .node-back { background-color: rgb(190, 20, 50); }
+.tree-node.unlocked .node-back { background-color: rgb(60, 130, 40); }
+
+.node-icon {
+    position: absolute;
+    left: 20%; top: 20%; right: 20%; bottom: 20%;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.tree-node.gate .node-icon { left: 12%; top: 12%; right: 12%; bottom: 12%; }
+.tree-node.fog .node-icon { -unity-background-image-tint-color: rgb(0, 0, 0); }
+.tree-node.sealed .node-icon { -unity-background-image-tint-color: rgb(120, 95, 105); }
+
+.node-socket, .node-frame {
+    position: absolute;
+    left: 0; top: 0; right: 0; bottom: 0;
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-background-image-tint-color: rgb(140, 125, 125);
+}
+
+.node-socket { background-image: url("project://database/Assets/Art/UI/node_socket.png"); }
+.node-frame { background-image: url("project://database/Assets/Art/UI/gate_frame.png"); }
+.tree-node.owned .node-socket, .tree-node.owned .node-frame { -unity-background-image-tint-color: rgb(255, 255, 255); }
+.tree-node.affordable .node-socket { -unity-background-image-tint-color: rgb(225, 210, 190); }
+
+.node-lock {
+    position: absolute;
+    width: 50%;
+    height: 50%;
+    right: -10%;
+    bottom: -6%;
+    background-image: url("project://database/Assets/Art/UI/icon_padlock.png");
+    -unity-background-scale-mode: scale-to-fit;
+    display: none;
+}
+
+.tree-node.fog .node-lock, .tree-node.sealed .node-lock { display: flex; }
+.tree-node.fog { opacity: 0.5; }
+
+.node-badge {
+    position: absolute;
+    bottom: -16px;
+    padding: 0 8px;
+    font-size: 20px;
+    border-radius: 12px;
+    border-width: 2px;
+    border-color: rgb(255, 205, 110);
+    background-color: rgb(64, 16, 26);
+    color: rgb(255, 232, 175);
+    -unity-text-outline-width: 2px;
+}
+
+.tree-node.poor .node-badge { color: rgb(255, 150, 150); border-color: rgb(150, 70, 70); }
+.tree-node.maxed .node-badge { background-color: rgb(36, 84, 28); border-color: rgb(170, 255, 120); color: rgb(220, 255, 190); }
+.tree-node.fog .node-badge { border-color: rgb(110, 95, 95); color: rgb(170, 160, 160); }
+.tree-node.gate .node-badge { bottom: -20px; font-size: 18px; background-color: rgb(30, 18, 22); }
+.tree-node.gate.owned .node-badge { background-color: rgb(110, 60, 14); color: rgb(255, 236, 170); }
+
+/* ---------- Tree FX ---------- */
+
+.tree-ring, .tree-particle {
+    position: absolute;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.tree-float {
+    position: absolute;
+    translate: -50% -50%;
+    -unity-font-style: bold;
+    -unity-text-outline-width: 3px;
+    -unity-text-outline-color: rgb(30, 8, 12);
+    white-space: nowrap;
+}
+
+/* ---------- Header, detail card, actions ---------- */
+
+.shop-header {
+    position: absolute;
+    left: 0; top: 0; right: 0;
+    height: 150px;
+    padding-top: 14px;
+    align-items: center;
+    background-color: rgba(10, 4, 8, 0.55);
+    border-bottom-width: 3px;
+    border-color: rgba(255, 205, 110, 0.45);
+}
+
+.shop-title {
+    font-size: 52px;
+    color: rgb(255, 214, 92);
+    -unity-text-outline-width: 3px;
+    text-shadow: 0 5px 0 rgba(80, 10, 0, 0.85);
+}
+
+.shop-top { flex-direction: row; align-items: center; margin-top: 4px; }
+.shop-gold { margin: 0 26px 0 0; }
+.shop-stats { flex-direction: row; }
+
+.stat-chip {
+    align-items: center;
+    min-width: 132px;
+    margin: 0 6px;
+    padding: 0 14px 2px 14px;
+    border-radius: 18px;
+    border-width: 2px;
+    border-color: rgba(255, 205, 110, 0.35);
+    background-color: rgba(18, 10, 14, 0.75);
+    transition-property: background-color, border-color;
+    transition-duration: 0.25s;
+}
+
+.stat-chip.fresh { background-color: rgb(120, 200, 90); border-color: rgb(220, 255, 180); }
+.chip-value { font-size: 30px; color: rgb(255, 236, 190); -unity-text-outline-width: 3px; }
+.chip-name { font-size: 18px; color: rgb(200, 185, 160); }
+
+.shop-detail {
+    position: absolute;
+    left: 36px;
+    bottom: 36px;
+    width: 640px;
+    min-height: 200px;
+    flex-direction: row;
+    padding: 18px 22px;
+    border-radius: 26px;
+    border-width: 3px;
+    border-color: rgba(255, 205, 110, 0.7);
+    background-color: rgba(20, 8, 14, 0.9);
+}
+
+.shop-detail-icon {
+    width: 132px;
+    height: 132px;
+    flex-shrink: 0;
+    margin-right: 18px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.shop-detail.fog .shop-detail-icon { -unity-background-image-tint-color: rgb(0, 0, 0); }
+.shop-detail-body { flex-grow: 1; flex-shrink: 1; }
+.shop-detail-name { font-size: 36px; color: rgb(255, 214, 92); -unity-text-outline-width: 3px; white-space: normal; }
+.shop-detail-level { font-size: 22px; color: rgb(170, 255, 130); margin-bottom: 4px; }
+.shop-detail-desc { font-size: 25px; color: rgb(240, 225, 195); white-space: normal; margin-bottom: 8px; }
+.shop-detail-price { flex-direction: row; align-items: center; }
+.shop-detail-cost { font-size: 30px; color: rgb(255, 240, 200); -unity-text-outline-width: 2px; white-space: normal; }
+.shop-detail-cost.poor { color: rgb(255, 130, 130); }
 
 .card-coin {
-    width: 42px;
-    height: 42px;
+    width: 34px;
+    height: 34px;
     margin-right: 8px;
     background-image: url("project://database/Assets/Art/VFX/vfx_coin.png");
     -unity-background-scale-mode: scale-to-fit;
 }
 
-.card-price {
-    font-size: 38px;
-    color: rgb(255, 240, 200);
-    -unity-text-outline-width: 3px;
+.tree-hint {
+    position: absolute;
+    bottom: 18px;
+    left: 0; right: 0;
+    -unity-text-align: middle-center;
+    font-size: 22px;
+    color: rgba(240, 225, 195, 0.6);
 }
 
-.shop-card.poor .card-price { color: rgb(255, 130, 130); }
-.shop-card.poor .card-buy { background-color: rgb(70, 30, 36); }
-.shop-card.done .card-buy, .shop-card.locked .card-buy { background-color: rgb(40, 34, 30); border-color: rgb(120, 100, 80); }
-.shop-card.done .card-coin, .shop-card.locked .card-coin { display: none; }
-.shop-card.done .card-price, .shop-card.locked .card-price { font-size: 30px; color: rgb(200, 185, 160); }
-.shop-card.locked { opacity: 0.6; }
-.shop-card.locked .card-icon { -unity-background-image-tint-color: rgb(90, 90, 90); }
+.shop-actions {
+    position: absolute;
+    right: 36px;
+    bottom: 30px;
+    flex-direction: row;
+    align-items: center;
+}
+
+/* ---------- Loading screen (visible from the first frame, hidden by HUD.HideLoading) ---------- */
+
+.loading-screen {
+    position: absolute;
+    left: 0; top: 0; right: 0; bottom: 0;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(8, 4, 8);
+}
+
+.loading-glow {
+    position: absolute;
+    width: 1500px;
+    height: 1100px;
+    background-image: url("project://database/Assets/Art/VFX/vfx_glow.png");
+    -unity-background-image-tint-color: rgba(190, 90, 40, 0.42);
+}
+
+.loading-vignette {
+    position: absolute;
+    left: 0; top: 0; right: 0; bottom: 0;
+    border-width: 120px;
+    border-color: rgba(0, 0, 0, 0.45);
+}
+
+.loading-logo {
+    width: 900px;
+    height: 304px;
+    background-image: url("project://database/Assets/Art/UI/logo.png");
+    -unity-background-scale-mode: scale-to-fit;
+    margin-bottom: 18px;
+}
+
+.loading-wheel {
+    width: 150px;
+    height: 150px;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+.loading-ring {
+    position: absolute;
+    left: 0; top: 0; right: 0; bottom: 0;
+    background-image: url("project://database/Assets/Art/Wheel/wheel_rim.png");
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.loading-hub {
+    width: 64px;
+    height: 64px;
+    background-image: url("project://database/Assets/Art/Wheel/wheel_hub.png");
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.loading-bar {
+    width: 620px;
+    height: 16px;
+    padding: 3px;
+    border-radius: 8px;
+    border-width: 2px;
+    border-color: rgba(255, 205, 110, 0.55);
+    background-color: rgba(20, 8, 10, 0.9);
+}
+
+.loading-fill {
+    width: 0;
+    height: 100%;
+    border-radius: 4px;
+    background-color: rgb(255, 196, 80);
+}
+
+.loading-label {
+    margin-top: 20px;
+    font-size: 30px;
+    color: rgb(230, 210, 175);
+    -unity-text-align: middle-center;
+}
