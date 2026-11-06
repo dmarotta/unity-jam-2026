@@ -9,9 +9,13 @@ GREEN, MAGENTA = (0, 255, 0), (255, 0, 255)
 SIZES = {"3:4": (960, 1280), "4:3": (1280, 960), "1:1": (1152, 1152)}
 # name: (source sprite, aspect, chroma, height fraction, x center fraction)
 JOBS = {
+    # Every hero state starts from the idle pose so frame 0 of each video gives the same standing body height.
     "hero_idle":     ("hero_idle",           "3:4", GREEN,   0.74, 0.50),
-    "hero_run":      ("hero_run",            "3:4", GREEN,   0.72, 0.50),
-    "hero_attack":   ("hero_idle",           "4:3", GREEN,   0.70, 0.30),
+    "hero_run":      ("hero_idle",           "3:4", GREEN,   0.70, 0.50),
+    "hero_attack":   ("hero_idle",           "4:3", GREEN,   0.66, 0.28),
+    "hero_hurt":     ("hero_idle",           "3:4", GREEN,   0.70, 0.55),
+    "hero_victory":  ("hero_idle",           "3:4", GREEN,   0.70, 0.50),
+    "hero_death":    ("hero_idle",           "4:3", GREEN,   0.62, 0.62),
     "goblin_idle":   ("boss1_goblin_idle",   "3:4", MAGENTA, 0.74, 0.50),
     "goblin_attack": ("boss1_goblin_idle",   "4:3", MAGENTA, 0.70, 0.66),
     "golem_idle":    ("boss2_golem_idle",    "1:1", GREEN,   0.74, 0.50),

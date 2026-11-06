@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Lucky
 {
-    public enum Pose { Idle, Attack, Hurt, Run, Victory }
+    public enum Pose { Idle, Attack, Hurt, Run, Victory, Death }
 
     /// <summary>A side-view character: key-pose sprites animated procedurally with springs and shader effects.</summary>
     public class Fighter : MonoBehaviour
@@ -12,7 +12,7 @@ namespace Lucky
         // Poses are generated as separate images; these ratios keep the character's on-screen size consistent.
         static readonly Dictionary<Pose, float> PoseHeight = new()
         {
-            { Pose.Idle, 1f }, { Pose.Attack, 0.9f }, { Pose.Hurt, 0.96f }, { Pose.Run, 0.98f }, { Pose.Victory, 1.1f },
+            { Pose.Idle, 1f }, { Pose.Attack, 0.9f }, { Pose.Hurt, 0.96f }, { Pose.Run, 0.98f }, { Pose.Victory, 1.1f }, { Pose.Death, 0.6f },
         };
 
         public SpriteRenderer Body { get; private set; }
@@ -78,6 +78,7 @@ namespace Lucky
         public float AttackHitTime => anims.TryGetValue(Pose.Attack, out var a) ? a.HitTime : 0.12f;
         public float AttackDuration => anims.TryGetValue(Pose.Attack, out var a) ? a.Duration : 0.5f;
         public bool HasAnim(Pose p) => anims.ContainsKey(p);
+        public float AnimDuration(Pose p) => anims.TryGetValue(p, out var a) ? a.Duration : 0f;
 
         /// <summary>
         /// Switch key pose. With blend, the old pose lingers as a fading, swelling ghost while the new one

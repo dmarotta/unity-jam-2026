@@ -1,0 +1,468 @@
+fileFormatVersion: 2
+guid: bc135595d9d20e2468ad374b6125fcf0
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -8296462754026401362
+    second: hero_hurt_0
+  - first:
+      213: 5275114965950228231
+    second: hero_hurt_1
+  - first:
+      213: 146043917139382486
+    second: hero_hurt_2
+  - first:
+      213: 181574121890372982
+    second: hero_hurt_3
+  - first:
+      213: -4954382182709168831
+    second: hero_hurt_4
+  - first:
+      213: -4610993289845100069
+    second: hero_hurt_5
+  - first:
+      213: -140848643871468871
+    second: hero_hurt_6
+  - first:
+      213: -5199269579485865818
+    second: hero_hurt_7
+  - first:
+      213: -8034987194342749193
+    second: hero_hurt_8
+  - first:
+      213: 7683271977466707966
+    second: hero_hurt_9
+  - first:
+      213: 9078028487704789222
+    second: hero_hurt_10
+  - first:
+      213: 5121648796932304458
+    second: hero_hurt_11
+  - first:
+      213: 668387140743915601
+    second: hero_hurt_12
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 0
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 60
+    crunchedCompression: 1
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: hero_hurt_0
+      rect:
+        serializedVersion: 2
+        x: 87
+        y: 1206
+        width: 250
+        height: 392
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ea15ffde41b0ddc80800000000000000
+      internalID: -8296462754026401362
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hero_hurt_1
+      rect:
+        serializedVersion: 2
+        x: 470
+        y: 1206
+        width: 266
+        height: 393
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7076fcedc19f43940800000000000000
+      internalID: 5275114965950228231
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hero_hurt_2
+      rect:
+        serializedVersion: 2
+        x: 829
+        y: 1207
+        width: 324
+        height: 385
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6d013ba3b2ad60200800000000000000
+      internalID: 146043917139382486
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hero_hurt_3
+      rect:
+        serializedVersion: 2
+        x: 1209
+        y: 1207
+        width: 327
+        height: 378
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 67dddaba3b4158200800000000000000
+      internalID: 181574121890372982
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hero_hurt_4
+      rect:
+        serializedVersion: 2
+        x: 49
+        y: 812
+        width: 328
+        height: 374
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 145781e77af7e3bb0800000000000000
+      internalID: -4954382182709168831
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hero_hurt_5
+      rect:
+        serializedVersion: 2
+        x: 416
+        y: 801
+        width: 323
+        height: 387
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bd1b21178067200c0800000000000000
+      internalID: -4610993289845100069
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hero_hurt_6
+      rect:
+        serializedVersion: 2
+        x: 767
+        y: 801
+        width: 304
+        height: 391
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9b212f697ea9b0ef0800000000000000
+      internalID: -140848643871468871
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hero_hurt_7
+      rect:
+        serializedVersion: 2
+        x: 1151
+        y: 801
+        width: 265
+        height: 367
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6a810474ddb78d7b0800000000000000
+      internalID: -5199269579485865818
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hero_hurt_8
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 401
+        width: 298
+        height: 346
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7fb436ac7bdfd7090800000000000000
+      internalID: -8034987194342749193
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hero_hurt_9
+      rect:
+        serializedVersion: 2
+        x: 454
+        y: 402
+        width: 272
+        height: 325
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: effbd91e72770aa60800000000000000
+      internalID: 7683271977466707966
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hero_hurt_10
+      rect:
+        serializedVersion: 2
+        x: 867
+        y: 406
+        width: 256
+        height: 367
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6e04586efc2abfd70800000000000000
+      internalID: 9078028487704789222
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hero_hurt_11
+      rect:
+        serializedVersion: 2
+        x: 1248
+        y: 406
+        width: 247
+        height: 391
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a4ee475f170c31740800000000000000
+      internalID: 5121648796932304458
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hero_hurt_12
+      rect:
+        serializedVersion: 2
+        x: 87
+        y: 6
+        width: 250
+        height: 392
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 158ea703096964900800000000000000
+      internalID: 668387140743915601
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      hero_hurt_0: -8296462754026401362
+      hero_hurt_1: 5275114965950228231
+      hero_hurt_10: 9078028487704789222
+      hero_hurt_11: 5121648796932304458
+      hero_hurt_12: 668387140743915601
+      hero_hurt_2: 146043917139382486
+      hero_hurt_3: 181574121890372982
+      hero_hurt_4: -4954382182709168831
+      hero_hurt_5: -4610993289845100069
+      hero_hurt_6: -140848643871468871
+      hero_hurt_7: -5199269579485865818
+      hero_hurt_8: -8034987194342749193
+      hero_hurt_9: 7683271977466707966
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

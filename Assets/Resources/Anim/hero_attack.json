@@ -1,0 +1,30 @@
+{
+ "frames": 15,
+ "columns": 4,
+ "frameWidth": 560,
+ "frameHeight": 400,
+ "fps": 24.0,
+ "loop": false,
+ "pivotX": 0.2846,
+ "pivotY": 0.015,
+ "bodyHeight": 297.3,
+ "hitFrame": 6,
+ "sourceSpan": 2.83,
+ "sourceIndices": [
+  0,
+  14,
+  17,
+  20,
+  24,
+  28,
+  31,
+  33,
+  36,
+  52,
+  56,
+  59,
+  62,
+  65,
+  68
+ ]
+}
