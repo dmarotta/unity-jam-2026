@@ -419,7 +419,7 @@ namespace Lucky
             var boss = BossFighter;
             hud.ShowHud(true);
             AudioManager.I.Play("boss_intro", 0.9f);
-            AudioManager.I.Play("boss_roar", 0.8f, BossPitch());
+            BossVoice("intro", 0.9f);
             boss.SetPose(Pose.Attack, 0.7f);
             boss.Flash(def.Accent, 0.9f);
             boss.Squash(0.8f, 1.25f);
@@ -495,6 +495,7 @@ namespace Lucky
             var deck = Balance.Tarot;
             int a = rng.Next(deck.Count), b = (a + 1 + rng.Next(deck.Count - 1)) % deck.Count;
             AudioManager.I.Play("boss_attack_magic", 0.6f, 1.3f);
+            BossVoice("attack", 0.8f);
             boss.SetPose(Pose.Attack, 0.7f);
             boss.Flash(TarotColor, 0.8f);
             boss.Squash(1.1f, 0.92f);
@@ -828,7 +829,7 @@ namespace Lucky
             AudioManager.I.Play("hit_heavy", 0.9f, 1.25f);
             AudioManager.I.Play("shop_deny", 1f, 0.85f);
             AudioManager.I.Play("near_miss", 0.9f);
-            AudioManager.I.Play("boss_roar", 0.55f, BossPitch() * 1.3f);
+            BossVoice("taunt", 0.7f);
             Juice.I.Hitstop(0.1f);
             wheel.SetLights(PrizeWheel.Lights.Bust, 1f);
             wheel.Flare(deny, 1f);
@@ -1014,7 +1015,7 @@ namespace Lucky
             PostFX.I.Punch(bloomAdd: 1.4f * power, chromaAdd: 0.45f * power, lensAdd: -0.22f * power);
             hud.Flash(Color.white, 0.22f * power, 0.14f);
             AudioManager.I.Play(dmg >= 8 ? "hit_heavy" : "hit_light");
-            AudioManager.I.Play("boss_hurt", 0.8f, BossPitch());
+            BossVoice("hurt", 0.8f);
             FX.I.Text(hitPos + new Vector3(0.4f, 1.4f), "-" + dmg, jackpot ? Gold : Color.white, 1.3f + power, 1.6f, 1.1f, dmg >= 9);
 
             yield return Land(result, hitPos);
@@ -1053,7 +1054,7 @@ namespace Lucky
             hud.SetBossHp(0, def.Hp, true);
             Juice.I.SlowMo(0.3f, 0.9f, 0.6f);
             AudioManager.I.Play("phylactery_shatter");
-            AudioManager.I.Play("boss_roar", 0.9f, BossPitch() * 0.75f);
+            BossVoice("hurt", 1f, 0.8f);
             boss.SetPose(Pose.Hurt, 1f);
             boss.Flash(SoulColor, 1f);
             boss.Squash(0.7f, 1.3f);
@@ -1115,7 +1116,7 @@ namespace Lucky
             var fire = new Color(1f, 0.55f, 0.15f);
             var result = FightMath.Apply(bossHp, Boss.Hp, bomb.Value);
             AudioManager.I.Play("potion_explode");
-            AudioManager.I.Play("boss_hurt", 0.8f, BossPitch());
+            BossVoice("hurt", 0.8f);
             Juice.I.Hitstop(0.12f);
             boss.SetPose(Pose.Hurt, 0.5f);
             boss.Flash(fire, 1f);
@@ -1335,7 +1336,7 @@ namespace Lucky
 
             // The boss gloats while its HP rewinds and refills.
             AudioManager.I.Play("hp_refill");
-            AudioManager.I.Play("boss_roar", 0.6f, BossPitch() * 1.15f);
+            BossVoice("taunt", 0.8f);
             boss.SetPose(Pose.Attack, 0.9f);
             boss.Flash(def.Accent, 0.8f);
             boss.Squash(1.15f, 0.9f);
@@ -1371,7 +1372,7 @@ namespace Lucky
             FX.I.Confetti(c + Vector3.up * 2f, 90);
 
             yield return new WaitForSeconds(0.45f);
-            AudioManager.I.Play("boss_death");
+            BossVoice("death", 1f);
             boss.Flash(Color.white, 1f);
             StartCoroutine(boss.Dissolve(1.3f, def.Accent));
             for (int i = 0; i < 6; i++)
@@ -1413,7 +1414,7 @@ namespace Lucky
             boss.Tilt(6f);
             yield return new WaitForSeconds(0.12f);
             boss.SetPose(Pose.Attack, 0.7f);
-            AudioManager.I.Play("boss_roar", 0.5f, BossPitch() * 1.1f);
+            BossVoice("attack", 0.8f);
             yield return Strike(sting);
             yield return new WaitForSeconds(0.45f);
             if (poison > 0 && heroHp > 0) yield return PoisonTick();
@@ -1680,7 +1681,7 @@ namespace Lucky
             var boss = BossFighter;
             Dodged(boss, 1f, boss.Accent);
             AudioManager.I.Play("near_miss", 0.8f);
-            AudioManager.I.Play("boss_roar", 0.45f, BossPitch() * 1.3f);
+            BossVoice("taunt", 0.6f);
             boss.SetPose(Pose.Attack, 0.5f);
         }
 
@@ -1838,7 +1839,8 @@ namespace Lucky
             }, ease);
         }
 
-        float BossPitch() => 1.15f - depth * 0.08f;
+        /// <summary>The current boss's own voice line: intro, attack, hurt, death or taunt (Audio/SFX/Voices/{id}_{kind}).</summary>
+        void BossVoice(string kind, float volume, float pitch = 1f) => AudioManager.I.Play($"{Boss.Id}_{kind}", volume, pitch, 0.05f, 0.15f);
 
 #if UNITY_EDITOR
         /// <summary>Editor QA hook: force the next spin's value (0 = exact kill).</summary>
