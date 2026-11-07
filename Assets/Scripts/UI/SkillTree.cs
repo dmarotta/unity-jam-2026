@@ -57,9 +57,9 @@ namespace Lucky
 
         static readonly Dictionary<string, string> StatLabels = new()
         {
-            { "max_hp", " MAX HP" }, { "regen", "% REGEN" }, { "armor", " ARMOR" }, { "pity", "% LUCK" },
-            { "gold", "% GOLD" }, { "boss_gold", "% BOUNTY" }, { "carry", " CARRY" }, { "potion_heal", " POTION HEAL" },
-            { "clover_bonus", " CLOVER PULL" }, { "dodge", "% DODGE" },
+            { "max_hp", " MAX HP" }, { "regen", "% REGEN" }, { "armor", " ARMOR" }, { "pity", "% LUCK/MISS" },
+            { "gold", "% GOLD" }, { "boss_gold", "% BOUNTY" }, { "carry", " MAX STOCK" }, { "potion_heal", " POTION HEAL" },
+            { "clover_bonus", " CLOVER SLICES" }, { "dodge", "% DODGE" },
         };
 
         public SkillTree(VisualElement viewport, GameConfig config, MonoBehaviour host)

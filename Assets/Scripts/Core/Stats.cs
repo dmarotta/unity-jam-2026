@@ -49,7 +49,7 @@ namespace Lucky
             ("Regen", $"{Mathf.RoundToInt(RegenFraction * 100f)}%"),
             ("Armor", Armor.ToString()),
             ("Dodge", $"{Mathf.RoundToInt(Dodge * 100f)}%"),
-            ("Luck", $"+{PityPerMiss:0.0}/miss"),
+            ("Luck", $"+{Mathf.RoundToInt(PityPerMiss * 100f)}%/miss"),
             ("Gold", $"×{GoldPerDamage:0.##}"),
         };
     }

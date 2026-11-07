@@ -984,7 +984,7 @@ namespace Lucky
             shopDetailCost.text = priced ? Num(item.Price)
                 : missing.Length > 0 ? "Needs " + string.Join(" + ", Array.ConvertAll(missing, r => r.Name))
                 : item.Gate ? (item.Owned ? "Path open" : $"Reach Depth {item.Value}")
-                : item.Consumable ? "Satchel full" : "Fully upgraded";
+                : item.Consumable ? "Stock full" : "Fully upgraded";
         }
 
         void RefreshShopHeader()
