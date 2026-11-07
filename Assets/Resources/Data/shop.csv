@@ -14,7 +14,7 @@ vitality_4,Vitality IV,passive,max_hp,3,-4,3,750;950;1200,25,seal_phoenix,icon_h
 phoenix,Phoenix Feather,passive,revive,4,-4,1,1500,1,vitality_4,icon_mending,"Once per run, rise from defeat with half your HP."
 fortune,Fortune I,passive,pity,1,0,3,60;100;150,20,,icon_fortune,"Each spin that could have killed but didn't makes the Lucky Number +{value}% likelier, per level. Resets each boss."
 loaded_die,Loaded Die,passive,charm_below,2,0,1,120,1,fortune,icon_loaded_die,Land 1 short of the Lucky Number and the die tips it over: +1.
-clover,Four-Leaf Clover,consumable,clover,1,1,2,45;100;180;280;400,6,fortune,icon_clover,"Restocks every run. On your next spin, the Lucky Number counts as {value} extra slices. Stacks; needs the Lucky Number on the wheel."
+clover,Four-Leaf Clover,consumable,clover,1,1,2,45;100;180;280;400,6,fortune,icon_clover,"Restocks every run. On your next spin with the Lucky Number on the wheel, it counts as {value} extra slices. Stacks."
 clover_bloom,Clover Bloom,passive,clover_bonus,2,1,2,140;220,3,clover;loaded_die,icon_clover,Four-Leaf Clovers count as +{value} more slices per level.
 seal_luck,Seal of the Mimic,gate,,3,0,1,0,4,loaded_die,,"Defeat {boss} (reach Depth {value}) to break this seal."
 horseshoe,Lucky Horseshoe,passive,charm_above,4,0,1,380,1,seal_luck,icon_horseshoe,"Land 1 off the Lucky Number, either way, and it's pulled in: ±1."

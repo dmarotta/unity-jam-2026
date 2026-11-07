@@ -66,7 +66,6 @@ namespace Lucky
             : item.Stat switch
             {
                 "potion" when heroHp >= heroMax && poison == 0 => "Already at full HP",
-                "clover" when wheel.KillSlice < 0 => $"Boss HP must be {Mathf.Max(wheelValues)} or less",
                 "ward" when warded => "Ward already up",
                 _ => null,
             };
@@ -617,7 +616,7 @@ namespace Lucky
             bool killable = Killable();
             float luck = stats.PityPerMiss * misses + cloverWeight + starWeight;
             int target = FightMath.PickSlice(rng, wheelValues, bossHp, luck);
-            cloverWeight = 0;
+            if (killable) cloverWeight = 0; // banked clovers wait until the Lucky Number is on the wheel
 #if UNITY_EDITOR
             int forced = forcedValue >= 0 ? System.Array.IndexOf(wheelValues, forcedValue == 0 ? bossHp : forcedValue) : -1;
             if (forced >= 0) target = forced;
