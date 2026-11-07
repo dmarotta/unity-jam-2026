@@ -8,29 +8,39 @@ namespace Lucky
         public int MaxHp, Armor, CharmBelow, CharmAbove, PotionBonus, CloverBonus, Revives;
         public float RegenFraction, PityPerMiss, GoldPerDamage, BossGoldMultiplier, Dodge;
 
-        public static int Bonus(string stat)
+        public static int Bonus(string stat) => Bonus(stat, i => i.Level);
+
+        /// <summary>Sum of level × value over passives granting <paramref name="stat"/>, with levels read from <paramref name="level"/>.</summary>
+        public static int Bonus(string stat, System.Func<ShopItem, int> level)
         {
             int sum = 0;
             foreach (var item in Balance.Shop)
-                if (!item.Consumable && item.Stat == stat) sum += Mathf.Min(item.Level, item.Max) * item.Value;
+                if (!item.Consumable && item.Stat == stat) sum += Mathf.Min(level(item), item.BaseMax) * item.Value;
             return sum;
         }
 
-        public static Stats Current() => new()
+        public static Stats Current() => From(i => i.Level);
+
+        /// <summary>Stats for any set of shop levels (the balance simulator plays loadouts that aren't saved).</summary>
+        public static Stats From(System.Func<ShopItem, int> level)
         {
-            MaxHp = Balance.HeroHp + Bonus("max_hp"),
-            Armor = Bonus("armor"),
-            CharmBelow = Bonus("charm_below"),
-            CharmAbove = Bonus("charm_above"),
-            PotionBonus = Bonus("potion_heal"),
-            CloverBonus = Bonus("clover_bonus"),
-            Revives = Bonus("revive"),
-            RegenFraction = (Balance.RegenPercent + Bonus("regen")) / 100f,
-            PityPerMiss = Balance.PityPerMiss + Bonus("pity") / 100f,
-            GoldPerDamage = Balance.GoldPerDamage * (1f + Bonus("gold") / 100f),
-            BossGoldMultiplier = 1f + Bonus("boss_gold") / 100f,
-            Dodge = (Balance.HeroDodge + Bonus("dodge")) / 100f,
-        };
+            int B(string stat) => Bonus(stat, level);
+            return new Stats
+            {
+                MaxHp = Balance.HeroHp + B("max_hp"),
+                Armor = B("armor"),
+                CharmBelow = B("charm_below"),
+                CharmAbove = B("charm_above"),
+                PotionBonus = B("potion_heal"),
+                CloverBonus = B("clover_bonus"),
+                Revives = B("revive"),
+                RegenFraction = (Balance.RegenPercent + B("regen")) / 100f,
+                PityPerMiss = Balance.PityPerMiss + B("pity") / 100f,
+                GoldPerDamage = Balance.GoldPerDamage * (1f + B("gold") / 100f),
+                BossGoldMultiplier = 1f + B("boss_gold") / 100f,
+                Dodge = (Balance.HeroDodge + B("dodge")) / 100f,
+            };
+        }
 
         /// <summary>Headline numbers for the shop's stat strip, in display order.</summary>
         public (string label, string value)[] Summary() => new[]
