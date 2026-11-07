@@ -928,13 +928,11 @@
 .tarot-up, .tarot-down {
     font-size: 26px;
     margin-top: 4px;
-    padding-left: 12px;
-    border-left-width: 6px;
     white-space: normal;
 }
 
-.tarot-up { color: rgb(170, 255, 140); border-left-color: rgb(110, 225, 80); }
-.tarot-down { color: rgb(255, 145, 130); border-left-color: rgb(240, 80, 80); }
+.tarot-up { color: rgb(170, 255, 140); }
+.tarot-down { color: rgb(255, 145, 130); }
 
 .tarot-key {
     position: absolute;
