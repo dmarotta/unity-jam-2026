@@ -23,8 +23,9 @@ namespace Lucky
         readonly Dictionary<Pose, Sprite> poses = new();
         readonly Dictionary<Pose, Flipbook> anims = new();
         Material mat;
-        SpriteRenderer shadow, ghost;
+        SpriteRenderer shadow, contact, pool, ghost;
         Transform pivot;
+        Vector3 shadowScale;
         Spring squashX, squashY, offsetX, offsetY, tilt;
         float flash, poseUntil, animTime, ghostLife;
         Pose pose;
@@ -53,6 +54,20 @@ namespace Lucky
             f.shadow.sharedMaterial = cfg.spriteDefault;
             f.shadow.sortingOrder = order - 2;
             f.shadow.color = new Color(0f, 0f, 0f, 0.7f);
+            // Tight, dark core right under the feet; the soft blob alone is too wide to read as contact on a dark floor.
+            f.contact = new GameObject("Contact").AddComponent<SpriteRenderer>();
+            f.contact.transform.SetParent(f.shadow.transform, false);
+            f.contact.transform.localScale = new Vector3(0.45f, 0.5f, 1f);
+            f.contact.sprite = f.shadow.sprite;
+            f.contact.sharedMaterial = cfg.spriteDefault;
+            f.contact.sortingOrder = order - 1;
+            // The arena floors are near-black, so a shadow alone can't read; a warm glow on the floor gives it something to darken.
+            f.pool = new GameObject("FloorGlow").AddComponent<SpriteRenderer>();
+            f.pool.transform.SetParent(f.shadow.transform, false);
+            f.pool.sprite = cfg.Sprite("vfx_glow");
+            f.pool.transform.localScale = Vector3.one * 1.4f * f.shadow.sprite.bounds.size.x / f.pool.sprite.bounds.size.x;
+            f.pool.sharedMaterial = cfg.additive;
+            f.pool.sortingOrder = order - 3;
 
             f.pivot = new GameObject("Pivot").transform;
             f.pivot.SetParent(go.transform, false);
@@ -120,7 +135,7 @@ namespace Lucky
             Body.transform.localScale = new Vector3(scale, scale, 1f);
             float width = Mathf.Min(sprite.bounds.size.x * scale, Height * 0.9f);
             float sh = width * 1.1f / shadow.sprite.bounds.size.x;
-            shadow.transform.localScale = new Vector3(sh, sh * 0.22f, 1f);
+            shadowScale = new Vector3(sh, sh * 0.22f, 1f);
         }
 
         public void Squash(float x, float y)
@@ -157,7 +172,7 @@ namespace Lucky
         public IEnumerator Dissolve(float duration, Color edge)
         {
             mat.SetColor("_DissolveEdge", edge * 4f);
-            shadow.enabled = false;
+            shadow.gameObject.SetActive(false);
             yield return Tween.Run(duration, t => mat.SetFloat("_Dissolve", t), Ease.InQuad);
             gameObject.SetActive(false);
         }
@@ -167,7 +182,7 @@ namespace Lucky
             gameObject.SetActive(true);
             mat.SetFloat("_Dissolve", 0f);
             mat.SetFloat("_Glow", 1f);
-            shadow.enabled = true;
+            shadow.gameObject.SetActive(true);
             flash = 0f;
             Body.color = Color.white;
             pivot.localPosition = Vector3.zero;
@@ -213,6 +228,18 @@ namespace Lucky
             int frame = (int)(animTime * anim.Fps);
             frame = anim.Loop ? frame % anim.Frames.Length : Mathf.Min(frame, anim.Frames.Length - 1);
             Body.sprite = anim.Frames[frame];
+        }
+
+        void LateUpdate()
+        {
+            // Shadows stay on the floor while hops and run bounces lift the body, shrinking and fading with height.
+            var p = transform.position;
+            float k = 1f / (1f + Mathf.Max(0f, p.y - World.GroundY) * 1.5f);
+            shadow.transform.SetPositionAndRotation(new Vector3(p.x, World.GroundY, p.z), Quaternion.identity);
+            shadow.transform.localScale = shadowScale * Mathf.Lerp(0.6f, 1f, k);
+            shadow.color = new Color(0f, 0f, 0f, 0.7f * k);
+            contact.color = new Color(0f, 0f, 0f, 0.95f * k * k);
+            pool.color = new Color(1f, 0.65f, 0.35f, 0.2f * k);
         }
     }
 }
