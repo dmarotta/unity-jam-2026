@@ -41,6 +41,18 @@ namespace Lucky
         int cloverWeight, revives;
         SpriteRenderer wardBubble;
 
+        // Boss quirks: the Lich's spare life, Arachna's poison stacks, Snake-Eyes' burning slices (turns left per slice).
+        bool phylactery;
+        int poison, turn;
+        int[] burnTurns;
+        float emberTimer;
+
+        // Madame Fortuna's card this turn: the wheel's values (The Tower doubles them), Justice, The Star's pull,
+        // Wheel of Fortune's second spin, and the sting added to her next attack.
+        int[] wheelValues;
+        bool noBust, spinTwice;
+        int starWeight, sting;
+
         /// <summary>Short-lived effect objects owned by run coroutines; destroyed on reset in case a quit cut them short.</summary>
         readonly List<GameObject> transients = new();
 
@@ -53,8 +65,8 @@ namespace Lucky
             : !awaitingSpin ? "Wait for your turn"
             : item.Stat switch
             {
-                "potion" when heroHp >= heroMax => "Already at full HP",
-                "clover" when wheel.KillSlice < 0 => $"Boss HP must be {Mathf.Max(Balance.Wheel)} or less",
+                "potion" when heroHp >= heroMax && poison == 0 => "Already at full HP",
+                "clover" when wheel.KillSlice < 0 => $"Boss HP must be {Mathf.Max(wheelValues)} or less",
                 "ward" when warded => "Ward already up",
                 _ => null,
             };
@@ -114,6 +126,8 @@ namespace Lucky
             wheel = new GameObject("Wheel").AddComponent<PrizeWheel>();
             wheel.transform.SetParent(wheelRoot, false);
             wheel.Build(config, Balance.Wheel);
+            wheelValues = Balance.Wheel;
+            burnTurns = new int[Balance.Wheel.Length];
             wheel.PegCrossed += OnPeg;
             wheel.Teased += OnTeased;
             wheel.Slipped += OnSlipped;
@@ -139,7 +153,27 @@ namespace Lucky
             float spin = Mathf.InverseLerp(0f, 1200f, wheel.Speed);
             wheelLight.intensity = 0.35f + spin * 1.1f + (wheel.KillSlice >= 0 ? 0.25f * (0.5f + 0.5f * Mathf.Sin(Time.unscaledTime * 5f)) : 0f);
             if (wardBubble != null) wardBubble.transform.localScale = Vector3.one * hero.Height * (0.62f + 0.04f * Mathf.Sin(Time.time * 6f)) / wardBubble.sprite.bounds.size.x;
+
+            // Lingering status: embers off scorched slices, venom bubbles off a poisoned hero.
+            emberTimer -= Time.deltaTime;
+            if (emberTimer > 0f) return;
+            emberTimer = 0.07f;
+            for (int i = 0; i < burnTurns.Length; i++)
+                if (burnTurns[i] > 0) Flames(wheel.SlicePoint(i, Random.Range(0.55f, 0.95f)), FireColor, 1, 0.5f);
+            if (poison > 0 && Random.value < 0.5f) Flames(hero.transform.position + Vector3.up * hero.Height * Random.Range(0.1f, 0.7f), VenomColor, 1, 0.6f);
         }
+
+        /// <summary>Additive blobs licking upward: fire off burnt slices and burns, bubbles off poison.</summary>
+        static void Flames(Vector3 pos, Color color, int count, float power) => FX.I.Emit(pos, new FX.Burst
+        {
+            Sprite = "vfx_glow", Count = count, SpeedMin = 1f * power, SpeedMax = 4f * power, AngleMin = 70f, AngleMax = 110f,
+            Gravity = 2f, Drag = 1.5f, LifeMin = 0.4f, LifeMax = 0.8f, SizeMin = 0.25f, SizeMax = 0.6f + 0.4f * power, EndSize = 0.1f,
+            Color = color, EndColor = new Color(color.r * 0.8f, color.g * 0.2f, color.b * 0.1f, 0f), Additive = true,
+            Spread = new Vector2(0.3f, 0.15f) * (1f + power),
+        });
+
+        static readonly Color FireColor = new(1f, 0.5f, 0.1f), VenomColor = new(0.55f, 1f, 0.3f), TarotColor = new(0.78f, 0.49f, 1f);
+        static readonly Color SoulColor = new(0.36f, 1f, 0.69f), StoneColor = new(0.85f, 0.78f, 0.68f), HealColor = new(0.5f, 1f, 0.6f);
 
         Sprite S(string name) => config.Sprite(name);
 
@@ -211,6 +245,34 @@ namespace Lucky
             PostFX.I.SetDanger(0f);
             AudioManager.I.Loop("heartbeat", false);
             AudioManager.I.Loop("run_steps", false);
+            ClearQuirks();
+        }
+
+        /// <summary>Poison and scorched slices end with the fight; Madame Fortuna's card ends with its turn.</summary>
+        void ClearQuirks()
+        {
+            poison = 0;
+            hud.SetPoison(0);
+            for (int i = 0; i < burnTurns.Length; i++)
+            {
+                if (burnTurns[i] == 0) continue;
+                burnTurns[i] = 0;
+                wheel.SetBurnt(i, false);
+            }
+            ClearWheelRules();
+            sting = 0;
+            hud.ShowActiveCard(null);
+        }
+
+        /// <summary>The card's hold on the wheel wears off once the spin's number is in: plain values, busts back on.</summary>
+        void ClearWheelRules()
+        {
+            starWeight = 0;
+            spinTwice = false;
+            if (!noBust && wheelValues == Balance.Wheel) return;
+            noBust = wheel.NoBust = false;
+            wheelValues = Balance.Wheel;
+            wheel.SetValues(wheelValues);
         }
 
         // ---------- Input ----------
@@ -232,6 +294,12 @@ namespace Lucky
             }
             if (back) hud.ShowSettings(!hud.SettingsOpen);
             if (hud.SettingsOpen) return;
+            if (hud.PickingCard)
+            {
+                for (int i = 0; kb != null && i < 9; i++)
+                    if (kb[Key.Digit1 + i].wasPressedThisFrame) hud.ChooseCard(i);
+                return;
+            }
             if (awaitingSpin && confirm) spinRequested = true;
             for (int i = 0; kb != null && i < consumables.Count && i < 9; i++)
                 if (kb[Key.Digit1 + i].wasPressedThisFrame && CanUse(consumables[i])) itemRequested = consumables[i];
@@ -278,7 +346,7 @@ namespace Lucky
             heroHp = heroMax;
             runGold = spins = jackpots = busts = 0;
             SaveData.Runs++;
-            hud.SetGold(0, true);
+            hud.SetGold(0);
             hud.SetHeroHp(heroHp, heroMax, false);
             hud.SetCharm(charm != null ? S(charm.Icon) : null, stats.CharmAbove > 0 ? "±1" : "+1");
             hud.BuildItems(consumables);
@@ -318,14 +386,14 @@ namespace Lucky
         /// <summary>Can any wheel value (after charms) land exactly on the boss's HP?</summary>
         bool Killable()
         {
-            foreach (int v in Balance.Wheel)
+            foreach (int v in wheelValues)
                 if (FightMath.Charm(v, bossHp, stats.CharmBelow, stats.CharmAbove) == bossHp) return true;
             return false;
         }
 
         void RefreshTarget()
         {
-            wheel.SetTarget(bossHp, misses + cloverWeight, stats.CharmBelow, stats.CharmAbove, charm?.Icon);
+            wheel.SetTarget(bossHp, misses + cloverWeight + starWeight, stats.CharmBelow, stats.CharmAbove, charm?.Icon);
             hud.SetNeed(bossHp, Killable());
         }
 
@@ -333,7 +401,9 @@ namespace Lucky
         {
             var def = Boss;
             bossHp = def.Hp;
-            misses = 0;
+            misses = turn = 0;
+            phylactery = def.Quirk == "phylactery";
+            ClearQuirks();
             hud.SetBossInfo(def);
             hud.SetPortraits(S("portrait_hero"), bossPortraits[depth]);
             hud.SetBossHp(bossHp, def.Hp, false);
@@ -360,6 +430,7 @@ namespace Lucky
             CameraRig.I.ZoomPunch(-0.05f);
             PostFX.I.Punch(bloomAdd: 1.5f, chromaAdd: 0.35f, lensAdd: -0.2f);
             hud.Banner(def.Name.ToUpperInvariant(), $"Depth {depth + 1}  ·  {def.Arena}", HUD.BannerStyle.Intro, 1.25f);
+            StartCoroutine(hud.PulseTraits());
             yield return new WaitForSeconds(1.5f);
             yield return ShowWheel(true);
         }
@@ -368,6 +439,11 @@ namespace Lucky
         {
             while (true)
             {
+                turn++;
+                sting = 0;
+                hud.ShowActiveCard(null);
+                if (Boss.Quirk == "tarot" && (turn - 1) % Boss.QuirkValue == 0) yield return TarotDraw();
+
                 spinRequested = false;
                 itemRequested = null;
                 float readyAt = SetAwaitingSpin(true);
@@ -381,6 +457,8 @@ namespace Lucky
                         SetAwaitingSpin(false);
                         yield return UseItem(item);
                         if (bossHp == 0) yield break;
+                        yield return TryRevive();
+                        if (heroHp <= 0) yield break;
                         readyAt = SetAwaitingSpin(true);
                     }
                     if (SaveData.AutoSpin && !hud.SettingsOpen && Time.unscaledTime - readyAt > 0.6f) spinRequested = true;
@@ -390,13 +468,134 @@ namespace Lucky
 
                 yield return SpinTurn();
                 if (bossHp == 0) yield break;
+                yield return TryRevive();
+                if (heroHp <= 0) yield break;
 
                 yield return BossTurn();
-                if (heroHp > 0) continue;
-                if (revives == 0) yield break;
-                revives--;
-                yield return Revive();
+                hud.ShowActiveCard(null);
+                yield return TryRevive();
+                if (heroHp <= 0) yield break;
             }
+        }
+
+        /// <summary>Phoenix Feather: a hero who just fell rises if a revive is left (a counter-attack can fell them mid-turn).</summary>
+        IEnumerator TryRevive()
+        {
+            if (heroHp > 0 || revives == 0) yield break;
+            revives--;
+            yield return Revive();
+        }
+
+        // ---------- Madame Fortuna's tarot ----------
+
+        /// <summary>She deals two different cards; the player must take one, and it plays at once.</summary>
+        IEnumerator TarotDraw()
+        {
+            var boss = BossFighter;
+            var deck = Balance.Tarot;
+            int a = rng.Next(deck.Count), b = (a + 1 + rng.Next(deck.Count - 1)) % deck.Count;
+            AudioManager.I.Play("boss_attack_magic", 0.6f, 1.3f);
+            boss.SetPose(Pose.Attack, 0.7f);
+            boss.Flash(TarotColor, 0.8f);
+            boss.Squash(1.1f, 0.92f);
+            FX.I.Cards(boss.Chest, 10);
+            FX.I.Sparks(boss.Chest, TarotColor, 30, 1.3f);
+            FX.I.Light(boss.Chest, TarotColor, 4f, 9f, 0.8f);
+            yield return new WaitForSeconds(0.35f);
+
+            TarotCard card = null;
+            yield return hud.PickCard(new[] { deck[a], deck[b] }, c => card = c);
+            hud.ShowActiveCard(card);
+            yield return PlayCard(card);
+        }
+
+        IEnumerator PlayCard(TarotCard card)
+        {
+            var at = wheel.PointerTip + Vector3.up * 1.8f;
+            FX.I.Pop(card.Sprite, at, 0.5f, 2.6f, 0.8f, Color.white, 0f, false);
+            FX.I.Ring(at, TarotColor, 10f, 0.5f);
+            FX.I.Sparks(at, TarotColor, 36, 1.4f, true);
+            FX.I.Light(at, TarotColor, 4f, 9f, 0.6f);
+            wheel.Flare(TarotColor, 1f);
+            wheel.Punch(0.1f);
+            CameraRig.I.Shake(0.25f);
+            PostFX.I.Punch(bloomAdd: 1.3f, chromaAdd: 0.35f);
+            var caption = at + Vector3.up * 1.6f;
+            switch (card.Id)
+            {
+                case "tower":
+                    sting = card.Cost;
+                    wheelValues = System.Array.ConvertAll(Balance.Wheel, v => v * card.Gain);
+                    wheel.SetValues(wheelValues);
+                    AudioManager.I.Play("hit_heavy", 0.9f, 0.7f);
+                    FX.I.Sparks(wheel.Center, Gold, 50, 2f, true);
+                    FX.I.Text(caption, $"×{card.Gain}!", Gold, 3f, 1f, 1.2f, true);
+                    break;
+                case "justice":
+                    noBust = wheel.NoBust = true;
+                    AudioManager.I.Play("hp_upgrade", 0.9f, 0.9f);
+                    FX.I.Text(caption, "NO BUST!", TarotColor, 2.2f, 1f, 1.2f, true);
+                    HealBoss(card.Cost);
+                    break;
+                case "star":
+                    starWeight = card.Gain;
+                    AudioManager.I.Play("charm_nudge", 1f, 1.15f);
+                    wheel.SetLights(PrizeWheel.Lights.Jackpot, 1.2f);
+                    FX.I.Text(caption, "FEELING LUCKY!", Gold, 1.8f, 1f, 1.2f, true);
+                    Singe(card.Cost, TarotColor, "");
+                    break;
+                case "temperance":
+                    if (heroHp < heroMax) HealHero(Mathf.Min(card.Gain, heroMax - heroHp), HealColor);
+                    HealBoss(card.Cost);
+                    break;
+                case "wheel":
+                    spinTwice = true;
+                    sting = card.Cost;
+                    AudioManager.I.Play("spin_start", 0.8f, 1.2f);
+                    FX.I.Text(caption, "SPIN TWICE!", Gold, 2.2f, 1f, 1.2f, true);
+                    break;
+            }
+            RefreshTarget();
+            yield return new WaitForSeconds(0.75f);
+        }
+
+        /// <summary>A boss mends (Justice, Temperance): green sparkles rise and the bar climbs.</summary>
+        void HealBoss(int amount)
+        {
+            int healed = Mathf.Min(amount, Boss.Hp - bossHp);
+            if (healed <= 0) return;
+            var boss = BossFighter;
+            bossHp += healed;
+            hud.SetBossHp(bossHp, Boss.Hp, true);
+            RefreshTarget();
+            AudioManager.I.Play("hp_refill", 0.8f, 1.1f);
+            boss.Flash(HealColor, 0.8f);
+            boss.Squash(1.1f, 0.92f);
+            FX.I.Emit(boss.transform.position + Vector3.up * 0.3f, new FX.Burst
+            {
+                Sprite = "vfx_sparkle", Count = 30, SpeedMin = 2f, SpeedMax = 6f, AngleMin = 75f, AngleMax = 105f,
+                Gravity = 2f, Drag = 1f, LifeMin = 0.6f, LifeMax = 1.2f, SizeMin = 0.25f, SizeMax = 0.55f, EndSize = 0f,
+                Spin = 200f, Color = HealColor, EndColor = Color.white, Additive = true, Spread = new Vector2(1.2f, 0.2f),
+            });
+            FX.I.Text(boss.Head + Vector3.up * 0.6f, "+" + healed, HealColor, 1.8f, 1.3f, 1.1f, true);
+        }
+
+        /// <summary>Damage the hero pays for something (The Star, a scorched slice) rather than takes in a fight; never lethal.</summary>
+        void Singe(int amount, Color color, string label)
+        {
+            int dmg = Mathf.Min(amount, heroHp - 1);
+            if (dmg <= 0) return;
+            heroHp -= dmg;
+            hud.SetHeroHp(heroHp, heroMax, true);
+            AudioManager.I.Play("hero_hurt", 0.8f, 1.1f);
+            hero.SetPose(Pose.Hurt, 0.4f);
+            hero.Flash(color, 1f);
+            hero.Squash(0.85f, 1.12f);
+            hero.Knock(-3f);
+            FX.I.Sparks(hero.Chest, color, 24, 1.2f);
+            FX.I.Text(hero.Head + Vector3.up * 0.6f, $"-{dmg} {label}".TrimEnd(), color, 1.7f, 1.3f, 1.1f, true);
+            CameraRig.I.Shake(0.3f);
+            UpdateDanger();
         }
 
         /// <summary>Open or close the player's turn window; returns when it opened (for auto-spin).</summary>
@@ -415,13 +614,84 @@ namespace Lucky
             spins++;
             var def = Boss;
             bool killable = Killable();
-            int target = FightMath.PickSlice(rng, Balance.Wheel, bossHp, stats.PityPerMiss * misses + cloverWeight);
+            float luck = stats.PityPerMiss * misses + cloverWeight + starWeight;
+            int target = FightMath.PickSlice(rng, wheelValues, bossHp, luck);
             cloverWeight = 0;
 #if UNITY_EDITOR
-            int forced = forcedValue >= 0 ? System.Array.IndexOf(Balance.Wheel, forcedValue == 0 ? bossHp : forcedValue) : -1;
+            int forced = forcedValue >= 0 ? System.Array.IndexOf(wheelValues, forcedValue == 0 ? bossHp : forcedValue) : -1;
             if (forced >= 0) target = forced;
             forcedValue = -1;
 #endif
+            yield return SpinWheel(target);
+            if (spinTwice) yield return SpinAgain(target, luck, t => target = t);
+
+            int landed = wheelValues[target];
+            bool blocked = def.Quirk == "block" && rng.NextDouble() < def.QuirkChance;
+            int afterBlock = blocked ? Mathf.Max(0, landed - def.QuirkValue) : landed;
+            int value = FightMath.Charm(afterBlock, bossHp, stats.CharmBelow, stats.CharmAbove);
+            bool charmed = value != afterBlock;
+            var result = Preview(afterBlock);
+            bool swallowed = def.Quirk == "swallow" && value > 0 && rng.NextDouble() < def.QuirkChance;
+            bool dodged = !swallowed && rng.NextDouble() < def.Dodge;
+            bool big = value >= 9 || result.Outcome == HitOutcome.Jackpot;
+
+            bool nearMiss = result.Outcome != HitOutcome.Jackpot && wheel.KillSlice >= 0 && SliceDistance(target, wheel.KillSlice) == 1;
+            if (nearMiss && !slipped)
+            {
+                AudioManager.I.Play("near_miss", 0.9f);
+                FX.I.Text(wheel.PointerTip + Vector3.up * 2.4f, "SO CLOSE!", new Color(1f, 0.55f, 0.75f), 0.9f, 0.8f, 1.2f, true);
+            }
+
+            // Number reveal: pops out of the pointer and hangs above the wheel. A blocked or charmed number is revealed as landed first.
+            AudioManager.I.Play(big ? "reveal_big" : "reveal_small", 1f, 0.9f + landed * 0.02f);
+            var revealColor = charmed || blocked ? new Color(1f, 0.97f, 0.88f) : result.Outcome switch
+            {
+                HitOutcome.Jackpot => Gold,
+                HitOutcome.Bust => new Color(1f, 0.4f, 0.5f),
+                HitOutcome.Miss => TarotColor,
+                _ => new Color(1f, 0.97f, 0.88f),
+            };
+            FX.I.Text(wheel.PointerTip + Vector3.up * 1.3f, landed.ToString(), revealColor, big ? 3.2f : 2.4f, 0.6f, 0.9f, big);
+            FX.I.Pop("vfx_glow", wheel.PointerTip + Vector3.up * 1.3f, 1f, 5f, 0.45f, revealColor);
+            if (blocked) yield return StoneBlock(landed, afterBlock);
+            if (charmed) yield return CharmNudge(afterBlock, value);
+            if (burnTurns[target] > 0) yield return Scorched(def.QuirkValue);
+            if (result.Outcome == HitOutcome.Jackpot && !dodged) yield return LuckyReveal();
+            else yield return new WaitForSeconds(0.32f);
+
+            ClearWheelRules();
+            yield return HeroAttack(result, killable, dodged, swallowed);
+        }
+
+        /// <summary>What a wheel number would do to the boss right now, after charms and this turn's card.</summary>
+        HitResult Preview(int value) => FightMath.Apply(bossHp, Boss.Hp, FightMath.Charm(value, bossHp, stats.CharmBelow, stats.CharmAbove), !noBust);
+
+        /// <summary>Wheel of Fortune: the first number hangs to the left, the wheel spins again, and the better result is kept.</summary>
+        IEnumerator SpinAgain(int first, float luck, System.Action<int> keep)
+        {
+            var held = wheel.PointerTip + new Vector3(-3.6f, 1.6f);
+            AudioManager.I.Play("card_deal", 0.9f, 0.9f);
+            FX.I.Text(held, wheelValues[first].ToString(), Color.white, 2.8f, 0.3f, 2.9f, true);
+            FX.I.Pop("vfx_glow", held, 1f, 4f, 0.5f, TarotColor);
+            FX.I.Text(wheel.PointerTip + Vector3.up * 2.4f, "AGAIN!", TarotColor, 1.8f, 0.9f, 1f, true);
+            yield return new WaitForSeconds(0.45f);
+
+            int second = FightMath.PickSlice(rng, wheelValues, bossHp, luck);
+            yield return SpinWheel(second);
+            int kept = FightMath.Better(Preview(wheelValues[second]), Preview(wheelValues[first])) ? second : first;
+            var at = kept == first ? held : wheel.PointerTip + Vector3.up * 1.6f;
+            AudioManager.I.Play("card_pick", 0.8f);
+            wheel.HighlightWin(kept);
+            FX.I.Ring(at, Gold, 7f, 0.45f);
+            FX.I.Sparks(at, Gold, 30, 1.3f, true);
+            FX.I.Text(wheel.PointerTip + Vector3.up * 2.6f, $"KEEP {wheelValues[kept]}!", Gold, 2.2f, 1f, 1.2f, true);
+            keep(kept);
+            yield return new WaitForSeconds(0.5f);
+        }
+
+        /// <summary>One spin of the wheel onto <paramref name="target"/>, with all its drama, up to the clack of the stop.</summary>
+        IEnumerator SpinWheel(int target)
+        {
             var drama = ChooseDrama(target);
 
             AudioManager.I.Play("spin_start");
@@ -440,41 +710,50 @@ namespace Lucky
             yield return wheel.Spin(target, SaveData.AutoSpin ? Balance.AutoSpinSeconds : Balance.SpinSeconds, drama);
             if (!slipped) wheel.SetLights(PrizeWheel.Lights.Idle);
 
-            int landed = Balance.Wheel[target];
-            int value = FightMath.Charm(landed, bossHp, stats.CharmBelow, stats.CharmAbove);
-            bool charmed = value != landed;
-            var result = FightMath.Apply(bossHp, def.Hp, value);
-            bool dodged = rng.NextDouble() < def.Dodge;
-            bool big = value >= 9 || result.Outcome == HitOutcome.Jackpot;
-
             AudioManager.I.Play("wheel_stop");
             wheel.HighlightWin(target);
             wheel.Punch(0.1f);
             CameraRig.I.Shake(0.15f);
             FX.I.Sparks(wheel.PointerTip, Gold, 16, 1f, true);
+        }
 
-            bool nearMiss = result.Outcome != HitOutcome.Jackpot && wheel.KillSlice >= 0 && SliceDistance(target, wheel.KillSlice) == 1;
-            if (nearMiss && !slipped)
-            {
-                AudioManager.I.Play("near_miss", 0.9f);
-                FX.I.Text(wheel.PointerTip + Vector3.up * 2.4f, "SO CLOSE!", new Color(1f, 0.55f, 0.75f), 0.9f, 0.8f, 1.2f, true);
-            }
+        /// <summary>The Golem's stone shield slams over the revealed number and knocks it down.</summary>
+        IEnumerator StoneBlock(int landed, int after)
+        {
+            var at = wheel.PointerTip + Vector3.up * 1.3f;
+            var boss = BossFighter;
+            yield return new WaitForSeconds(0.3f);
+            AudioManager.I.Play("stone_block");
+            AudioManager.I.Play("hit_heavy", 0.7f, 0.6f);
+            Juice.I.Hitstop(0.08f);
+            boss.SetPose(Pose.Attack, 0.5f);
+            boss.Squash(1.15f, 0.88f);
+            boss.Flash(StoneColor, 0.8f);
+            FX.I.Pop("icon_block", at + Vector3.right * 2f, 0.6f, 2.3f, 0.9f, Color.white, 0f, false);
+            FX.I.Text(at + new Vector3(2f, 1.4f), $"-{landed - after} BLOCKED", StoneColor, 1.6f, 1f, 1.2f, true);
+            FX.I.Dust(at, 10, new Color(0.6f, 0.55f, 0.5f, 0.8f));
+            FX.I.Sparks(at, Boss.Accent, 28, 1.3f, true);
+            FX.I.Ring(at, StoneColor, 6f, 0.4f);
+            wheel.Punch(0.09f);
+            CameraRig.I.Shake(0.4f);
+            PostFX.I.Punch(chromaAdd: 0.4f, saturationAdd: -25f);
+            yield return new WaitForSeconds(0.28f);
+            FX.I.Text(at, after.ToString(), StoneColor, 3f, 0.6f, 0.9f, true);
+            FX.I.Pop("vfx_glow", at, 1f, 5f, 0.45f, StoneColor);
+        }
 
-            // Number reveal: pops out of the pointer and hangs above the wheel. A charmed number is revealed as landed first.
-            AudioManager.I.Play(big ? "reveal_big" : "reveal_small", 1f, 0.9f + landed * 0.02f);
-            var revealColor = charmed ? new Color(1f, 0.97f, 0.88f) : result.Outcome switch
-            {
-                HitOutcome.Jackpot => Gold,
-                HitOutcome.Bust => new Color(1f, 0.4f, 0.5f),
-                _ => new Color(1f, 0.97f, 0.88f),
-            };
-            FX.I.Text(wheel.PointerTip + Vector3.up * 1.3f, landed.ToString(), revealColor, big ? 3.2f : 2.4f, 0.6f, 0.9f, big);
-            FX.I.Pop("vfx_glow", wheel.PointerTip + Vector3.up * 1.3f, 1f, 5f, 0.45f, revealColor);
-            if (charmed) yield return CharmNudge(landed, value);
-            if (result.Outcome == HitOutcome.Jackpot && !dodged) yield return LuckyReveal();
-            else yield return new WaitForSeconds(0.32f);
-
-            yield return HeroAttack(result, killable, dodged);
+        /// <summary>Landing on a scorched slice: the fire leaps off the wheel at the hero. The hit itself still goes in.</summary>
+        IEnumerator Scorched(int amount)
+        {
+            var from = wheel.PointerTip;
+            AudioManager.I.Play("fire_sizzle");
+            Flames(from, FireColor, 30, 1.6f);
+            FX.I.Light(from, FireColor, 5f, 9f, 0.6f);
+            FX.I.Text(from + Vector3.up * 2.5f, "SCORCHED!", FireColor, 1.8f, 1f, 1.1f, true);
+            wheel.Punch(0.08f);
+            yield return Projectile("vfx_glow", from, hero.Chest, 0.3f, 1.6f, FireColor, true, 0f, 2f);
+            Flames(hero.Chest, FireColor, 24, 1.2f);
+            Singe(amount, FireColor, "BURN");
         }
 
         PrizeWheel.Drama ChooseDrama(int target)
@@ -608,7 +887,7 @@ namespace Lucky
 
         // ---------- Hero attack & outcomes ----------
 
-        IEnumerator HeroAttack(HitResult result, bool wasKillable, bool dodged)
+        IEnumerator HeroAttack(HitResult result, bool wasKillable, bool dodged, bool swallowed)
         {
             var boss = BossFighter;
             // The attack flipbook bakes in a lunge that carries Ace ~1.05 body heights forward by its hit frame,
@@ -627,7 +906,9 @@ namespace Lucky
             FX.I.Dust(hero.transform.position, 4, new Color(0.8f, 0.75f, 0.7f, 0.6f));
             yield return Move(hero, strike, animated ? hero.AttackHitTime : 0.13f, Ease.OutCubic, true);
 
-            if (dodged) BossDodged();
+            if (swallowed) yield return Swallowed(result.Damage);
+            else if (dodged) BossDodged();
+            else if (result.Outcome == HitOutcome.Miss) Spared();
             else yield return Impact(result);
 
             // Let the swing (and the flipbook's hop back) finish before running home.
@@ -636,9 +917,72 @@ namespace Lucky
             yield return Move(hero, hero.Home, 0.3f, Ease.InOutCubic, false, 0.6f);
             hero.Squash(1.12f, 0.9f);
 
-            if (result.Outcome == HitOutcome.Jackpot && !dodged) yield break;
+            if (bossHp == 0) yield break;
             if (wasKillable) misses++;
             RefreshTarget();
+            if (result.Outcome == HitOutcome.Bust && !dodged && !swallowed && Boss.Quirk == "counter") yield return Counter();
+        }
+
+        /// <summary>Gildmaw gulps the hit whole: no damage, but the hoard coughs up its multiple in gold.</summary>
+        IEnumerator Swallowed(int damage)
+        {
+            var boss = BossFighter;
+            var mouth = boss.Chest + Vector3.left * 0.6f;
+            int gold = Mathf.RoundToInt(damage * stats.GoldPerDamage * Boss.QuirkValue);
+            AudioManager.I.Play("mimic_chomp", 1f, 0.9f);
+            AudioManager.I.Play("coin_burst", 0.9f, 0.9f);
+            Juice.I.Hitstop(0.12f);
+            boss.SetPose(Pose.Attack, 0.6f);
+            boss.Squash(1.3f, 0.75f);
+            boss.Flash(Gold, 1f);
+            FX.I.Pop("icon_swallow", mouth + Vector3.up * 1.8f, 0.5f, 2.4f, 0.9f, Color.white, 0f, false);
+            FX.I.Text(boss.Head + Vector3.up * 0.9f, "GULP!", Gold, 2.6f, 1.2f, 1.2f, true);
+            FX.I.Coins(mouth, 40, 1.6f);
+            FX.I.Sparks(mouth, Gold, 40, 1.5f, true);
+            FX.I.Ring(mouth, Gold, 8f, 0.5f);
+            FX.I.Light(mouth, Gold, 5f, 10f, 0.8f);
+            CameraRig.I.Shake(0.5f);
+            CameraRig.I.ZoomPunch(-0.04f);
+            PostFX.I.Punch(bloomAdd: 1.6f, saturationAdd: 25f);
+            hud.Flash(Gold, 0.3f, 0.3f);
+            yield return new WaitForSeconds(0.25f);
+            FX.I.Text(mouth + Vector3.up * 2.6f, $"×{Boss.QuirkValue} GOLD", Gold, 2f, 1.4f, 1.3f, true);
+            GrantGold(gold, mouth, Mathf.Min(30, 6 + gold / 2));
+            yield return new WaitForSeconds(0.3f);
+        }
+
+        /// <summary>Justice holds an overshoot back: golden scales flare and the boss is untouched instead of healed.</summary>
+        void Spared()
+        {
+            var at = BossFighter.Chest + Vector3.left * 0.8f;
+            AudioManager.I.Play("hit_heavy", 0.7f, 1.6f);
+            AudioManager.I.Play("hp_upgrade", 0.7f, 1.2f);
+            Juice.I.Hitstop(0.08f);
+            FX.I.Pop("tarot_justice", at + Vector3.up * 0.8f, 0.5f, 2.2f, 0.8f, Color.white, 0f, false);
+            FX.I.Ring(at, TarotColor, 8f, 0.45f);
+            FX.I.Sparks(at, Gold, 30, 1.3f, true);
+            FX.I.Text(at + Vector3.up * 2.4f, "NO BUST!", TarotColor, 2f, 1.2f, 1.1f, true);
+            CameraRig.I.Shake(0.25f);
+        }
+
+        /// <summary>Sir Blackjack punishes a bust: a parry clang and an instant extra attack.</summary>
+        IEnumerator Counter()
+        {
+            var boss = BossFighter;
+            AudioManager.I.Play("counter_clang");
+            Juice.I.Hitstop(0.1f);
+            boss.SetPose(Pose.Attack, 0.6f);
+            boss.Flash(Color.white, 1f);
+            boss.Squash(1.2f, 0.85f);
+            FX.I.Pop("icon_counter", boss.Head + Vector3.up * 1.2f, 0.5f, 2.4f, 0.8f, Color.white, 0f, false);
+            FX.I.Text(boss.Head + Vector3.up * 2.4f, "RIPOSTE!", boss.Accent, 2.4f, 1f, 1.2f, true);
+            FX.I.Sparks(boss.Chest, Color.white, 30, 1.4f, true);
+            FX.I.Ring(boss.Chest, boss.Accent, 8f, 0.4f);
+            hud.Flash(boss.Accent, 0.25f, 0.25f);
+            CameraRig.I.ZoomPunch(-0.04f);
+            yield return new WaitForSeconds(0.35f);
+            yield return Strike(0);
+            yield return new WaitForSeconds(0.35f);
         }
 
         IEnumerator Impact(HitResult result)
@@ -692,9 +1036,54 @@ namespace Lucky
                     yield return Bust(result);
                     break;
                 case HitOutcome.Jackpot:
-                    yield return JackpotKill();
+                    yield return phylactery ? Phylactery() : JackpotKill();
                     break;
             }
+        }
+
+        /// <summary>Mortis's first death: the phylactery bursts, a soul flame roars up, and he rises with part of his HP.</summary>
+        IEnumerator Phylactery()
+        {
+            var boss = BossFighter;
+            var def = Boss;
+            var c = boss.Chest;
+            phylactery = false;
+            jackpots++;
+            bossHp = 0;
+            hud.SetBossHp(0, def.Hp, true);
+            Juice.I.SlowMo(0.3f, 0.9f, 0.6f);
+            AudioManager.I.Play("phylactery_shatter");
+            AudioManager.I.Play("boss_roar", 0.9f, BossPitch() * 0.75f);
+            boss.SetPose(Pose.Hurt, 1f);
+            boss.Flash(SoulColor, 1f);
+            boss.Squash(0.7f, 1.3f);
+            FX.I.Pop("icon_phylactery", c + Vector3.up * 1.6f, 0.6f, 3f, 0.55f, Color.white, 0f, false);
+            yield return new WaitForSeconds(0.4f);
+
+            FX.I.Emit(c + Vector3.up * 1.6f, new FX.Burst
+            {
+                Sprite = "vfx_sparkle", Count = 70, SpeedMin = 4f, SpeedMax = 13f, AngleMin = 0f, AngleMax = 360f,
+                Gravity = -8f, Drag = 1.2f, LifeMin = 0.6f, LifeMax = 1.3f, SizeMin = 0.3f, SizeMax = 0.8f, EndSize = 0f,
+                Spin = 600f, Color = Color.white, EndColor = SoulColor, Additive = true,
+            });
+            FX.I.Ring(c, SoulColor, 13f, 0.6f);
+            FX.I.Ring(c, Color.white, 7f, 0.4f);
+            FX.I.Light(c, SoulColor, 8f, 16f, 1.4f);
+            CameraRig.I.Shake(0.9f);
+            CameraRig.I.ZoomPunch(-0.07f);
+            PostFX.I.Punch(bloomAdd: 2.2f, chromaAdd: 1f, saturationAdd: -60f, lensAdd: -0.35f);
+            hud.Flash(SoulColor, 0.5f, 0.5f);
+            hud.SpendLife();
+            hud.Banner("HE RISES!", "Phylactery shattered  ·  one life left", HUD.BannerStyle.Danger, 1.2f);
+            yield return new WaitForSeconds(0.5f);
+
+            bossHp = Mathf.CeilToInt(def.Hp * def.QuirkValue / 100f);
+            AudioManager.I.Play("hp_refill", 1f, 0.8f);
+            boss.SetPose(Pose.Attack, 1f);
+            boss.Squash(1.2f, 0.85f);
+            for (int i = 0; i < 3; i++) Flames(boss.transform.position + Vector3.up * boss.Height * (0.2f + i * 0.3f), SoulColor, 20, 1.5f);
+            FX.I.Text(boss.Head + Vector3.up * 0.6f, "+" + bossHp, SoulColor, 2.2f, 1.3f, 1.3f, true);
+            yield return hud.BossWrap(def.Hp, bossHp);
         }
 
         // ---------- Consumables ----------
@@ -753,8 +1142,9 @@ namespace Lucky
             hud.Flash(fire, 0.3f, 0.3f);
 
             yield return Land(result, c);
-            if (result.Outcome == HitOutcome.Jackpot) yield break;
+            if (bossHp == 0) yield break;
             RefreshTarget();
+            if (result.Outcome == HitOutcome.Bust && Boss.Quirk == "counter") yield return Counter();
             yield return new WaitForSeconds(0.3f);
         }
 
@@ -770,6 +1160,13 @@ namespace Lucky
 
             int amount = Mathf.Min(heroMax - heroHp, potion.Value + stats.PotionBonus);
             HealHero(amount, heal);
+            if (poison > 0)
+            {
+                poison = 0;
+                hud.SetPoison(0);
+                FX.I.Text(hero.Head + new Vector3(0f, 2f), "CURED!", VenomColor, 1.6f, 1.2f, 1.1f, true);
+                Flames(hero.Chest, VenomColor, 20, 1f);
+            }
             hero.SetPose(Pose.Victory, 0.6f);
             Juice.I.Hitstop(0.06f);
             CameraRig.I.ZoomPunch(-0.03f);
@@ -993,9 +1390,12 @@ namespace Lucky
         void GrantGold(int amount, Vector3 from, int coins)
         {
             runGold += amount;
-            hud.SetGold(runGold, false);
+            int landed = 0;
             FX.I.FlyCoins(from, () => hud.GoldWorldPosition(cam), coins, () =>
             {
+                // Each coin carries its share, so the counter climbs as the coins land rather than ahead of them.
+                landed++;
+                hud.AddGold(amount * landed / coins - amount * (landed - 1) / coins);
                 hud.PopGold();
                 AudioManager.I.Play("coin_tick", 0.5f, Random.Range(1f, 1.3f), 0.03f, 0.02f);
             });
@@ -1007,7 +1407,6 @@ namespace Lucky
         {
             var boss = BossFighter;
             var def = Boss;
-            int dmg = rng.Next(def.DmgMin, def.DmgMax + 1);
             yield return new WaitForSeconds(0.3f);
 
             boss.Squash(1.15f, 0.85f);
@@ -1015,66 +1414,164 @@ namespace Lucky
             yield return new WaitForSeconds(0.12f);
             boss.SetPose(Pose.Attack, 0.7f);
             AudioManager.I.Play("boss_roar", 0.5f, BossPitch() * 1.1f);
-
-            switch (def.Attack)
-            {
-                case "melee":
-                    AudioManager.I.Play("boss_attack_swipe");
-                    var strike = new Vector3(hero.transform.position.x + 2.4f + def.Height * 0.15f, World.GroundY);
-                    yield return Move(boss, strike, 0.16f, Ease.InCubic, true);
-                    HeroHit(dmg, def.Accent);
-                    yield return new WaitForSeconds(0.25f);
-                    yield return Move(boss, boss.Home, 0.35f, Ease.InOutCubic, false, 0.4f);
-                    break;
-                case "cards":
-                    AudioManager.I.Play("boss_attack_swipe", 0.8f, 1.3f);
-                    for (int i = 0; i < 4; i++)
-                    {
-                        StartCoroutine(Projectile("vfx_card", boss.Chest + new Vector3(-0.8f, 0.3f), hero.Chest + (Vector3)Random.insideUnitCircle * 0.5f, 0.32f, 0.8f, Color.white, false, 900f, 1.2f));
-                        yield return new WaitForSeconds(0.06f);
-                    }
-                    yield return new WaitForSeconds(0.26f);
-                    HeroHit(dmg, def.Accent);
-                    break;
-                case "coins":
-                    AudioManager.I.Play("mimic_chomp");
-                    AudioManager.I.Play("coin_burst", 0.7f, 1.15f);
-                    for (int i = 0; i < 10; i++)
-                    {
-                        StartCoroutine(Projectile("vfx_coin", boss.Chest + new Vector3(-1.1f, 0f), hero.Chest + (Vector3)Random.insideUnitCircle * 0.6f, 0.3f, 0.45f, Color.white, false, 1100f, Random.Range(0.4f, 1.8f)));
-                        yield return new WaitForSeconds(0.035f);
-                    }
-                    yield return new WaitForSeconds(0.25f);
-                    HeroHit(dmg, def.Accent);
-                    break;
-                case "venom":
-                    AudioManager.I.Play("venom_spit");
-                    var venom = new Color(0.55f, 1f, 0.3f);
-                    for (int i = 0; i < 6; i++)
-                    {
-                        StartCoroutine(Projectile("vfx_glow", boss.transform.position + new Vector3(-1.6f, boss.Height * 0.4f), hero.Chest + (Vector3)Random.insideUnitCircle * 0.5f, 0.34f, Random.Range(0.7f, 1.2f), venom, true, 0f, 1.3f));
-                        yield return new WaitForSeconds(0.05f);
-                    }
-                    yield return new WaitForSeconds(0.3f);
-                    HeroHit(dmg, venom);
-                    break;
-                case "fire":
-                    AudioManager.I.Play("boss_attack_magic", 0.9f, 0.8f);
-                    for (int i = 0; i < 14; i++)
-                    {
-                        StartCoroutine(Projectile("vfx_glow", boss.Head + new Vector3(-1.2f, -0.4f), hero.Chest + (Vector3)Random.insideUnitCircle * 0.6f, 0.3f, Random.Range(0.8f, 1.6f), new Color(1f, Random.Range(0.35f, 0.7f), 0.1f), true, 0f, 0.4f));
-                        yield return new WaitForSeconds(0.025f);
-                    }
-                    yield return new WaitForSeconds(0.25f);
-                    HeroHit(dmg, new Color(1f, 0.5f, 0.1f));
-                    break;
-                default:
-                    AudioManager.I.Play("boss_attack_magic");
-                    yield return Projectile("vfx_darkorb", boss.Chest + new Vector3(-1f, 0.4f), hero.Chest, 0.42f, 1.5f, Color.Lerp(def.Accent, Color.white, 0.2f), true, 360f, 1.6f);
-                    HeroHit(dmg, def.Accent);
-                    break;
-            }
+            yield return Strike(sting);
             yield return new WaitForSeconds(0.45f);
+            if (poison > 0 && heroHp > 0) yield return PoisonTick();
+            if (def.Quirk == "scorch") yield return Scorch();
+        }
+
+        /// <summary>
+        /// The boss's attack: Hits strikes of DmgMin..DmgMax, each dodged or soaked by armor on its own, so armor shines
+        /// against one big slam and dodge against a few heavy blows. A ward eats the whole volley. <paramref name="sting"/>
+        /// (a tarot card's cost) rides on the first strike that lands; Arachna's venom stacks when any strike lands.
+        /// </summary>
+        IEnumerator Strike(int sting)
+        {
+            var boss = BossFighter;
+            var def = Boss;
+            bool shielded = warded;
+            int landedHits = 0;
+            if (sting > 0) FX.I.Text(boss.Head + Vector3.up * 0.6f, $"+{sting} CURSE", TarotColor, 1.5f, 1.1f, 1.1f, true);
+
+            void Hit(int i, Color accent)
+            {
+                if (shielded)
+                {
+                    if (i == 0) Blocked();
+                    else Deflect();
+                    return;
+                }
+                if (heroHp <= 0) return;
+                int raw = rng.Next(def.DmgMin, def.DmgMax + 1) + (landedHits == 0 ? sting : 0);
+                if (HeroHit(raw, accent)) landedHits++;
+            }
+
+            if (def.Attack == "melee")
+            {
+                // Dash in, then one swing per hit with a quick wind-back between.
+                AudioManager.I.Play("boss_attack_swipe");
+                var strike = new Vector3(hero.transform.position.x + 2.4f + def.Height * 0.15f, World.GroundY);
+                yield return Move(boss, strike, 0.16f, Ease.InCubic, true);
+                for (int i = 0; i < def.Hits; i++)
+                {
+                    if (i > 0)
+                    {
+                        boss.SetPose(Pose.Attack, 0.4f);
+                        AudioManager.I.Play("boss_attack_swipe", 0.9f, 1.15f + i * 0.1f);
+                        yield return Move(boss, strike + Vector3.right * 1.1f, 0.1f, Ease.OutQuad, false);
+                        yield return Move(boss, strike, 0.09f, Ease.InCubic, true);
+                    }
+                    Hit(i, def.Accent);
+                    yield return new WaitForSeconds(0.12f);
+                }
+                yield return new WaitForSeconds(0.15f);
+                yield return Move(boss, boss.Home, 0.35f, Ease.InOutCubic, false, 0.4f);
+            }
+            else
+            {
+                // One projectile per hit; each strikes as it lands.
+                switch (def.Attack)
+                {
+                    case "cards": AudioManager.I.Play("boss_attack_swipe", 0.8f, 1.3f); break;
+                    case "coins": AudioManager.I.Play("mimic_chomp"); AudioManager.I.Play("coin_burst", 0.7f, 1.15f); break;
+                    case "venom": AudioManager.I.Play("venom_spit"); break;
+                    case "fire": AudioManager.I.Play("boss_attack_magic", 0.9f, 0.8f); break;
+                    default: AudioManager.I.Play("boss_attack_magic"); break;
+                }
+                var hitColor = def.Attack switch { "venom" => VenomColor, "fire" => FireColor, _ => def.Accent };
+                int pending = def.Hits;
+                for (int i = 0; i < def.Hits; i++)
+                {
+                    int index = i;
+                    var shot = ShotFor(boss, def);
+                    var to = hero.Chest + (Vector3)Random.insideUnitCircle * 0.5f;
+                    StartCoroutine(Then(Projectile(shot.sprite, shot.from, to, shot.duration, shot.size * Random.Range(0.85f, 1.15f), shot.tint, shot.additive, shot.spin, shot.arc), () =>
+                    {
+                        Hit(index, hitColor);
+                        pending--;
+                    }));
+                    if (i > 0) AudioManager.I.Play("whoosh_ui", 0.35f, 1.3f + i * 0.06f);
+                    yield return new WaitForSeconds(shot.stagger);
+                }
+                while (pending > 0) yield return null;
+            }
+            if (landedHits > 0 && def.Quirk == "venom") AddPoison(def.QuirkValue);
+        }
+
+        /// <summary>How each ranged attack flies: sprite, launch point, flight time, size, tint, glow, spin, arc height, gap between shots.</summary>
+        static (string sprite, Vector3 from, float duration, float size, Color tint, bool additive, float spin, float arc, float stagger) ShotFor(Fighter boss, BossDef def) => def.Attack switch
+        {
+            "cards" => ("vfx_card", boss.Chest + new Vector3(-0.8f, 0.3f), 0.32f, 0.8f, Color.white, false, 900f, 1.2f, 0.13f),
+            "coins" => ("vfx_coin", boss.Chest + new Vector3(-1.1f, 0f), 0.3f, 0.45f, Color.white, false, 1100f, Random.Range(0.4f, 1.8f), 0.07f),
+            "venom" => ("vfx_glow", boss.transform.position + new Vector3(-1.6f, boss.Height * 0.4f), 0.34f, 1.1f, VenomColor, true, 0f, 1.3f, 0.22f),
+            "fire" => ("vfx_glow", boss.Head + new Vector3(-1.2f, -0.4f), 0.3f, 1.4f, new Color(1f, Random.Range(0.35f, 0.7f), 0.1f), true, 0f, 0.4f, 0.11f),
+            _ => ("vfx_darkorb", boss.Chest + new Vector3(-1f, 0.4f), 0.42f, 1.5f, Color.Lerp(def.Accent, Color.white, 0.2f), true, 360f, 1.6f, 0.2f),
+        };
+
+        static IEnumerator Then(IEnumerator routine, System.Action after)
+        {
+            yield return routine;
+            after();
+        }
+
+        /// <summary>Arachna's bite leaves venom: one more stack, ticking every boss turn until a potion or the fight's end.</summary>
+        void AddPoison(int stacks)
+        {
+            poison += stacks;
+            hud.SetPoison(poison);
+            AudioManager.I.Play("poison_tick", 0.7f, 1.3f);
+            hero.Flash(VenomColor, 0.8f);
+            Flames(hero.Chest, VenomColor, 16, 0.8f);
+            FX.I.Text(hero.Head + new Vector3(0.8f, 1.6f), $"+{stacks} POISON", VenomColor, 1.4f, 1f, 1.1f, true);
+        }
+
+        IEnumerator PoisonTick()
+        {
+            AudioManager.I.Play("poison_tick");
+            heroHp = Mathf.Max(0, heroHp - poison);
+            hud.SetHeroHp(heroHp, heroMax, true);
+            hud.SetPoison(poison);
+            hero.SetPose(Pose.Hurt, 0.4f);
+            hero.Flash(VenomColor, 1f);
+            hero.Squash(0.9f, 1.08f);
+            Flames(hero.transform.position + Vector3.up * hero.Height * 0.4f, VenomColor, 30, 1.2f);
+            FX.I.Text(hero.Head + Vector3.up * 0.6f, $"-{poison} POISON", VenomColor, 1.8f, 1.3f, 1.1f, true);
+            PostFX.I.VignettePulse(new Color(0.2f, 0.6f, 0.05f), 0.3f);
+            CameraRig.I.Shake(0.25f);
+            UpdateDanger();
+            yield return new WaitForSeconds(0.5f);
+        }
+
+        /// <summary>Snake-Eyes breathes on the wheel: old burns cool off, a fresh slice catches fire for a few turns.</summary>
+        IEnumerator Scorch()
+        {
+            var boss = BossFighter;
+            var fresh = new List<int>();
+            for (int i = 0; i < burnTurns.Length; i++)
+            {
+                if (burnTurns[i] > 0 && --burnTurns[i] == 0)
+                {
+                    wheel.SetBurnt(i, false);
+                    FX.I.Dust(wheel.SlicePoint(i, 0.8f), 6, new Color(0.3f, 0.28f, 0.28f, 0.7f));
+                }
+                if (burnTurns[i] == 0) fresh.Add(i);
+            }
+            int slot = fresh[rng.Next(fresh.Count)];
+            AudioManager.I.Play("boss_attack_magic", 0.8f, 0.7f);
+            boss.SetPose(Pose.Attack, 0.5f);
+            var to = wheel.SlicePoint(slot, 0.75f);
+            yield return Projectile("vfx_glow", boss.Head + new Vector3(-1.2f, -0.4f), to, 0.4f, 1.8f, FireColor, true, 0f, 2.5f);
+            burnTurns[slot] = BossDef.ScorchTurns;
+            wheel.SetBurnt(slot, true);
+            RefreshTarget();
+            AudioManager.I.Play("fire_sizzle", 0.9f);
+            Flames(to, FireColor, 30, 1.4f);
+            FX.I.Ring(to, FireColor, 5f, 0.4f);
+            FX.I.Light(to, FireColor, 4f, 8f, 0.6f);
+            FX.I.Text(to + Vector3.up * 1.2f, "SCORCHED", FireColor, 1.4f, 1f, 1f, true);
+            wheel.Punch(0.08f);
+            CameraRig.I.Shake(0.3f);
+            yield return new WaitForSeconds(0.35f);
         }
 
         IEnumerator Projectile(string sprite, Vector3 from, Vector3 to, float duration, float size, Color tint, bool additive, float spin, float arc)
@@ -1106,41 +1603,51 @@ namespace Lucky
             Destroy(sr.gameObject);
         }
 
-        /// <summary>A boss attack of <paramref name="raw"/> damage lands unless dodged; Iron Hide soaks all but 1 of its armor.</summary>
-        void HeroHit(int raw, Color accent)
+        /// <summary>
+        /// One boss strike of <paramref name="raw"/> damage lands unless dodged; Iron Hide soaks all but 1 of its armor.
+        /// Small strikes (coins, cards) shake less so a volley rattles instead of stunning. True when it landed.
+        /// </summary>
+        bool HeroHit(int raw, Color accent)
         {
             if (rng.NextDouble() < stats.Dodge)
             {
                 Dodged(hero, -1f, new Color(1f, 0.97f, 0.88f));
-                return;
-            }
-            if (warded)
-            {
-                Blocked();
-                return;
+                return false;
             }
             int dmg = Mathf.Max(1, raw - stats.Armor);
             if (dmg < raw) StartCoroutine(ArmorBlock(raw, raw - dmg));
             heroHp = Mathf.Max(0, heroHp - dmg);
-            Juice.I.Hitstop(0.09f);
+            float power = Mathf.Lerp(0.35f, 1f, Mathf.InverseLerp(1f, 10f, dmg));
+            Juice.I.Hitstop(0.09f * power);
             hero.SetPose(Pose.Hurt, 0.5f);
             hero.Flash(new Color(1f, 0.25f, 0.25f), 1f);
-            hero.Knock(-6f);
+            hero.Knock(-6f * power);
             hero.Squash(0.8f, 1.15f);
-            hero.Tilt(10f);
-            CameraRig.I.Shake(0.5f);
-            CameraRig.I.Kick(Vector2.left, 0.18f);
-            PostFX.I.VignettePulse(new Color(0.7f, 0f, 0.05f), 0.3f);
-            PostFX.I.Punch(chromaAdd: 0.5f);
-            hud.Flash(new Color(1f, 0.1f, 0.1f), 0.25f, 0.3f);
+            hero.Tilt(10f * power);
+            CameraRig.I.Shake(0.5f * power);
+            CameraRig.I.Kick(Vector2.left, 0.18f * power);
+            PostFX.I.VignettePulse(new Color(0.7f, 0f, 0.05f), 0.3f * power);
+            PostFX.I.Punch(chromaAdd: 0.5f * power);
+            hud.Flash(new Color(1f, 0.1f, 0.1f), 0.25f * power, 0.3f);
             hud.SetHeroHp(heroHp, heroMax, true);
-            FX.I.Pop("vfx_impact", hero.Chest, 0.3f, 2.8f, 0.2f, accent);
-            FX.I.Sparks(hero.Chest, new Color(1f, 0.3f, 0.3f), 16, 1.2f);
-            FX.I.Light(hero.Chest, Color.Lerp(accent, Color.red, 0.5f), 3f, 7f, 0.35f);
-            FX.I.Text(hero.Head + new Vector3(0f, 0.6f), "-" + dmg, new Color(1f, 0.35f, 0.35f), 1.7f, 1.4f, 1.1f, true);
-            AudioManager.I.Play("hero_hurt");
-            AudioManager.I.Play("hit_light", 0.6f, 0.8f);
+            FX.I.Pop("vfx_impact", hero.Chest + (Vector3)Random.insideUnitCircle * 0.3f, 0.3f, 2.8f * power, 0.2f, accent);
+            FX.I.Sparks(hero.Chest, new Color(1f, 0.3f, 0.3f), (int)(8 + 10 * power), 1.2f);
+            FX.I.Light(hero.Chest, Color.Lerp(accent, Color.red, 0.5f), 3f * power, 7f, 0.35f);
+            FX.I.Text(hero.Head + new Vector3(Random.Range(-0.5f, 0.5f), 0.6f), "-" + dmg, new Color(1f, 0.35f, 0.35f), 1.1f + 0.6f * power, 1.4f, 1.1f, true);
+            AudioManager.I.Play("hero_hurt", 0.6f + 0.4f * power);
+            AudioManager.I.Play("hit_light", 0.6f, 0.8f + (1f - power) * 0.4f);
             UpdateDanger();
+            return true;
+        }
+
+        /// <summary>Later strikes of a volley glancing off the ward the first strike shattered.</summary>
+        void Deflect()
+        {
+            var at = hero.Chest + Vector3.right * 0.6f;
+            AudioManager.I.Play("hit_light", 0.6f, 1.7f);
+            hero.Flash(WardColor, 0.6f);
+            FX.I.Sparks(at, WardColor, 16, 1.1f, true);
+            FX.I.Ring(at, WardColor, 4f, 0.25f);
         }
 
         /// <summary>The ward eats the whole attack and shatters in a burst of cyan glass.</summary>
@@ -1247,6 +1754,7 @@ namespace Lucky
 
         IEnumerator DepthCleared()
         {
+            ClearQuirks();
             yield return ShowWheel(false);
             hero.SetPose(Pose.Victory, 1.4f);
             AudioManager.I.Play("victory_stinger", 0.8f);
@@ -1343,13 +1851,11 @@ namespace Lucky
         IEnumerator Defeat()
         {
             inRun = false;
-            yield return ShowWheel(false);
             AudioManager.I.Loop("heartbeat", false);
             AudioManager.I.Play("gameover_stinger");
-            AudioManager.I.Duck(0.15f, 4f);
-            Juice.I.SlowMo(0.3f, 1.2f, 0.6f);
+            AudioManager.I.Duck(0.15f, 1.5f);
             hero.Flash(Color.white, 1f);
-            hud.Banner("DEFEATED", "Fate always wins...", HUD.BannerStyle.Danger, 1.4f);
+            hud.Banner("DEFEATED", "Fate always wins...", HUD.BannerStyle.Danger, 0.8f);
             if (hero.HasAnim(Pose.Death))
             {
                 // Collapse animation, then a heavy thud as the body hits the floor.
@@ -1358,18 +1864,13 @@ namespace Lucky
                 AudioManager.I.Play("hit_heavy", 0.8f, 0.7f);
                 FX.I.Dust(hero.transform.position, 10, new Color(0.6f, 0.55f, 0.5f, 0.7f));
                 CameraRig.I.Shake(0.4f);
-                yield return Tween.Run(0.7f, t => hero.Body.color = new Color(1f, 1f, 1f, 1f - t * 0.4f), Ease.OutQuad);
+                yield return new WaitForSeconds(0.3f);
             }
             else
             {
                 hero.SetPose(Pose.Hurt, 99f);
-                yield return Tween.Run(0.7f, t =>
-                {
-                    hero.transform.rotation = Quaternion.Euler(0f, 0f, 80f * t);
-                    hero.Body.color = new Color(1f, 1f, 1f, 1f - t * 0.6f);
-                }, Ease.OutBounce);
+                yield return Tween.Run(0.4f, t => hero.transform.rotation = Quaternion.Euler(0f, 0f, 80f * t), Ease.OutBounce);
             }
-            yield return new WaitForSecondsRealtime(1.6f);
             bool record = BankRun();
             hud.ShowHud(false);
             hud.ShowEnd(false, "FATE WINS", $"{Boss.Name} stopped you on depth {depth + 1} of {bosses.Count}", GoldNote(),

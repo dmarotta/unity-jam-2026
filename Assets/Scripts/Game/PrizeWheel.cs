@@ -39,7 +39,8 @@ namespace Lucky
 
         Transform disc, pointer;
         TextMeshPro[] labels;
-        SpriteRenderer[] icons, gems;
+        SpriteRenderer[] icons, gems, flames;
+        bool[] burnt;
         SpriteRenderer backGlow, pointerGlow;
         MeshRenderer killOverlay, winOverlay, blur;
         Material killMat, winMat;
@@ -62,6 +63,11 @@ namespace Lucky
         public int KillSlice => killSlice;
         public int Count => count;
 
+        /// <summary>Justice: overshooting slices are struck out, since this spin can't bust.</summary>
+        public bool NoBust { get; set; }
+
+        public bool Burnt(int slot) => burnt[slot];
+
         /// <summary>Fired once per frame in which pegs crossed the flapper; argument is speed in deg/s.</summary>
         public event Action<float> PegCrossed;
 
@@ -72,6 +78,9 @@ namespace Lucky
         public int SliceAtPointer() => Mod(Mathf.RoundToInt(Angle / slice), count);
         public Vector3 PointerTip => pointer.position + pointer.rotation * new Vector3(0f, -1.25f, 0f);
         public Vector3 Center => transform.position;
+
+        /// <summary>World position on slice <paramref name="slot"/>'s centre line, <paramref name="radius"/> of the way out.</summary>
+        public Vector3 SlicePoint(int slot, float radius) => disc.TransformPoint(Dir(SliceAngle(slot)) * FaceRadius * radius);
         public void FastForward() => fastForward = true;
 
         static int Mod(int a, int m) => (a % m + m) % m;
@@ -84,6 +93,8 @@ namespace Lucky
             count = values.Length;
             slice = 360f / count;
             states = new State[count];
+            burnt = new bool[count];
+            flames = new SpriteRenderer[count];
 
             disc = new GameObject("Disc").transform;
             disc.SetParent(transform, false);
@@ -145,6 +156,10 @@ namespace Lucky
                 icons[i] = Sprite($"Icon{i}", disc, "icon_crown", dir * FaceRadius * 0.45f, 0.62f, Order + 4, cfg.spriteDefault);
                 icons[i].transform.localRotation = Quaternion.Euler(0, 0, a - 90f);
                 icons[i].enabled = false;
+
+                flames[i] = Sprite($"Flame{i}", disc, "icon_flame", dir * FaceRadius * 0.88f, 0.55f, Order + 4, cfg.spriteDefault);
+                flames[i].transform.localRotation = Quaternion.Euler(0, 0, a - 90f);
+                flames[i].enabled = false;
 
                 float pegAngle = a + slice * 0.5f;
                 var pegPos = Dir(pegAngle) * FaceRadius * 0.955f;
@@ -291,6 +306,21 @@ namespace Lucky
 
         // ---------- State ----------
 
+        /// <summary>Relabel the slices (The Tower doubles them); call SetTarget after to recolour.</summary>
+        public void SetValues(int[] slotValues)
+        {
+            values = slotValues;
+            for (int i = 0; i < count; i++) StartCoroutine(PopLabel(labels[i].transform, 1.5f));
+        }
+
+        /// <summary>Snake-Eyes' scorch: a charred slice with a flame on its rim; call SetTarget after to redraw the char.</summary>
+        public void SetBurnt(int slot, bool on)
+        {
+            burnt[slot] = on;
+            flames[slot].enabled = on;
+            if (on) StartCoroutine(PopLabel(flames[slot].transform, 2.2f, flames[slot].transform.localScale.x));
+        }
+
         /// <summary>
         /// Recolor slices for the boss's remaining HP: exact-kill, bust, normal, and charm slices that a lucky charm
         /// (<paramref name="charmBelow"/>/<paramref name="charmAbove"/>, see FightMath.Charm) pulls onto the kill.
@@ -311,6 +341,7 @@ namespace Lucky
                 if (states[i] == State.Kill) killSlice = i;
                 if (states[i] == State.Bust) AddWedge(v, c, t, SliceAngle(i), 0.12f, 1f, new Color(0.05f, 0f, 0.02f, 0.62f), null);
                 if (states[i] == State.Charm) AddWedge(v, c, t, SliceAngle(i), 0.12f, 1f, new Color(1f, 0.85f, 0.35f, 0.3f), null);
+                if (burnt[i]) AddWedge(v, c, t, SliceAngle(i), 0.5f, 1f, new Color(0.9f, 0.25f, 0.02f, 0.75f), null);
 
                 var label = labels[i];
                 var baseCol = i % Palette.Length == 2 ? new Color(0.24f, 0.07f, 0.07f) : new Color(1f, 0.95f, 0.84f);
@@ -321,6 +352,7 @@ namespace Lucky
                     State.Bust => Color.Lerp(baseCol, new Color(0.55f, 0.3f, 0.32f), 0.6f),
                     _ => baseCol,
                 };
+                label.text = NoBust && states[i] == State.Bust ? $"<s>{values[i]}</s>" : values[i].ToString();
                 icons[i].enabled = states[i] != State.Normal;
                 icons[i].sprite = config.Sprite(states[i] switch
                 {
@@ -346,9 +378,9 @@ namespace Lucky
             if (killSlice >= 0) killOverlay.transform.localRotation = Quaternion.Euler(0, 0, SliceAngle(killSlice));
         }
 
-        IEnumerator PopLabel(Transform label, float amount)
+        IEnumerator PopLabel(Transform label, float amount, float rest = 1f)
         {
-            yield return Tween.Run(0.45f, t => label.localScale = Vector3.one * Mathf.Lerp(amount, 1f, Ease.OutElastic(t)), Ease.Linear, true);
+            yield return Tween.Run(0.45f, t => label.localScale = Vector3.one * rest * Mathf.Lerp(amount, 1f, Ease.OutElastic(t)), Ease.Linear, true);
         }
 
         public void SetLights(Lights mode, float duration = 0f)

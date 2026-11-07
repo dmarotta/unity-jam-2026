@@ -14,17 +14,19 @@ namespace Lucky
         public event Action SpinPressed, PlayPressed, RetryPressed, MenuPressed, QuitPressed;
         public event Action<ShopItem> ItemPressed;
 
-        VisualElement root, hud, flash, fade, banner, titleScreen, endScreen, settingsScreen, shopScreen;
+        VisualElement root, hud, flash, fade, banner, titleScreen, endScreen, settingsScreen, shopScreen, resetScreen, resetPanel;
         VisualElement heroFill, heroGhost, bossFill, bossGhost, heroBar, bossBar, heroPortrait, bossPortrait;
         VisualElement pips, goldBox, needPill, endStats, shopStats, shopDetail, shopDetailIcon, shopDetailCoin, charmBadge, charmIcon, itemBar;
         Label heroHp, bossHp, bossName, bossTitle, depthLabel, goldLabel, needValue, spinLabel;
         Label bannerTitle, bannerSub, endTitle, endSub, endNote, endRibbon, shopGold, charmLabel;
         Label shopDetailName, shopDetailLevel, shopDetailDesc, shopDetailCost;
-        Button spinButton, autoButton, shakeToggle, flashToggle, titlePlay, endRetry, settingsQuit;
+        Button spinButton, autoButton, shakeToggle, flashToggle, titlePlay, endRetry, settingsQuit, titleReset;
         VisualElement titleLogo, titleTagline, titleButtons, titleStats, titleWinsStat, titlePlayGlow;
         Label titleGold, titleDepth, titleWins, titleShopBadge, endShopBadge;
         VisualElement endPanel, endButtons, endFx, settingsPanel, musicPips, sfxPips;
         VisualElement loadingScreen, loadingLogo, loadingRing, loadingHub, loadingFill;
+        VisualElement bossTraits, heroStatus, quirkChip, poisonChip, tarotPicker, tarotRow, tarotCaption, activeCard, activeCardArt;
+        Label activeCardName, activeCardUp, activeCardDown;
         Label loadingLabel;
         List<VisualElement> shines;
         FontAsset titleFont;
@@ -37,7 +39,8 @@ namespace Lucky
 
         public bool SettingsOpen => settingsScreen.style.display == DisplayStyle.Flex;
         public bool ShopOpen => shopScreen.style.display == DisplayStyle.Flex;
-        bool TitleOpen => titleScreen.style.display == DisplayStyle.Flex && !ShopOpen;
+        bool ResetOpen => resetScreen.style.display == DisplayStyle.Flex;
+        bool TitleOpen => titleScreen.style.display == DisplayStyle.Flex && !ShopOpen && !ResetOpen;
         bool EndOpen => endScreen.style.display == DisplayStyle.Flex && !ShopOpen;
 
         public void Init(GameConfig cfg)
@@ -54,6 +57,9 @@ namespace Lucky
             titleScreen = Q<VisualElement>("title-screen");
             endScreen = Q<VisualElement>("end-screen");
             settingsScreen = Q<VisualElement>("settings-screen");
+            resetScreen = Q<VisualElement>("reset-screen");
+            resetPanel = Q<VisualElement>("reset-panel");
+            titleReset = Q<Button>("title-reset");
             heroFill = Q<VisualElement>("hero-fill");
             heroGhost = Q<VisualElement>("hero-ghost");
             bossFill = Q<VisualElement>("boss-fill");
@@ -122,6 +128,16 @@ namespace Lucky
             loadingHub = Q<VisualElement>("loading-hub");
             loadingFill = Q<VisualElement>("loading-fill");
             loadingLabel = Q<Label>("loading-label");
+            bossTraits = Q<VisualElement>("boss-traits");
+            heroStatus = Q<VisualElement>("hero-status");
+            tarotPicker = Q<VisualElement>("tarot-picker");
+            tarotRow = Q<VisualElement>("tarot-row");
+            tarotCaption = Q<VisualElement>("tarot-caption");
+            activeCard = Q<VisualElement>("active-card");
+            activeCardArt = Q<VisualElement>("active-card-art");
+            activeCardName = Q<Label>("active-card-name");
+            activeCardUp = Q<Label>("active-card-up");
+            activeCardDown = Q<Label>("active-card-down");
 
             if (titleFont != null)
                 root.Query(className: "title-font").ForEach(e => e.style.unityFontDefinition = FontDefinition.FromSDFFont(titleFont));
@@ -149,6 +165,15 @@ namespace Lucky
             Q<Button>("end-menu").clicked += () => { Click(); MenuPressed?.Invoke(); };
             Q<Button>("title-shop").clicked += () => { Click(); ShowShop(true); };
             Q<Button>("end-shop").clicked += () => { Click(); ShowShop(true); };
+            titleReset.clicked += () => ShowReset(true);
+            Q<Button>("reset-cancel").clicked += () => ShowReset(false);
+            Q<Button>("reset-confirm").clicked += () =>
+            {
+                SaveData.ResetProgress();
+                ShowReset(false);
+                RefreshTitleStats();
+                RefreshShopBadges();
+            };
             Q<Button>("shop-back").clicked += () => { Click(); ShowShop(false); };
             Q<Button>("shop-begin").clicked += () => { Click(); PlayPressed?.Invoke(); };
             tree = new SkillTree(Q<VisualElement>("tree-viewport"), cfg, this);
@@ -193,11 +218,196 @@ namespace Lucky
             if (boss != null) bossPortrait.style.backgroundImage = new StyleBackground(boss);
         }
 
+        /// <summary>Name, title, and chips under the HP bar: attack shape (hits × damage), dodge, and the signature quirk.</summary>
         public void SetBossInfo(BossDef def)
         {
             bossName.text = def.Name.ToUpperInvariant();
-            bossTitle.text = def.Dodge > 0f ? $"{def.Title}  ·  {Mathf.RoundToInt(def.Dodge * 100f)}% dodge" : def.Title;
+            bossTitle.text = def.Title;
             bossName.style.color = Color.Lerp(def.Accent, Color.white, 0.35f);
+            bossTraits.Clear();
+            string perHit = def.DmgMin == def.DmgMax ? def.DmgMin.ToString() : $"{def.DmgMin}-{def.DmgMax}";
+            bossTraits.Add(Trait("icon_attack", def.Hits > 1 ? $"{def.Hits} × {perHit}" : perHit, null));
+            if (def.Dodge > 0f) bossTraits.Add(Trait("icon_dodge", Pct(def.Dodge), null));
+            quirkChip = Quirks.TryGetValue(def.Quirk, out var quirk) ? Trait(quirk.icon, quirk.text(def), "quirk") : null;
+            if (quirkChip != null) bossTraits.Add(quirkChip);
+        }
+
+        static string Pct(float chance) => $"{Mathf.RoundToInt(chance * 100f)}%";
+
+        static readonly Dictionary<string, (string icon, Func<BossDef, string> text)> Quirks = new()
+        {
+            { "block", ("icon_block", d => $"BLOCKS {d.QuirkValue}  ·  {Pct(d.QuirkChance)}") },
+            { "swallow", ("icon_swallow", d => $"GULPS HITS  ·  {Pct(d.QuirkChance)}") },
+            { "tarot", ("tarot_back", _ => "DEALS TAROT") },
+            { "counter", ("icon_counter", _ => "COUNTERS BUSTS") },
+            { "scorch", ("icon_flame", _ => "SCORCHES SLICES") },
+            { "venom", ("icon_poison", _ => "VENOMOUS") },
+            { "phylactery", ("icon_phylactery", _ => "2 LIVES") },
+        };
+
+        VisualElement Trait(string icon, string text, string extraClass)
+        {
+            var chip = Box("trait");
+            if (extraClass != null) chip.AddToClassList(extraClass);
+            var image = Box("trait-icon");
+            var sprite = config.Sprite(icon);
+            if (sprite != null) image.style.backgroundImage = new StyleBackground(sprite);
+            chip.Add(image);
+            chip.Add(CardLabel("trait-label", text));
+            return chip;
+        }
+
+        /// <summary>The boss's chips pop one after another so the new rules get noticed on arrival.</summary>
+        public IEnumerator PulseTraits()
+        {
+            for (int i = bossTraits.childCount - 1; i >= 0; i--)
+            {
+                StartCoroutine(PopScale(bossTraits[i], 1.6f, 0.5f));
+                AudioManager.I?.Play("ui_hover", 0.7f, 1.2f + i * 0.1f);
+                yield return new WaitForSecondsRealtime(0.12f);
+            }
+        }
+
+        /// <summary>The Lich's phylactery is gone: his quirk chip cracks to "LAST LIFE".</summary>
+        public void SpendLife()
+        {
+            if (quirkChip == null) return;
+            quirkChip.Q<Label>().text = "LAST LIFE";
+            quirkChip.AddToClassList("spent");
+            StartCoroutine(PopScale(quirkChip, 1.8f, 0.6f));
+            StartCoroutine(Shake(quirkChip, 12f, 0.5f));
+        }
+
+        /// <summary>Poison stacks on the hero, shown as a chip under their bar; 0 clears it.</summary>
+        public void SetPoison(int stacks)
+        {
+            if (stacks <= 0)
+            {
+                heroStatus.Clear();
+                poisonChip = null;
+                return;
+            }
+            if (poisonChip == null) heroStatus.Add(poisonChip = Trait("icon_poison", "", "poison"));
+            poisonChip.Q<Label>().text = $"POISON {stacks}";
+            StartCoroutine(PopScale(poisonChip, 1.5f, 0.45f));
+        }
+
+        // ---------- Tarot ----------
+
+        public bool PickingCard { get; private set; }
+        int cardChoice = -1;
+
+        public void ChooseCard(int index)
+        {
+            if (!PickingCard || index < 0 || index >= tarotRow.childCount) return;
+            cardChoice = index;
+        }
+
+        /// <summary>
+        /// Madame Fortuna deals the offer face down, flips it, and waits for a click or number key. The pick pops, the
+        /// rest fall away, then <paramref name="chosen"/> gets the card.
+        /// </summary>
+        public IEnumerator PickCard(IReadOnlyList<TarotCard> offer, Action<TarotCard> chosen)
+        {
+            tarotRow.Clear();
+            var cards = new List<(VisualElement root, VisualElement art, VisualElement plate)>();
+            for (int i = 0; i < offer.Count; i++)
+            {
+                int index = i;
+                var card = new Button(() => ChooseCard(index));
+                card.AddToClassList("tarot-card");
+                card.Add(Box("tarot-glow"));
+                var art = Box("tarot-art");
+                art.style.backgroundImage = new StyleBackground(config.Sprite("tarot_back"));
+                card.Add(art);
+                var plate = Box("tarot-plate");
+                var name = CardLabel("tarot-name", offer[i].Name.ToUpperInvariant());
+                if (titleFont != null) name.style.unityFontDefinition = FontDefinition.FromSDFFont(titleFont);
+                plate.Add(name);
+                plate.Add(CardLabel("tarot-up", offer[i].Up));
+                plate.Add(CardLabel("tarot-down", offer[i].Down));
+                plate.style.opacity = 0f;
+                card.Add(plate);
+                card.Add(CardLabel("tarot-key", (i + 1).ToString()));
+                card.RegisterCallback<PointerEnterEvent>(_ => AudioManager.I?.Play("ui_hover", 0.5f));
+                card.style.opacity = 0f;
+                tarotRow.Add(card);
+                cards.Add((card, art, plate));
+            }
+
+            cardChoice = -1;
+            tarotPicker.style.display = DisplayStyle.Flex;
+            tarotPicker.pickingMode = PickingMode.Position;
+            StartCoroutine(Tween.Run(0.3f, t => tarotPicker.style.backgroundColor = new Color(0.05f, 0.02f, 0.08f, 0.65f * t), Ease.OutQuad, true));
+            StartCoroutine(Rise(tarotCaption, 40f, 0.35f));
+            for (int i = 0; i < cards.Count; i++)
+            {
+                AudioManager.I?.Play("card_deal", 0.9f, 1f + i * 0.1f);
+                StartCoroutine(DealIn(cards[i].root));
+                yield return new WaitForSecondsRealtime(0.14f);
+            }
+            yield return new WaitForSecondsRealtime(0.35f);
+            for (int i = 0; i < cards.Count; i++)
+            {
+                AudioManager.I?.Play("reveal_small", 0.7f, 1.25f + i * 0.1f);
+                StartCoroutine(FlipUp(cards[i].art, cards[i].plate, config.Sprite(offer[i].Sprite)));
+                yield return new WaitForSecondsRealtime(0.12f);
+            }
+            PickingCard = true;
+            while (cardChoice < 0) yield return null;
+            PickingCard = false;
+            tarotPicker.pickingMode = PickingMode.Ignore;
+
+            var pick = cards[cardChoice].root;
+            AudioManager.I?.Play("card_pick");
+            Flash(new Color(0.8f, 0.5f, 1f), 0.3f, 0.35f);
+            StartCoroutine(PopScale(pick, 1.25f, 0.5f));
+            for (int i = 0; i < cards.Count; i++)
+                if (i != cardChoice) StartCoroutine(Discard(cards[i].root));
+            yield return new WaitForSecondsRealtime(0.6f);
+            yield return Tween.Run(0.3f, t =>
+            {
+                pick.style.opacity = 1f - t;
+                pick.style.translate = new Translate(0f, -140f * t);
+                tarotCaption.style.opacity = 1f - t;
+                tarotPicker.style.backgroundColor = new Color(0.05f, 0.02f, 0.08f, 0.65f * (1f - t));
+            }, Ease.InQuad, true);
+            tarotPicker.style.display = DisplayStyle.None;
+            chosen(offer[cardChoice]);
+        }
+
+        IEnumerator DealIn(VisualElement card) => Tween.Run(0.4f, t =>
+        {
+            card.style.opacity = Mathf.Clamp01(t * 3f);
+            card.style.translate = new Translate(900f * (1f - t), -220f * (1f - t));
+            card.style.rotate = new Rotate(35f * (1f - t));
+        }, Ease.OutBack, true);
+
+        IEnumerator FlipUp(VisualElement art, VisualElement plate, Sprite face)
+        {
+            yield return Tween.Run(0.12f, t => art.style.scale = new Scale(new Vector3(1f - t, 1f, 1f)), Ease.InQuad, true);
+            if (face != null) art.style.backgroundImage = new StyleBackground(face);
+            StartCoroutine(Rise(plate, 24f, 0.25f));
+            yield return Tween.Run(0.18f, t => art.style.scale = new Scale(new Vector3(t, 1f, 1f)), Ease.OutBack, true);
+        }
+
+        IEnumerator Discard(VisualElement card) => Tween.Run(0.4f, t =>
+        {
+            card.style.opacity = 1f - t;
+            card.style.translate = new Translate(0f, 280f * t);
+            card.style.rotate = new Rotate(-25f * t);
+        }, Ease.InQuad, true);
+
+        /// <summary>The card in play this turn, as a badge above the arena; null hides it.</summary>
+        public void ShowActiveCard(TarotCard card)
+        {
+            activeCard.style.display = card != null ? DisplayStyle.Flex : DisplayStyle.None;
+            if (card == null) return;
+            activeCardArt.style.backgroundImage = new StyleBackground(config.Sprite(card.Sprite));
+            activeCardName.text = card.Name.ToUpperInvariant();
+            activeCardUp.text = card.Up;
+            activeCardDown.text = card.Down;
+            StartCoroutine(PopScale(activeCard, 1.4f, 0.5f));
         }
 
         const float TrackWidth = 348f;
@@ -304,13 +514,14 @@ namespace Lucky
             depthLabel.text = $"DEPTH {current + 1} / {portraits.Count}";
         }
 
-        public void SetGold(int value, bool instant)
+        public void SetGold(int value)
         {
-            targetGold = value;
-            if (!instant) return;
-            shownGold = value;
+            targetGold = shownGold = value;
             goldLabel.text = Num(value);
         }
+
+        /// <summary>Raises the gold target; the label counts up to it.</summary>
+        public void AddGold(int amount) => targetGold += amount;
 
         public void PopGold() => StartCoroutine(PopScale(goldBox, 1.18f, 0.2f));
 
@@ -645,6 +856,21 @@ namespace Lucky
             titleDepth.text = $"Best depth {Mathf.Max(1, SaveData.BestDepth)}";
             titleWinsStat.style.display = SaveData.Wins > 0 ? DisplayStyle.Flex : DisplayStyle.None;
             titleWins.text = $"{SaveData.Wins} curse{(SaveData.Wins == 1 ? "" : "s")} broken";
+            titleReset.style.display = SaveData.Runs > 0 ? DisplayStyle.Flex : DisplayStyle.None;
+        }
+
+        /// <summary>Confirm dialog in front of the title before progress is wiped.</summary>
+        void ShowReset(bool on)
+        {
+            Click();
+            resetScreen.style.display = on ? DisplayStyle.Flex : DisplayStyle.None;
+            if (!on) return;
+            StartCoroutine(Tween.Run(0.25f, t =>
+            {
+                resetScreen.style.opacity = t;
+                float s = Mathf.LerpUnclamped(0.85f, 1f, Ease.OutBack(t));
+                resetPanel.style.scale = new Scale(new Vector3(s, s, 1f));
+            }, Ease.Linear, true));
         }
 
         /// <summary>The SHOP buttons show how many upgrades the banked gold can buy right now.</summary>
@@ -665,9 +891,10 @@ namespace Lucky
             else if (EndOpen && endReady) Press(endRetry, RetryPressed);
         }
 
-        /// <summary>Keyboard back (Esc) closes the shop.</summary>
+        /// <summary>Keyboard back (Esc) cancels the reset dialog or closes the shop.</summary>
         public void Back()
         {
+            if (ResetOpen) { ShowReset(false); return; }
             if (!ShopOpen) return;
             Click();
             ShowShop(false);

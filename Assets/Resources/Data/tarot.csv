@@ -1,0 +1,6 @@
+id,name,sprite,gain,cost,up,down
+tower,The Tower,tarot_tower,2,3,Next hit ×{gain},She hits +{cost}
+justice,Justice,tarot_justice,0,2,Can't bust this spin,She heals {cost}
+star,The Star,tarot_star,8,3,Lucky Number far likelier,You lose {cost} HP
+temperance,Temperance,tarot_temperance,5,5,You heal {gain},She heals {cost}
+wheel,Wheel of Fortune,tarot_wheel,2,2,Spin twice · keep the best,She hits +{cost}

@@ -20,6 +20,7 @@ RULES = [
     ("Assets/Art/UI/bar_frame.png", None),
     ("Assets/Art/UI/panel_frame.png", None),
     ("Assets/Art/UI/spin_button.png", 512),
+    ("Assets/Art/UI/tarot_*.png", 512),
     ("Assets/Art/UI/icon_*.png", 256),
     ("Assets/Art/UI/portrait_*.png", 256),
     ("Assets/Art/VFX/vfx_coin.png", 128),

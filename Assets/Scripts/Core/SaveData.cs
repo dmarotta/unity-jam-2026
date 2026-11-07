@@ -18,6 +18,18 @@ namespace Lucky
         public static bool SealCelebrated(string gate) => PlayerPrefs.GetInt("seal_" + gate, 0) == 1;
         public static void MarkSealCelebrated(string gate) => SetInt("seal_" + gate, 1);
 
+        /// <summary>Wipes gold, records and every shop level; settings are kept.</summary>
+        public static void ResetProgress()
+        {
+            foreach (var key in new[] { "gold", "best_depth", "runs", "wins" }) PlayerPrefs.DeleteKey(key);
+            foreach (var item in Balance.Shop)
+            {
+                PlayerPrefs.DeleteKey("item_" + item.Id);
+                PlayerPrefs.DeleteKey("seal_" + item.Id);
+            }
+            PlayerPrefs.Save();
+        }
+
         public static float MusicVolume { get => PlayerPrefs.GetFloat("music_vol", 0.7f); set => SetFloat("music_vol", value); }
         public static float SfxVolume { get => PlayerPrefs.GetFloat("sfx_vol", 1f); set => SetFloat("sfx_vol", value); }
         public static bool ScreenShake { get => PlayerPrefs.GetInt("shake", 1) == 1; set => SetInt("shake", value ? 1 : 0); }

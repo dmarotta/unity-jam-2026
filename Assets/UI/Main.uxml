@@ -13,6 +13,7 @@
                         <ui:VisualElement class="bar-shine" picking-mode="Ignore" />
                         <ui:Label name="hero-hp" text="100 / 100" class="bar-label" picking-mode="Ignore" />
                     </ui:VisualElement>
+                    <ui:VisualElement name="hero-status" class="traits" picking-mode="Ignore" />
                 </ui:VisualElement>
             </ui:VisualElement>
             <ui:VisualElement name="charm-badge" class="charm-badge" picking-mode="Ignore">
@@ -40,6 +41,7 @@
                         <ui:VisualElement class="bar-shine" picking-mode="Ignore" />
                         <ui:Label name="boss-hp" text="10 / 10" class="bar-label" picking-mode="Ignore" />
                     </ui:VisualElement>
+                    <ui:VisualElement name="boss-traits" class="traits right" picking-mode="Ignore" />
                 </ui:VisualElement>
             </ui:VisualElement>
 
@@ -47,6 +49,15 @@
                 <ui:VisualElement name="need-icon" class="need-icon" picking-mode="Ignore" />
                 <ui:Label text="LUCKY NUMBER" class="need-caption" picking-mode="Ignore" />
                 <ui:Label name="need-value" text="10" class="need-value" picking-mode="Ignore" />
+            </ui:VisualElement>
+
+            <ui:VisualElement name="active-card" class="active-card" picking-mode="Ignore">
+                <ui:VisualElement name="active-card-art" class="active-card-art" picking-mode="Ignore" />
+                <ui:VisualElement class="active-card-text" picking-mode="Ignore">
+                    <ui:Label name="active-card-name" text="" class="active-card-name title-font" picking-mode="Ignore" />
+                    <ui:Label name="active-card-up" text="" class="tarot-up" picking-mode="Ignore" />
+                    <ui:Label name="active-card-down" text="" class="tarot-down" picking-mode="Ignore" />
+                </ui:VisualElement>
             </ui:VisualElement>
 
             <ui:Button name="spin-button" class="spin-button">
@@ -59,6 +70,11 @@
                 <ui:Label text="PAUSE" picking-mode="Ignore" />
                 <ui:Label text="ESC" class="keycap" picking-mode="Ignore" />
             </ui:Button>
+        </ui:VisualElement>
+
+        <ui:VisualElement name="tarot-picker" class="tarot-picker" picking-mode="Ignore">
+            <ui:Label name="tarot-caption" text="MADAME FORTUNA DEALS  ·  PICK ONE" class="tarot-caption title-font" picking-mode="Ignore" />
+            <ui:VisualElement name="tarot-row" class="tarot-row" picking-mode="Ignore" />
         </ui:VisualElement>
 
         <ui:VisualElement name="banner" class="banner" picking-mode="Ignore">
@@ -98,6 +114,7 @@
                 </ui:VisualElement>
             </ui:VisualElement>
             <ui:Label text="Team Lucky Number  ·  Unity Game Jam 2026" class="credits" picking-mode="Ignore" />
+            <ui:Button name="title-reset" text="Reset progress" class="text-button title-reset" />
         </ui:VisualElement>
 
         <ui:VisualElement name="end-screen" class="screen end-screen">
@@ -184,6 +201,17 @@
                 </ui:VisualElement>
                 <ui:Button name="settings-close" text="RESUME" class="big-button settings-close" />
                 <ui:Button name="settings-quit" text="Quit to menu" class="text-button" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <ui:VisualElement name="reset-screen" class="screen">
+            <ui:VisualElement name="reset-panel" class="panel">
+                <ui:Label text="RESET PROGRESS?" class="panel-title settings-title title-font" picking-mode="Ignore" />
+                <ui:Label text="All gold, upgrades, best depth and wins will be lost.&#10;Your settings are kept. This cannot be undone." class="panel-sub" picking-mode="Ignore" />
+                <ui:VisualElement class="button-row" picking-mode="Ignore">
+                    <ui:Button name="reset-cancel" text="CANCEL" class="secondary-button" />
+                    <ui:Button name="reset-confirm" text="RESET" class="big-button" />
+                </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>
 

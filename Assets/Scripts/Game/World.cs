@@ -10,7 +10,7 @@ namespace Lucky
     public class World : MonoBehaviour
     {
         public const float Spacing = 23.5f;
-        public const float GroundY = -2.75f;
+        public const float GroundY = -3.7f;
         public const float HeroX = -6.4f, BossX = 6.5f;
         const float BgHeight = 11.9f;
 

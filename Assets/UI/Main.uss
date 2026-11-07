@@ -510,6 +510,17 @@
     color: rgba(170, 155, 135, 0.7);
 }
 
+/* Tucked in a corner so it is never hit by accident; opens a confirm dialog. */
+.title-reset {
+    position: absolute;
+    right: 28px;
+    bottom: 14px;
+    font-size: 22px;
+    color: rgba(170, 155, 135, 0.6);
+}
+
+.title-reset:hover { color: rgb(255, 120, 120); }
+
 .panel {
     min-width: 820px;
     padding: 64px 80px 52px 80px;
@@ -807,6 +818,164 @@
 }
 
 .item-tip-status.blocked { color: rgb(255, 130, 110); }
+
+/* ---------- Boss traits and hero status chips (icon + a couple of words) ---------- */
+
+.traits {
+    flex-direction: row;
+    margin-top: 6px;
+}
+
+.traits.right { flex-direction: row-reverse; }
+
+.trait {
+    flex-direction: row;
+    align-items: center;
+    height: 44px;
+    margin: 0 4px;
+    padding: 0 12px 0 6px;
+    border-radius: 22px;
+    border-width: 2px;
+    border-color: rgb(255, 205, 110);
+    background-color: rgba(28, 12, 14, 0.9);
+}
+
+.trait-icon {
+    width: 36px;
+    height: 36px;
+    margin-right: 6px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.trait-label {
+    font-size: 22px;
+    color: rgb(255, 236, 200);
+}
+
+.trait.quirk { border-color: rgb(255, 120, 90); background-color: rgba(60, 14, 12, 0.92); }
+.trait.quirk .trait-label { color: rgb(255, 196, 150); }
+.trait.spent { opacity: 0.45; }
+.trait.poison { border-color: rgb(140, 255, 90); background-color: rgba(18, 40, 8, 0.92); }
+.trait.poison .trait-label { color: rgb(170, 255, 120); font-size: 26px; }
+
+/* ---------- Tarot: Madame Fortuna's two-card pick and the card in play ---------- */
+
+.tarot-picker {
+    position: absolute;
+    left: 0; top: 0; right: 0; bottom: 0;
+    align-items: center;
+    justify-content: center;
+    display: none;
+    background-color: rgba(12, 4, 20, 0);
+}
+
+.tarot-caption {
+    font-size: 40px;
+    color: rgb(214, 170, 255);
+    margin-bottom: 26px;
+    letter-spacing: 2px;
+}
+
+.tarot-row { flex-direction: row; }
+
+.tarot-card {
+    width: 330px;
+    margin: 0 36px;
+    padding: 0;
+    border-width: 0;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0);
+    transition-property: scale;
+    transition-duration: 0.12s;
+    transition-timing-function: ease-out-back;
+}
+
+.tarot-card:hover { scale: 1.07 1.07; }
+
+.tarot-glow {
+    position: absolute;
+    left: -70px; top: -60px; right: -70px; bottom: -40px;
+    background-image: url("project://database/Assets/Art/VFX/vfx_glow.png");
+    -unity-background-image-tint-color: rgba(199, 125, 255, 0.35);
+}
+
+.tarot-card:hover .tarot-glow { -unity-background-image-tint-color: rgba(230, 190, 255, 0.85); }
+
+.tarot-art {
+    width: 300px;
+    height: 400px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.tarot-plate {
+    margin-top: -28px;
+    width: 330px;
+    padding: 10px 16px 14px 16px;
+    border-radius: 16px;
+    border-width: 3px;
+    border-color: rgb(199, 125, 255);
+    background-color: rgba(26, 10, 34, 0.96);
+}
+
+.tarot-name {
+    font-size: 30px;
+    color: rgb(255, 214, 120);
+    -unity-text-align: middle-center;
+    margin-bottom: 4px;
+}
+
+.tarot-up, .tarot-down {
+    font-size: 26px;
+    margin-top: 4px;
+    padding-left: 12px;
+    border-left-width: 6px;
+    white-space: normal;
+}
+
+.tarot-up { color: rgb(170, 255, 140); border-left-color: rgb(110, 225, 80); }
+.tarot-down { color: rgb(255, 145, 130); border-left-color: rgb(240, 80, 80); }
+
+.tarot-key {
+    position: absolute;
+    left: 2px;
+    top: -10px;
+    width: 52px;
+    height: 52px;
+    border-radius: 26px;
+    font-size: 30px;
+    -unity-text-align: middle-center;
+    color: rgb(30, 12, 40);
+    background-color: rgb(214, 170, 255);
+}
+
+.active-card {
+    position: absolute;
+    top: 250px;
+    left: 50%;
+    translate: -50% 0;
+    flex-direction: row;
+    align-items: center;
+    display: none;
+    padding: 8px 18px 8px 8px;
+    border-radius: 16px;
+    border-width: 3px;
+    border-color: rgb(199, 125, 255);
+    background-color: rgba(26, 10, 34, 0.92);
+}
+
+.active-card-art {
+    width: 72px;
+    height: 96px;
+    margin-right: 12px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.active-card-name {
+    font-size: 24px;
+    color: rgb(255, 214, 120);
+}
+
+.active-card .tarot-up, .active-card .tarot-down { font-size: 22px; margin-top: 2px; }
 
 /* ---------- Shop ---------- */
 

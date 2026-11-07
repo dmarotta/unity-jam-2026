@@ -4,12 +4,30 @@ using UnityEngine;
 
 namespace Lucky
 {
+    /// <summary>
+    /// A boss row. Each attack strikes Hits times for DmgMin..DmgMax apiece; the hero's armor and dodge apply per hit.
+    /// Quirk is the boss's signature rule, tuned by QuirkChance (0..1) and QuirkValue:
+    /// block (chance to soak QuirkValue of a wheel hit), swallow (chance to eat a wheel hit and pay QuirkValue× its gold),
+    /// tarot (offers a card every QuirkValue turns), counter (a bust draws an extra attack), scorch (burns a wheel slice
+    /// each turn; landing one burns the hero for QuirkValue), venom (each attack that lands adds QuirkValue poison),
+    /// phylactery (the first kill only shatters it: the boss rises with QuirkValue% HP).
+    /// </summary>
     public class BossDef
     {
-        public string Id, Name, Title, Arena, Attack, IdleSprite, AttackSprite, HurtSprite, Background;
-        public int Hp, DmgMin, DmgMax, GoldBonus;
-        public float Height, OffsetX, Dodge;
+        /// <summary>How many boss turns a scorched slice keeps burning.</summary>
+        public const int ScorchTurns = 3;
+
+        public string Id, Name, Title, Arena, Attack, IdleSprite, AttackSprite, HurtSprite, Background, Quirk;
+        public int Hp, DmgMin, DmgMax, Hits, GoldBonus, QuirkValue;
+        public float Height, OffsetX, Dodge, QuirkChance;
         public Color Accent;
+    }
+
+    /// <summary>A Madame Fortuna card: Up is the boon, Down the sting, with {gain}/{cost} filled from Gain/Cost.</summary>
+    public class TarotCard
+    {
+        public string Id, Name, Sprite, Up, Down;
+        public int Gain, Cost;
     }
 
     public enum NodeType { Passive, Consumable, Gate }
@@ -50,12 +68,13 @@ namespace Lucky
         }
     }
 
-    /// <summary>Spreadsheet-driven balance: Resources/Data/bosses.csv, wheel.csv and rules.csv.</summary>
+    /// <summary>Spreadsheet-driven balance: Resources/Data/bosses.csv, wheel.csv, shop.csv, tarot.csv and rules.csv.</summary>
     public static class Balance
     {
         public static List<BossDef> Bosses { get; private set; }
         public static int[] Wheel { get; private set; }
         public static List<ShopItem> Shop { get; private set; }
+        public static List<TarotCard> Tarot { get; private set; }
         static Dictionary<string, float> rules;
 
         public static ShopItem Item(string id) => Shop.Find(i => i.Id == id);
@@ -86,7 +105,18 @@ namespace Lucky
                     Attack = row["attack"], Height = Float(row["height"]), GoldBonus = Int(row["gold_bonus"]),
                     Accent = accent, IdleSprite = row["idle_sprite"], AttackSprite = row["attack_sprite"],
                     HurtSprite = row["hurt_sprite"], Background = row["background"], OffsetX = Float(row["offset_x"]),
-                    Dodge = Float(row["dodge"]) / 100f,
+                    Dodge = Float(row["dodge"]) / 100f, Hits = Int(row["hits"]), Quirk = row["quirk"].Trim(),
+                    QuirkChance = Float(row["quirk_chance"]) / 100f, QuirkValue = Int(row["quirk_value"]),
+                });
+            }
+
+            Tarot = new List<TarotCard>();
+            foreach (var row in Read("Data/tarot"))
+            {
+                Tarot.Add(new TarotCard
+                {
+                    Id = row["id"], Name = row["name"], Sprite = row["sprite"].Trim(), Gain = Int(row["gain"]), Cost = Int(row["cost"]),
+                    Up = row["up"].Replace("{gain}", row["gain"].Trim()), Down = row["down"].Replace("{cost}", row["cost"].Trim()),
                 });
             }
 

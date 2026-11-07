@@ -36,6 +36,6 @@ bounty,Bounty Hunter,passive,boss_gold,1,2,3,120;200;300,25,greed_2,icon_greed,+
 seal_gold,Seal of the Mimic,gate,,0,3,1,0,4,greed_2,,"Defeat {boss} (reach Depth {value}) to break this seal."
 greed_3,Greed III,passive,gold,0,4,2,600;850,35,seal_gold,icon_greed,+{value}% gold from every hit per level.
 bounty_2,Bounty Hunter II,passive,boss_gold,1,4,2,700;1000,50,greed_3,icon_greed,+{value}% boss-defeat gold per level.
-nimble,Nimble I,passive,dodge,-2,-1,2,90;160,4,iron_hide,icon_dodge,+{value}% chance per level to dodge a boss attack completely.
-nimble_2,Nimble II,passive,dodge,-4,-1,2,400;560,5,iron_hide_2,icon_dodge,+{value}% chance per level to dodge a boss attack completely.
-nimble_3,Nimble III,passive,dodge,-6,-1,2,1000;1300,6,iron_hide_3,icon_dodge,+{value}% chance per level to dodge a boss attack completely.
+nimble,Nimble I,passive,dodge,-2,-1,2,90;160,4,iron_hide,icon_dodge,+{value}% chance per level to dodge each boss hit.
+nimble_2,Nimble II,passive,dodge,-4,-1,2,400;560,5,iron_hide_2,icon_dodge,+{value}% chance per level to dodge each boss hit.
+nimble_3,Nimble III,passive,dodge,-6,-1,2,1000;1300,6,iron_hide_3,icon_dodge,+{value}% chance per level to dodge each boss hit.
