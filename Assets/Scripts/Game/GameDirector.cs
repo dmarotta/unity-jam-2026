@@ -937,7 +937,6 @@ namespace Lucky
             boss.Flash(Gold, 1f);
             FX.I.Pop("icon_swallow", mouth + Vector3.up * 1.8f, 0.5f, 2.4f, 0.9f, Color.white, 0f, false);
             FX.I.Text(boss.Head + Vector3.up * 0.9f, "GULP!", Gold, 2.6f, 1.2f, 1.2f, true);
-            FX.I.Coins(mouth, 40, 1.6f);
             FX.I.Sparks(mouth, Gold, 40, 1.5f, true);
             FX.I.Ring(mouth, Gold, 8f, 0.5f);
             FX.I.Light(mouth, Gold, 5f, 10f, 0.8f);
@@ -1007,7 +1006,6 @@ namespace Lucky
             FX.I.Ring(hitPos, def.Accent, 4f + 4f * power);
             FX.I.Sparks(hitPos, Gold, (int)(14 + 22 * power), 1f + power);
             FX.I.Light(hitPos, Color.Lerp(def.Accent, Color.white, 0.5f), 1.5f + 3f * power, 5f + 4f * power, 0.35f);
-            FX.I.Coins(hitPos, (int)(4 + dmg * 1.2f), 0.8f + power * 0.4f);
             CameraRig.I.Shake(0.3f + 0.45f * power);
             CameraRig.I.Kick(Vector2.right, 0.12f + 0.12f * power);
             CameraRig.I.ZoomPunch(-0.03f * power);
@@ -1024,7 +1022,7 @@ namespace Lucky
         IEnumerator Land(HitResult result, Vector3 hitPos)
         {
             int gold = Mathf.RoundToInt(result.Damage * stats.GoldPerDamage);
-            GrantGold(gold, hitPos, Mathf.Min(12, 3 + gold));
+            GrantGold(gold, hitPos, Mathf.Min(16, 4 + gold));
 
             switch (result.Outcome)
             {
