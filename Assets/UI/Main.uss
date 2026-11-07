@@ -176,6 +176,7 @@
     font-size: 44px;
     color: rgb(255, 214, 92);
     margin-left: 8px;
+    -unity-text-align: middle-left;
     -unity-text-outline-width: 3px;
 }
 
@@ -1149,8 +1150,7 @@
 .shop-header {
     position: absolute;
     left: 0; top: 0; right: 0;
-    height: 150px;
-    padding-top: 14px;
+    padding: 14px 0 8px 0;
     align-items: center;
     background-color: rgba(10, 4, 8, 0.55);
     border-bottom-width: 3px;
