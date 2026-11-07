@@ -69,17 +69,24 @@ namespace Lucky
         Particle Take(bool additive)
         {
             var stack = additive ? freeAdd : freeAlpha;
+            Particle p;
             if (stack.Count > 0)
             {
-                var p = stack.Pop();
+                p = stack.Pop();
                 p.Sr.gameObject.SetActive(true);
-                return p;
             }
-            var go = new GameObject(additive ? "fx+" : "fx");
-            go.transform.SetParent(transform, false);
-            var sr = go.AddComponent<SpriteRenderer>();
-            sr.sharedMaterial = additive ? config.additive : config.spriteDefault;
-            return new Particle { Sr = sr, Additive = additive };
+            else
+            {
+                var go = new GameObject(additive ? "fx+" : "fx");
+                go.transform.SetParent(transform, false);
+                var sr = go.AddComponent<SpriteRenderer>();
+                sr.sharedMaterial = additive ? config.additive : config.spriteDefault;
+                p = new Particle { Sr = sr, Additive = additive };
+            }
+            // Hidden until Update applies this use's scale and colour; otherwise a spawn after this frame's Update
+            // renders once with stale or default state (a recycled huge glow, or a fresh renderer's full-size white).
+            p.Sr.color = Color.clear;
+            return p;
         }
 
         void Release(Particle p)
