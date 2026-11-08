@@ -517,6 +517,8 @@ namespace Lucky
             PegCrossed?.Invoke(Speed);
         }
 
+        const float FlapStep = 1f / 120f;
+
         void UpdateFlapper(float dir, float dt)
         {
             const float contact = 6.5f, maxDeflect = 28f;
@@ -532,8 +534,14 @@ namespace Lucky
             }
             else
             {
-                flapVel += (-1100f * flap - 18f * flapVel) * dt;
-                flap += flapVel * dt;
+                // Fixed substeps: one explicit step of this stiff spring blows up past dt ≈ 0.044 s
+                // (a long frame, or fast-forwarded time) and leaves the pointer spinning.
+                for (float left = dt; left > 0f; left -= FlapStep)
+                {
+                    float h = Mathf.Min(left, FlapStep);
+                    flapVel += (-1100f * flap - 18f * flapVel) * h;
+                    flap += flapVel * h;
+                }
             }
             pointer.localRotation = Quaternion.Euler(0f, 0f, flap);
         }
