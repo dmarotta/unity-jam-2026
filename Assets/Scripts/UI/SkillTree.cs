@@ -10,7 +10,7 @@ namespace Lucky
     /// <summary>
     /// The shop as an incremental path tree: nodes on a grid around the wheel hub, joined by paths. Owning a node
     /// lights the paths into it and opens its neighbours; seals break when the player reaches deeper depths.
-    /// Drag to pan, scroll to zoom. All animation runs on unscaled time.
+    /// Drag to pan, scroll or pinch to zoom. All animation runs on unscaled time.
     /// </summary>
     public class SkillTree
     {
@@ -51,8 +51,9 @@ namespace Lucky
         readonly Vector2 origin;
         readonly int maxDepth;
         readonly Sprite sparkle, coin, ring;
-        Vector2 offset, pressStart, panStart;
-        float zoom = 1f, reveal = 1f, time;
+        readonly Dictionary<int, Vector2> pointers = new();
+        Vector2 offset, pressStart, panStart, pinchWorld;
+        float zoom = 1f, reveal = 1f, time, pinchDistance, pinchZoom;
         bool pressing, dragged;
 
         static readonly Dictionary<string, string> StatLabels = new()
@@ -138,7 +139,8 @@ namespace Lucky
 
             viewport.RegisterCallback<PointerDownEvent>(OnPointerDown, TrickleDown.TrickleDown);
             viewport.RegisterCallback<PointerMoveEvent>(OnPointerMove, TrickleDown.TrickleDown);
-            viewport.RegisterCallback<PointerUpEvent>(OnPointerUp, TrickleDown.TrickleDown);
+            viewport.RegisterCallback<PointerUpEvent>(e => OnPointerUp(e.pointerId), TrickleDown.TrickleDown);
+            viewport.RegisterCallback<PointerCancelEvent>(e => OnPointerUp(e.pointerId), TrickleDown.TrickleDown);
             viewport.RegisterCallback<WheelEvent>(OnWheel);
             ticker = viewport.schedule.Execute(Tick).Every(16);
             ticker.Pause();
@@ -386,14 +388,57 @@ namespace Lucky
 
         void OnPointerDown(PointerDownEvent e)
         {
+            pointers[e.pointerId] = e.position;
+            if (pointers.Count == 2)
+            {
+                // A second finger turns the drag into a pinch; nothing under either finger gets clicked.
+                dragged = true;
+                viewport.AddToClassList("dragging");
+                foreach (var id in pointers.Keys) viewport.CapturePointer(id);
+                BeginPinch();
+                return;
+            }
+            if (pointers.Count > 2) return;
             pressing = true;
             dragged = false;
             pressStart = e.position;
             panStart = offset;
         }
 
+        void BeginPinch()
+        {
+            var (a, b) = PinchPair();
+            pinchDistance = Mathf.Max(1f, Vector2.Distance(a, b));
+            pinchZoom = zoom;
+            pinchWorld = (viewport.WorldToLocal((a + b) * 0.5f) - offset) / zoom;
+        }
+
+        (Vector2, Vector2) PinchPair()
+        {
+            Vector2 a = default, b = default;
+            int i = 0;
+            foreach (var p in pointers.Values)
+            {
+                if (i++ == 0) a = p;
+                else { b = p; break; }
+            }
+            return (a, b);
+        }
+
         void OnPointerMove(PointerMoveEvent e)
         {
+            if (!pointers.ContainsKey(e.pointerId)) return;
+            pointers[e.pointerId] = e.position;
+            if (pointers.Count >= 2)
+            {
+                // Zoom around the midpoint between the fingers, which also pans as they move together.
+                var (a, b) = PinchPair();
+                zoom = Mathf.Clamp(pinchZoom * Vector2.Distance(a, b) / pinchDistance, MinZoom, MaxZoom);
+                offset = viewport.WorldToLocal((a + b) * 0.5f) - pinchWorld * zoom;
+                ClampOffset();
+                Apply();
+                return;
+            }
             if (!pressing) return;
             var delta = (Vector2)e.position - pressStart;
             if (!dragged && delta.magnitude < 8f) return;
@@ -408,11 +453,20 @@ namespace Lucky
             Apply();
         }
 
-        void OnPointerUp(PointerUpEvent e)
+        void OnPointerUp(int pointerId)
         {
+            if (!pointers.Remove(pointerId)) return;
+            if (viewport.HasPointerCapture(pointerId)) viewport.ReleasePointer(pointerId);
+            if (pointers.Count >= 2) { BeginPinch(); return; }
+            if (pointers.Count == 1)
+            {
+                // Lifting one finger of a pinch keeps panning with the other, without a jump.
+                pressStart = pointers.Values.First();
+                panStart = offset;
+                return;
+            }
             pressing = false;
             viewport.RemoveFromClassList("dragging");
-            if (viewport.HasPointerCapture(e.pointerId)) viewport.ReleasePointer(e.pointerId);
         }
 
         /// <summary>Zoom around the cursor.</summary>
