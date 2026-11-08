@@ -1857,13 +1857,18 @@ namespace Lucky
             hud.Banner("DEFEATED", "Fate always wins...", HUD.BannerStyle.Danger, 0.8f);
             if (hero.HasAnim(Pose.Death))
             {
-                // Collapse animation, then a heavy thud as the body hits the floor.
+                // The collapse plays at its own pace behind the end screen, with a heavy thud as the body hits the floor.
                 hero.SetPose(Pose.Death, 99f);
-                yield return new WaitForSeconds(hero.AnimDuration(Pose.Death) * 0.65f);
-                AudioManager.I.Play("hit_heavy", 0.8f, 0.7f);
-                FX.I.Dust(hero.transform.position, 10, new Color(0.6f, 0.55f, 0.5f, 0.7f));
-                CameraRig.I.Shake(0.4f);
-                yield return new WaitForSeconds(0.3f);
+                StartCoroutine(Thud(hero.AnimDuration(Pose.Death) * 0.65f));
+                yield return new WaitForSeconds(0.625f);
+
+                IEnumerator Thud(float delay)
+                {
+                    yield return new WaitForSeconds(delay);
+                    AudioManager.I.Play("hit_heavy", 0.8f, 0.7f);
+                    FX.I.Dust(hero.transform.position, 10, new Color(0.6f, 0.55f, 0.5f, 0.7f));
+                    CameraRig.I.Shake(0.4f);
+                }
             }
             else
             {
