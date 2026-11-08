@@ -2,6 +2,9 @@
     <Style src="project://database/Assets/UI/Main.uss" />
     <ui:VisualElement name="root" class="root" picking-mode="Ignore">
 
+        <ui:VisualElement name="letterbox-top" class="letterbox top" picking-mode="Ignore" />
+        <ui:VisualElement name="letterbox-bottom" class="letterbox bottom" picking-mode="Ignore" />
+
         <ui:VisualElement name="hud" class="hud" picking-mode="Ignore">
             <ui:VisualElement name="hero-panel" class="side-panel hero-panel" picking-mode="Ignore">
                 <ui:VisualElement name="hero-portrait" class="portrait" picking-mode="Ignore" />
@@ -119,9 +122,11 @@
 
         <ui:VisualElement name="end-screen" class="screen end-screen">
             <ui:VisualElement name="end-panel" class="panel">
+                <ui:VisualElement name="end-rays" class="end-rays" picking-mode="Ignore" />
                 <ui:Label name="end-title" text="" class="panel-title title-font" picking-mode="Ignore" />
                 <ui:Label name="end-sub" text="" class="panel-sub" picking-mode="Ignore" />
                 <ui:Label name="end-ribbon" text="" class="ribbon" picking-mode="Ignore" />
+                <ui:VisualElement name="end-trophies" class="trophies" picking-mode="Ignore" />
                 <ui:VisualElement name="end-stats" class="stats" picking-mode="Ignore" />
                 <ui:Label name="end-note" text="" class="end-note" picking-mode="Ignore" />
                 <ui:VisualElement name="end-buttons" class="end-buttons" picking-mode="Ignore">

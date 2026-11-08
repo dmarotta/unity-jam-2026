@@ -23,7 +23,7 @@ namespace Lucky
         Button spinButton, autoButton, shakeToggle, flashToggle, titlePlay, endRetry, settingsQuit, titleReset;
         VisualElement titleLogo, titleTagline, titleButtons, titleStats, titleWinsStat, titlePlayGlow;
         Label titleGold, titleDepth, titleWins, titleShopBadge, endShopBadge;
-        VisualElement endPanel, endButtons, endFx, settingsPanel, musicPips, sfxPips;
+        VisualElement endPanel, endButtons, endFx, endRays, endTrophies, settingsPanel, musicPips, sfxPips, letterboxTop, letterboxBottom;
         VisualElement loadingScreen, loadingLogo, loadingRing, loadingHub, loadingFill;
         VisualElement bossTraits, heroStatus, quirkChip, poisonChip, tarotPicker, tarotRow, tarotCaption, activeCard, activeCardArt;
         Label activeCardName, activeCardUp, activeCardDown;
@@ -33,9 +33,9 @@ namespace Lucky
         GameConfig config;
 
         int shownGold, targetGold;
-        float goldTick, lastInputTime;
-        bool spinReady, endReady, quitArmed;
-        Coroutine heroGhostRoutine, bossGhostRoutine, bannerRoutine, flashRoutine, titleRoutine, endRoutine;
+        float goldTick, lastInputTime, nextEndSparkle;
+        bool spinReady, endReady, quitArmed, endVictory;
+        Coroutine heroGhostRoutine, bossGhostRoutine, bannerRoutine, flashRoutine, titleRoutine, endRoutine, letterboxRoutine;
 
         public bool SettingsOpen => settingsScreen.style.display == DisplayStyle.Flex;
         public bool ShopOpen => shopScreen.style.display == DisplayStyle.Flex;
@@ -98,6 +98,10 @@ namespace Lucky
             endNote = Q<Label>("end-note");
             endButtons = Q<VisualElement>("end-buttons");
             endFx = Q<VisualElement>("end-fx");
+            endRays = Q<VisualElement>("end-rays");
+            endTrophies = Q<VisualElement>("end-trophies");
+            letterboxTop = Q<VisualElement>("letterbox-top");
+            letterboxBottom = Q<VisualElement>("letterbox-bottom");
             endRetry = Q<Button>("end-retry");
             endShopBadge = Q<Label>("end-shop-badge");
             settingsPanel = Q<VisualElement>("settings-panel");
@@ -493,6 +497,14 @@ namespace Lucky
 
         // ---------- Depth & gold ----------
 
+        /// <summary>The slain boss's pip turns defeated the moment it falls, swelling once (the pip's own transition animates it).</summary>
+        public void ConquerPip(int index)
+        {
+            if (index >= pips.childCount) return;
+            pips[index].AddToClassList("defeated");
+            StartCoroutine(Glow(pips[index], "stamped", 0.3f));
+        }
+
         public void SetDepth(int current, IReadOnlyList<Sprite> portraits)
         {
             if (pips.childCount != portraits.Count)
@@ -729,6 +741,36 @@ namespace Lucky
             yield return Tween.Run(duration, t => fade.style.opacity = Mathf.Lerp(from, to, t), Ease.InOutQuad, true);
         }
 
+        /// <summary>Cinematic bars that slide in from the top and bottom edges (boss intros, the finale).</summary>
+        public void Letterbox(bool on, float duration = 0.45f)
+        {
+            float from = letterbox, to = on ? 1f : 0f;
+            Restart(ref letterboxRoutine, Tween.Run(duration, t => SetLetterbox(Mathf.Lerp(from, to, t)), Ease.InOutCubic, true));
+        }
+
+        float letterbox;
+
+        void SetLetterbox(float k)
+        {
+            letterbox = k;
+            letterboxTop.style.translate = new Translate(0f, Length.Percent(-100f * (1f - k)));
+            letterboxBottom.style.translate = new Translate(0f, Length.Percent(100f * (1f - k)));
+        }
+
+        /// <summary>Clears in-run overlays that a cut-short run (quit, retry) can leave behind: the tarot offer, banner, flash and bars.</summary>
+        public void ResetOverlays()
+        {
+            PickingCard = false;
+            tarotPicker.style.display = DisplayStyle.None;
+            tarotPicker.pickingMode = PickingMode.Ignore;
+            if (bannerRoutine != null) StopCoroutine(bannerRoutine);
+            banner.style.opacity = 0f;
+            if (flashRoutine != null) StopCoroutine(flashRoutine);
+            flash.style.opacity = 0f;
+            if (letterboxRoutine != null) StopCoroutine(letterboxRoutine);
+            SetLetterbox(0f);
+        }
+
         // ---------- Loading screen ----------
 
         static readonly string[] LoadingLines =
@@ -736,7 +778,7 @@ namespace Lucky
             "Shuffling the cards of fate", "Oiling the Wheel of Fate", "Lighting the torches", "Waking the bosses", "Loading the dice",
         };
 
-        bool Loading => loadingScreen.style.display != DisplayStyle.None;
+        public bool Loading => loadingScreen.style.display != DisplayStyle.None;
 
         public void SetLoading(float progress)
         {
@@ -822,9 +864,6 @@ namespace Lucky
         {
             titleScreen.style.display = on ? DisplayStyle.Flex : DisplayStyle.None;
             if (!on) return;
-            // A run quit from the pause menu can leave a banner mid-animation.
-            if (bannerRoutine != null) StopCoroutine(bannerRoutine);
-            banner.style.opacity = 0f;
             RefreshTitleStats();
             RefreshShopBadges();
             Restart(ref titleRoutine, TitleIntro());
@@ -1037,9 +1076,14 @@ namespace Lucky
 
         /// <param name="ribbon">Record callout under the subtitle (e.g. NEW BEST DEPTH!), or null.</param>
         /// <param name="stats">Tiles in order; gold tiles read "+N" and burst into sparkles.</param>
-        public void ShowEnd(bool victory, string title, string sub, string note, string ribbon, IEnumerable<(string name, int value, string icon, bool gold)> stats)
+        /// <param name="portraits">Every boss in depth order; the first <paramref name="slain"/> are struck through and the next is the one that won.</param>
+        public void ShowEnd(bool victory, string title, string sub, string note, string ribbon, IEnumerable<(string name, int value, string icon, bool gold)> stats,
+            IReadOnlyList<Sprite> portraits, int slain)
         {
             endScreen.style.display = DisplayStyle.Flex;
+            endScreen.EnableInClassList("victory", victory);
+            endVictory = victory;
+            endRays.style.display = victory ? DisplayStyle.Flex : DisplayStyle.None;
             endReady = false;
             endTitle.text = title;
             endTitle.style.color = victory ? new Color(1f, 0.84f, 0.36f) : new Color(1f, 0.42f, 0.45f);
@@ -1062,15 +1106,28 @@ namespace Lucky
                 endStats.Add(tile);
                 tiles.Add((tile, label, value, gold));
             }
+            endTrophies.Clear();
+            for (int i = 0; i < portraits.Count; i++)
+            {
+                var trophy = Box("trophy");
+                trophy.AddToClassList(i < slain ? "slain" : i == slain ? "nemesis" : "sealed");
+                if (portraits[i] != null) trophy.style.backgroundImage = new StyleBackground(portraits[i]);
+                if (i < slain) trophy.Add(Box("trophy-mark"));
+                endTrophies.Add(trophy);
+            }
             RefreshShopBadges();
             Restart(ref endRoutine, EndReveal(victory, tiles));
         }
 
-        /// <summary>Panel pops, the title slams down, then the tiles pop in one by one and count up before the buttons rise.</summary>
+        /// <summary>
+        /// Panel pops, the title slams down, the boss row stamps in (slain bosses struck through, the victor shaking),
+        /// then the tiles pop in one by one and count up before the buttons rise.
+        /// </summary>
         IEnumerator EndReveal(bool victory, List<(VisualElement tile, Label label, int value, bool gold)> tiles)
         {
             foreach (var e in new[] { endTitle, endSub, endRibbon, endNote, endButtons }) e.style.opacity = 0f;
             foreach (var entry in tiles) entry.tile.style.opacity = 0f;
+            foreach (var trophy in endTrophies.Children()) trophy.style.opacity = 0f;
 
             StartCoroutine(Tween.Run(0.3f, t => endScreen.style.opacity = t, Ease.OutQuad, true));
             yield return Tween.Run(0.35f, t =>
@@ -1100,6 +1157,32 @@ namespace Lucky
                 yield return new WaitForSecondsRealtime(0.15f);
             }
 
+            int index = 0;
+            foreach (var trophy in endTrophies.Children())
+            {
+                trophy.style.opacity = StyleKeyword.Null; // back to the class's own (sealed bosses stay faded)
+                StartCoroutine(PopScale(trophy, 1.35f, 0.4f));
+                var mark = trophy.Q(className: "trophy-mark");
+                if (mark != null)
+                {
+                    StartCoroutine(Stamp(mark));
+                    AudioManager.I?.Play("hit_light", 0.45f, 1.1f + index * 0.06f, 0.02f, 0.02f);
+                }
+                else if (trophy.ClassListContains("nemesis"))
+                {
+                    StartCoroutine(Shake(trophy, 10f, 0.4f));
+                    AudioManager.I?.Play("hit_heavy", 0.5f, 0.75f);
+                }
+                index++;
+                yield return new WaitForSecondsRealtime(0.07f);
+            }
+            if (victory)
+            {
+                AudioManager.I?.Play("reveal_big", 0.5f, 1.3f);
+                StartCoroutine(Sparkles(endTrophies, 24));
+            }
+            yield return new WaitForSecondsRealtime(0.1f);
+
             foreach (var (tile, label, value, gold) in tiles)
             {
                 tile.style.opacity = 1f;
@@ -1115,6 +1198,14 @@ namespace Lucky
             yield return Rise(endButtons, 30f, 0.3f);
             endReady = true;
         }
+
+        /// <summary>A slash slams down onto a slain boss's portrait.</summary>
+        IEnumerator Stamp(VisualElement mark) => Tween.Run(0.18f, t =>
+        {
+            float s = Mathf.Lerp(2.4f, 1f, t);
+            mark.style.scale = new Scale(new Vector3(s, s, 1f));
+            mark.style.opacity = t;
+        }, Ease.InQuad, true);
 
         IEnumerator CountUp(Label label, int value, bool gold, VisualElement tile)
         {
@@ -1139,6 +1230,7 @@ namespace Lucky
         {
             if (endRoutine != null) StopCoroutine(endRoutine);
             endScreen.style.display = DisplayStyle.None;
+            endVictory = false;
             endFx.Clear();
         }
 
@@ -1247,6 +1339,20 @@ namespace Lucky
                 float b = 1f + 0.1f * Mathf.Max(0f, Mathf.Sin(Time.unscaledTime * 5f));
                 titleShopBadge.style.scale = new Scale(new Vector3(b, b, 1f));
                 endShopBadge.style.scale = new Scale(new Vector3(b, b, 1f));
+            }
+
+            // Victory scoreboard: the sunburst turns, the title shimmers rose to gold, and sparkles keep bursting off it.
+            if (EndOpen && endVictory)
+            {
+                float t = Time.unscaledTime;
+                endRays.style.rotate = new Rotate(t * 12f);
+                float k = 0.5f + 0.5f * Mathf.Sin(t * 4f);
+                endTitle.style.color = Color.HSVToRGB(Mathf.Lerp(0.97f, 1.13f, k) % 1f, Mathf.Lerp(0.4f, 0.75f, k), 1f);
+                if (endReady && t > nextEndSparkle)
+                {
+                    nextEndSparkle = t + 1.4f;
+                    StartCoroutine(Sparkles(endTitle, 12));
+                }
             }
 
             // Idle nudge: pulse the SPIN button after 4 s without input.

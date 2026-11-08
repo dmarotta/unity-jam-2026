@@ -98,6 +98,21 @@ namespace Lucky
 
         Coroutine crossfade;
 
+        /// <summary>Fade the current track out to silence; the next PlayMusic starts fresh.</summary>
+        public void StopMusic(float fade)
+        {
+            if (crossfade != null) StopCoroutine(crossfade);
+            crossfade = StartCoroutine(FadeOut(aIsCurrent ? musicA : musicB, fade));
+        }
+
+        IEnumerator FadeOut(AudioSource source, float time)
+        {
+            float start = source.volume;
+            yield return Tween.Run(time, t => source.volume = start * (1f - t), Ease.Linear, true);
+            source.Stop();
+            crossfade = null;
+        }
+
         IEnumerator Crossfade(AudioSource from, AudioSource to, float time)
         {
             float fromStart = from.volume;

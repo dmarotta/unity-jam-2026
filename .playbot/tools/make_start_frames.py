@@ -15,6 +15,8 @@ JOBS = {
     "hero_attack":   ("hero_idle",           "4:3", GREEN,   0.66, 0.28),
     "hero_hurt":     ("hero_idle",           "3:4", GREEN,   0.70, 0.55),
     "hero_victory":  ("hero_idle",           "3:4", GREEN,   0.70, 0.50),
+    # Smaller, for headroom: the finale flourish tosses the hat and raises a card overhead.
+    "hero_celebrate": ("hero_idle",          "3:4", GREEN,   0.60, 0.50),
     "hero_death":    ("hero_idle",           "4:3", GREEN,   0.62, 0.62),
     "goblin_idle":   ("boss1_goblin_idle",   "3:4", MAGENTA, 0.74, 0.50),
     "goblin_attack": ("boss1_goblin_idle",   "4:3", MAGENTA, 0.70, 0.66),

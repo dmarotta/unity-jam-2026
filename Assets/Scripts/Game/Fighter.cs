@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Lucky
 {
-    public enum Pose { Idle, Attack, Hurt, Run, Victory, Death }
+    public enum Pose { Idle, Attack, Hurt, Run, Victory, Death, Celebrate }
 
     /// <summary>A side-view character: key-pose sprites animated procedurally with springs and shader effects.</summary>
     public class Fighter : MonoBehaviour
@@ -13,6 +13,7 @@ namespace Lucky
         static readonly Dictionary<Pose, float> PoseHeight = new()
         {
             { Pose.Idle, 1f }, { Pose.Attack, 0.9f }, { Pose.Hurt, 0.96f }, { Pose.Run, 0.98f }, { Pose.Victory, 1.1f }, { Pose.Death, 0.6f },
+            { Pose.Celebrate, 1.1f },
         };
 
         public SpriteRenderer Body { get; private set; }

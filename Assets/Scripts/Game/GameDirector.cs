@@ -8,10 +8,12 @@ using UnityEngine.Rendering.Universal;
 namespace Lucky
 {
     /// <summary>Owns the run: title → depths (intro, spin/attack turns, boss turns) → victory or defeat.</summary>
-    public class GameDirector : MonoBehaviour
+    public partial class GameDirector : MonoBehaviour
     {
         public GameConfig config;
         public Volume volume;
+        /// <summary>The scene's global light: dimmed for the final boss, flooded with warm light when the curse breaks.</summary>
+        public Light2D ambient;
 
         const float WheelY = -5.7f, WheelHiddenY = -12.5f;
         const float MinLoad = 1.4f, MaxLoad = 8f;
@@ -91,11 +93,12 @@ namespace Lucky
             hero = Fighter.Create("Hero", world.transform, config, new Dictionary<Pose, Sprite>
             {
                 { Pose.Idle, S("hero_idle") }, { Pose.Attack, S("hero_attack") }, { Pose.Hurt, S("hero_hurt") },
-                { Pose.Run, S("hero_run") }, { Pose.Victory, S("hero_victory") },
+                { Pose.Run, S("hero_run") }, { Pose.Victory, S("hero_victory") }, { Pose.Celebrate, S("hero_victory") },
             }, new Dictionary<Pose, string>
             {
                 { Pose.Idle, "hero_idle" }, { Pose.Attack, "hero_attack" }, { Pose.Hurt, "hero_hurt" },
                 { Pose.Run, "hero_run" }, { Pose.Victory, "hero_victory" }, { Pose.Death, "hero_death" },
+                { Pose.Celebrate, "hero_celebrate" },
             }, 4.7f, 30);
 
             // Hand-held lantern glow: as the hero runs and lunges it rakes across the arena walls.
@@ -140,9 +143,27 @@ namespace Lucky
             wheelLight.transform.localPosition = new Vector3(0f, 4.6f, 0f);
             wheelLight.color = new Color(1f, 0.78f, 0.4f);
             wheelLight.pointLightOuterRadius = 8f;
+            ambientIntensity = ambient.intensity;
+            ambientColor = ambient.color;
         }
 
         Light2D wheelLight, keyLight;
+        float ambientIntensity;
+        Color ambientColor;
+        Coroutine ambientRoutine;
+
+        /// <summary>Fade the dungeon's ambient light toward a level and tint (unscaled, so slow-mo doesn't drag it).</summary>
+        void AmbientTo(float intensity, Color color, float duration)
+        {
+            if (ambientRoutine != null) StopCoroutine(ambientRoutine);
+            float i0 = ambient.intensity;
+            var c0 = ambient.color;
+            ambientRoutine = StartCoroutine(Tween.Run(duration, t =>
+            {
+                ambient.intensity = Mathf.Lerp(i0, intensity, t);
+                ambient.color = Color.Lerp(c0, color, t);
+            }, Ease.InOutQuad, true));
+        }
 
         void LateUpdate()
         {
@@ -244,6 +265,12 @@ namespace Lucky
             PostFX.I.SetDanger(0f);
             AudioManager.I.Loop("heartbeat", false);
             AudioManager.I.Loop("run_steps", false);
+            celebrating = false;
+            CameraRig.I.ClearFocus();
+            if (ambientRoutine != null) StopCoroutine(ambientRoutine);
+            ambient.intensity = ambientIntensity;
+            ambient.color = ambientColor;
+            hud.ResetOverlays();
             ClearQuirks();
         }
 
@@ -276,8 +303,12 @@ namespace Lucky
 
         // ---------- Input ----------
 
+        /// <summary>Editor-only debug panel (GameDirector.Debug.cs); compiled away in builds.</summary>
+        partial void DebugUpdate();
+
         void Update()
         {
+            DebugUpdate();
             var kb = Keyboard.current;
             var mouse = Mouse.current;
             var touch = Touchscreen.current;
@@ -333,13 +364,14 @@ namespace Lucky
             yield return hud.Fade(0f, 0.45f);
         }
 
-        IEnumerator Run()
+        IEnumerator Run(int startDepth = 0)
         {
             hud.ShowTitle(false);
             hud.ShowShop(false);
             hud.HideEnd();
             yield return hud.Fade(1f, 0.25f);
             ResetStage();
+            CameraRig.I.SnapTo(World.ArenaX(startDepth));
             inRun = true;
             LoadLoadout();
             heroHp = heroMax;
@@ -350,11 +382,11 @@ namespace Lucky
             hud.SetCharm(charm != null ? S(charm.Icon) : null, stats.CharmAbove > 0 ? "±1" : "+1");
             hud.BuildItems(consumables);
             hud.RefreshItems(Blocker, charges);
-            hero.transform.position = new Vector3(World.ArenaX(0) - OffscreenX, World.GroundY);
+            hero.transform.position = new Vector3(World.ArenaX(startDepth) - OffscreenX, World.GroundY);
             AudioManager.I.PlayMusic("music_battle");
             yield return hud.Fade(0f, 0.35f);
 
-            for (depth = 0; depth < bosses.Count; depth++)
+            for (depth = startDepth; depth < bosses.Count; depth++)
             {
                 yield return EnterArena();
                 yield return Fight();
@@ -412,10 +444,14 @@ namespace Lucky
 
             // The hero waits just off the left edge and runs in once the arena is on screen.
             yield return RunTo(hero.Home, 0.75f, Ease.OutQuad, true);
-            if (depth == bosses.Count - 1) AudioManager.I.PlayMusic("music_final", 0.8f);
+            bool final = depth == bosses.Count - 1;
+            if (final) AudioManager.I.PlayMusic("music_final", 0.8f);
 
-            // Boss intro: roar, accent flash, slam-in name card.
+            // Boss intro: the view leans in on the boss between cinematic bars; roar, accent flash, slam-in name card.
             var boss = BossFighter;
+            hud.Letterbox(true);
+            CameraRig.I.Focus(new Vector2(1.2f, 0.15f), -0.07f, 0.5f);
+            if (final) yield return FinalOmen();
             hud.ShowHud(true);
             AudioManager.I.Play("boss_intro", 0.9f);
             BossVoice("intro", 0.9f);
@@ -428,10 +464,37 @@ namespace Lucky
             CameraRig.I.Shake(0.45f);
             CameraRig.I.ZoomPunch(-0.05f);
             PostFX.I.Punch(bloomAdd: 1.5f, chromaAdd: 0.35f, lensAdd: -0.2f);
-            hud.Banner(def.Name.ToUpperInvariant(), $"Depth {depth + 1}  ·  {def.Arena}", HUD.BannerStyle.Intro, 1.25f);
+            hud.Banner(def.Name.ToUpperInvariant(), $"{(final ? "Final depth" : $"Depth {depth + 1}")}  ·  {def.Arena}", HUD.BannerStyle.Intro, 1.25f);
             StartCoroutine(hud.PulseTraits());
             yield return new WaitForSeconds(1.5f);
+            hud.Letterbox(false);
+            CameraRig.I.Focus(Vector2.zero, 0f, 0.5f);
             yield return ShowWheel(true);
+        }
+
+        /// <summary>Before the last boss: the light drains from the throne room, it quakes, and dust rains from the ceiling.</summary>
+        IEnumerator FinalOmen()
+        {
+            var boss = BossFighter;
+            var accent = Boss.Accent;
+            AmbientTo(ambientIntensity * 0.3f, Color.Lerp(ambientColor, accent, 0.35f), 0.6f);
+            AudioManager.I.Play("boss_roar", 0.9f, 0.85f);
+            CameraRig.I.Focus(new Vector2(1.4f, 0.2f), -0.12f, 1.3f);
+            PostFX.I.VignettePulse(new Color(accent.r * 0.3f, accent.g * 0.3f, accent.b * 0.3f), 0.35f);
+            for (float t = 0f; t < 1.2f; t += 0.1f)
+            {
+                CameraRig.I.Shake(0.14f);
+                boss.Flash(accent, 0.25f + t * 0.4f);
+                FX.I.Emit(new Vector3(CameraRig.I.BaseX + Random.Range(-9f, 9f), 5.8f), new FX.Burst
+                {
+                    Sprite = "vfx_dust", Count = 2, SpeedMin = 0.5f, SpeedMax = 2f, AngleMin = 260f, AngleMax = 280f,
+                    Gravity = -7f, Drag = 0.8f, LifeMin = 1f, LifeMax = 1.6f, SizeMin = 0.3f, SizeMax = 0.7f, EndSize = 1.8f,
+                    Spin = 60f, Color = new Color(0.55f, 0.5f, 0.48f, 0.55f), EndColor = new Color(0.55f, 0.5f, 0.48f, 0f),
+                    Order = FX.OrderBehind + 20, Spread = new Vector2(0.6f, 0.1f),
+                });
+                yield return new WaitForSeconds(0.1f);
+            }
+            AmbientTo(ambientIntensity, ambientColor, 1.2f);
         }
 
         IEnumerator Fight()
@@ -460,6 +523,13 @@ namespace Lucky
                         if (heroHp <= 0) yield break;
                         readyAt = SetAwaitingSpin(true);
                     }
+#if UNITY_EDITOR
+                    if (DebugTurn())
+                    {
+                        SetAwaitingSpin(false);
+                        yield break;
+                    }
+#endif
                     if (SaveData.AutoSpin && !hud.SettingsOpen && Time.unscaledTime - readyAt > 0.6f) spinRequested = true;
                     yield return null;
                 }
@@ -480,6 +550,13 @@ namespace Lucky
         /// <summary>Phoenix Feather: a hero who just fell rises if a revive is left (a counter-attack can fell them mid-turn).</summary>
         IEnumerator TryRevive()
         {
+#if UNITY_EDITOR
+            if (heroHp <= 0 && immortal)
+            {
+                HealHero(heroMax, HealColor);
+                yield break;
+            }
+#endif
             if (heroHp > 0 || revives == 0) yield break;
             revives--;
             yield return Revive();
@@ -617,22 +694,26 @@ namespace Lucky
             float luck = stats.PityPerMiss * misses + cloverWeight + starWeight;
             int target = FightMath.PickSlice(rng, wheelValues, bossHp, luck);
             if (killable) cloverWeight = 0; // banked clovers wait until the Lucky Number is on the wheel
+            bool rigged = false;
 #if UNITY_EDITOR
+            // Debug panel: a forced value lands where told; a forced kill can't be blocked, gulped or dodged.
             int forced = forcedValue >= 0 ? System.Array.IndexOf(wheelValues, forcedValue == 0 ? bossHp : forcedValue) : -1;
             if (forced >= 0) target = forced;
             forcedValue = -1;
+            rigged = forceKill;
+            forceKill = false;
 #endif
             yield return SpinWheel(target);
             if (spinTwice) yield return SpinAgain(target, luck, t => target = t);
 
             int landed = wheelValues[target];
-            bool blocked = def.Quirk == "block" && rng.NextDouble() < def.QuirkChance;
+            bool blocked = !rigged && def.Quirk == "block" && rng.NextDouble() < def.QuirkChance;
             int afterBlock = blocked ? Mathf.Max(0, landed - def.QuirkValue) : landed;
             int value = FightMath.Charm(afterBlock, bossHp, stats.CharmBelow, stats.CharmAbove);
             bool charmed = value != afterBlock;
             var result = Preview(afterBlock);
-            bool swallowed = def.Quirk == "swallow" && value > 0 && rng.NextDouble() < def.QuirkChance;
-            bool dodged = !swallowed && rng.NextDouble() < def.Dodge;
+            bool swallowed = !rigged && def.Quirk == "swallow" && value > 0 && rng.NextDouble() < def.QuirkChance;
+            bool dodged = !rigged && !swallowed && rng.NextDouble() < def.Dodge;
             bool big = value >= 9 || result.Outcome == HitOutcome.Jackpot;
 
             bool nearMiss = result.Outcome != HitOutcome.Jackpot && wheel.KillSlice >= 0 && SliceDistance(target, wheel.KillSlice) == 1;
@@ -1370,8 +1451,10 @@ namespace Lucky
 
             yield return new WaitForSeconds(0.45f);
             BossVoice("death", 1f);
+            AudioManager.I.Play("boss_death", 0.55f);
             boss.Flash(Color.white, 1f);
             StartCoroutine(boss.Dissolve(1.3f, def.Accent));
+            hud.ConquerPip(depth);
             for (int i = 0; i < 6; i++)
             {
                 FX.I.Coins(boss.Chest, 10, 1.2f);
@@ -1754,6 +1837,8 @@ namespace Lucky
         {
             ClearQuirks();
             yield return ShowWheel(false);
+            // The last boss leads straight into the finale, which has its own build-up.
+            if (depth == bosses.Count - 1) yield break;
             hero.SetPose(Pose.Victory, 1.4f);
             AudioManager.I.Play("victory_stinger", 0.8f);
             FX.I.Sparks(hero.Head, Gold, 24, 1.2f);
@@ -1767,7 +1852,6 @@ namespace Lucky
                 hud.Banner("MENDED", $"+{regen} HP  ·  {heroHp} / {heroMax}", HUD.BannerStyle.Info, 0.7f);
                 yield return new WaitForSeconds(0.8f);
             }
-            if (depth == bosses.Count - 1) yield break;
 
             hud.Banner("DEPTH CLEARED", "Descending deeper...", HUD.BannerStyle.Info, 0.9f);
             yield return new WaitForSeconds(0.6f);
@@ -1839,11 +1923,18 @@ namespace Lucky
         /// <summary>The current boss's own voice line: intro, attack, hurt, death or taunt (Audio/SFX/Voices/{id}_{kind}).</summary>
         void BossVoice(string kind, float volume, float pitch = 1f) => AudioManager.I.Play($"{Boss.Id}_{kind}", volume, pitch, 0.05f, 0.15f);
 
-#if UNITY_EDITOR
-        /// <summary>Editor QA hook: force the next spin's value (0 = exact kill).</summary>
-        int forcedValue = -1;
-        public void ForceNextValue(int value) => forcedValue = value;
-#endif
+        /// <summary>A loose sprite owned by the run (rockets, rays, the crown); ResetStage cleans up any left behind.</summary>
+        SpriteRenderer Prop(string sprite, Vector3 pos, float size, int order, bool additive)
+        {
+            var sr = new GameObject(sprite).AddComponent<SpriteRenderer>();
+            transients.Add(sr.gameObject);
+            sr.sprite = S(sprite);
+            sr.sharedMaterial = additive ? config.additive : config.spriteDefault;
+            sr.sortingOrder = order;
+            sr.transform.position = pos;
+            if (sr.sprite != null) sr.transform.localScale = Vector3.one * size / sr.sprite.bounds.size.x;
+            return sr;
+        }
 
         // ---------- Endings ----------
 
@@ -1878,28 +1969,284 @@ namespace Lucky
             bool record = BankRun();
             hud.ShowHud(false);
             hud.ShowEnd(false, "FATE WINS", $"{Boss.Name} stopped you on depth {depth + 1} of {bosses.Count}", GoldNote(),
-                record ? "NEW BEST DEPTH!" : null, RunStats());
+                record ? "NEW BEST DEPTH!" : null, RunStats(), bossPortraits, depth);
             AudioManager.I.PlayMusic("music_title", 2f);
         }
 
+        /// <summary>True from the curse breaking until the stage resets: the rays, the clover and the drifting luck keep going.</summary>
+        bool celebrating;
+
+        static readonly Color CurseColor = new(0.32f, 0.08f, 0.45f), LuckColor = new(0.45f, 1f, 0.4f);
+
+        /// <summary>
+        /// The finale: Ace takes centre stage and his cards circle him as the luck gathers; the curse shatters and the
+        /// dungeon floods with light while he celebrates; every boss's cursed soul rises free; a golden four-leaf clover
+        /// settles over him and the hoard answers in gold; then luck motes and stray cards drift behind the scoreboard.
+        /// </summary>
         IEnumerator Victory()
         {
             inRun = false;
+            celebrating = true;
             SaveData.Wins++;
-            AudioManager.I.PlayMusic("music_victory", 0.5f);
-            hero.SetPose(Pose.Victory, 99f);
-            for (int i = 0; i < 4; i++)
-            {
-                FX.I.Confetti(hero.Head + Vector3.up * 2f + Vector3.right * Random.Range(-4f, 4f), 60);
-                FX.I.Coins(hero.Chest, 20, 1.3f);
-                yield return new WaitForSeconds(0.25f);
-            }
-            hud.Banner("CURSE BROKEN!", "You beat the odds", HUD.BannerStyle.Jackpot, 2f);
-            yield return new WaitForSeconds(2.4f);
-            BankRun();
             hud.ShowHud(false);
+            hud.Letterbox(true, 0.8f);
+            AudioManager.I.StopMusic(1.4f);
+
+            var stage = new Vector3(World.ArenaX(depth) - 0.8f, World.GroundY);
+            yield return RunTo(stage, 0.9f, Ease.InOutQuad, true);
+            hero.Home = stage;
+            var c = hero.Chest;
+
+            // The hush: the light dies and the view closes in while Ace's cards circle him, tighter and faster, as the riser climbs.
+            CameraRig.I.Focus(new Vector2(stage.x - CameraRig.I.BaseX, -0.35f), -0.16f, 2.2f);
+            AmbientTo(ambientIntensity * 0.25f, Color.Lerp(ambientColor, CurseColor, 0.5f), 1.6f);
+            PostFX.I.VignettePulse(CurseColor * 0.4f, 0.4f);
+            AudioManager.I.Play("tension_riser", 1f);
+            yield return CardOrbit(c, 2.2f);
+
+            // The curse shatters: white-out, shockwaves, curse shards blown away, and warm light floods the dungeon.
+            AudioManager.I.Play("curse_shatter");
+            AudioManager.I.Play("jackpot", 0.7f, 1.1f);
+            AudioManager.I.PlayMusic("music_victory", 0.6f);
+            Juice.I.Hitstop(0.15f);
+            Juice.I.SlowMo(0.35f, 0.7f, 0.6f);
+            hud.Flash(Color.white, 0.95f, 1.1f);
+            hud.Letterbox(false, 0.8f);
+            PostFX.I.Punch(bloomAdd: 3f, chromaAdd: 1f, lensAdd: -0.5f, saturationAdd: 40f, exposureAdd: 0.7f);
+            CameraRig.I.Shake(1f);
+            CameraRig.I.ZoomPunch(-0.1f);
+            CameraRig.I.Focus(new Vector2(stage.x - CameraRig.I.BaseX, 0.2f), -0.05f, 2.5f);
+            AmbientTo(ambientIntensity * 1.9f, new Color(1f, 0.86f, 0.62f), 2.2f);
+            hero.SetPose(Pose.Celebrate, 99f);
+            hero.Flash(Color.white, 1f);
+            hero.Squash(0.7f, 1.35f);
+            for (int i = 0; i < 4; i++) FX.I.Ring(c, i % 2 == 0 ? Gold : Color.white, 8f + i * 7f, 0.55f + i * 0.2f);
+            FX.I.Sparks(c, Gold, 120, 3f, true);
+            FX.I.Emit(c, new FX.Burst
+            {
+                Sprite = "vfx_dust", Count = 40, SpeedMin = 9f, SpeedMax = 20f, AngleMin = 0f, AngleMax = 360f,
+                Drag = 2.5f, LifeMin = 0.6f, LifeMax = 1.2f, SizeMin = 0.8f, SizeMax = 1.8f, EndSize = 2.5f, Spin = 120f,
+                Color = new Color(CurseColor.r, CurseColor.g, CurseColor.b, 0.9f), EndColor = new Color(CurseColor.r, CurseColor.g, CurseColor.b, 0f),
+                Unscaled = true,
+            });
+            FX.I.Emit(c, new FX.Burst
+            {
+                Sprite = "vfx_sparkle", Count = 50, SpeedMin = 10f, SpeedMax = 22f, AngleMin = 0f, AngleMax = 360f,
+                Drag = 2f, LifeMin = 0.5f, LifeMax = 1f, SizeMin = 0.3f, SizeMax = 0.8f, EndSize = 0f, Spin = 700f,
+                Color = TarotColor, EndColor = Color.white, Additive = true, Unscaled = true,
+            });
+            FX.I.Light(c, Gold, 10f, 26f, 2.5f);
+            StartCoroutine(GodRays(c));
+            hud.Banner("CURSE BROKEN!", "Fortune smiles on you at last", HUD.BannerStyle.Jackpot, 1.7f);
+            yield return new WaitForSeconds(0.9f);
+
+            StartCoroutine(FreeSouls());
+            yield return new WaitForSeconds(0.8f);
+            yield return Blessing();
+            yield return new WaitForSeconds(1.6f);
+
+            BankRun();
             hud.ShowEnd(true, "CURSE BROKEN!", $"All {bosses.Count} depths cleared", GoldNote(),
-                SaveData.Wins == 1 ? "FIRST VICTORY!" : null, RunStats());
+                SaveData.Wins == 1 ? "FIRST VICTORY!" : $"VICTORY  ×{SaveData.Wins}", RunStats(), bossPortraits, bosses.Count);
+
+            // The calm after, behind the scoreboard: luck motes rise and now and then one of Ace's cards flutters down.
+            while (celebrating)
+            {
+                if (!hud.ShopOpen)
+                {
+                    float x = CameraRig.I.BaseX;
+                    FX.I.Embers(new Vector3(x, -4.8f), Random.value < 0.5f ? Gold : LuckColor, 3, new Vector2(9f, 0.3f));
+                    if (Random.value < 0.35f) FX.I.Emit(new Vector3(x + Random.Range(-8f, 8f), 6.2f), new FX.Burst
+                    {
+                        Sprite = "vfx_card", Count = 1, SpeedMin = 0.3f, SpeedMax = 1f, AngleMin = 240f, AngleMax = 300f,
+                        Gravity = -1.6f, Drag = 0.9f, LifeMin = 5f, LifeMax = 6.5f, SizeMin = 0.5f, SizeMax = 0.6f, EndSize = 1f,
+                        Spin = 80f, Color = Color.white, EndColor = Color.white, Flip = true,
+                    });
+                }
+                yield return new WaitForSeconds(0.6f);
+            }
+        }
+
+        /// <summary>
+        /// Ace's cards circle him in a flat ring, drawn in tighter and faster as the luck gathers, then fly apart as the
+        /// curse breaks. Cards on the near side of the ring pass in front of him.
+        /// </summary>
+        IEnumerator CardOrbit(Vector3 center, float duration)
+        {
+            const int Count = 12;
+            var cards = new SpriteRenderer[Count];
+            for (int i = 0; i < Count; i++) cards[i] = Prop("vfx_card", center, 0.7f, 0, false);
+            var size = cards[0].transform.localScale;
+            float spin = 0f, ember = 0f;
+            for (float t = 0f; t < duration; t += Time.deltaTime)
+            {
+                float k = t / duration;
+                spin += Time.deltaTime * Mathf.Lerp(100f, 620f, k * k);
+                float radius = Mathf.Lerp(3.6f, 1.5f, k * k);
+                for (int i = 0; i < Count; i++)
+                {
+                    float a = (spin + i * 360f / Count) * Mathf.Deg2Rad, s = Mathf.Sin(a);
+                    var card = cards[i];
+                    card.sortingOrder = s < 0f ? 36 : 24;
+                    card.transform.position = center + new Vector3(Mathf.Cos(a) * radius, s * radius * 0.3f + Mathf.Sin(a * 3f + t * 4f) * 0.12f);
+                    // Edge-on at the sides of the ring, face-on as they pass in front or behind.
+                    card.transform.localScale = new Vector3(size.x * (0.2f + 0.8f * Mathf.Abs(s)), size.y, 1f) * Mathf.Min(1f, t * 4f);
+                    card.transform.rotation = Quaternion.Euler(0f, 0f, Mathf.Cos(a) * -25f);
+                    card.color = Color.Lerp(Color.white, new Color(1f, 0.88f, 0.55f), k);
+                }
+                hero.Flash(Gold, 0.1f + 0.4f * k);
+                CameraRig.I.Shake(Time.deltaTime * (0.4f + 1.2f * k));
+                ember -= Time.deltaTime;
+                if (ember <= 0f)
+                {
+                    ember = 0.07f;
+                    FX.I.Embers(hero.transform.position, Gold, 2, new Vector2(2.5f, 0.2f));
+                    if (Random.value < k) FX.I.Sparks(center + (Vector3)Random.insideUnitCircle * 1.6f, Gold, 2, 0.4f);
+                }
+                yield return null;
+            }
+            foreach (var card in cards)
+            {
+                var p = card.transform.position;
+                float angle = Mathf.Atan2(p.y - center.y, p.x - center.x) * Mathf.Rad2Deg;
+                FX.I.Emit(p, new FX.Burst
+                {
+                    Sprite = "vfx_card", Count = 1, SpeedMin = 14f, SpeedMax = 20f, AngleMin = angle - 8f, AngleMax = angle + 8f,
+                    Gravity = -10f, Drag = 1.2f, LifeMin = 0.9f, LifeMax = 1.3f, SizeMin = 0.7f, SizeMax = 0.7f, EndSize = 1f,
+                    Spin = 720f, Color = Color.white, EndColor = Color.white, Flip = true, Unscaled = true,
+                });
+                transients.Remove(card.gameObject);
+                Destroy(card.gameObject);
+            }
+        }
+
+        /// <summary>Freed: each boss's cursed soul rises out of the depths in its own colour, a sweep from left to right.</summary>
+        IEnumerator FreeSouls()
+        {
+            for (int i = 0; i < bosses.Count && celebrating; i++)
+            {
+                float x = CameraRig.I.BaseX + Mathf.Lerp(-8f, 8f, (i + 0.5f) / bosses.Count) + Random.Range(-0.5f, 0.5f);
+                StartCoroutine(Soul(new Vector3(x, World.GroundY - 0.4f), Balance.Bosses[i].Accent, i));
+                yield return new WaitForSeconds(0.16f);
+            }
+        }
+
+        /// <summary>One soul: a wisp that weaves up out of the floor and away through the ceiling, lighting the walls as it passes.</summary>
+        IEnumerator Soul(Vector3 from, Color color, int index)
+        {
+            AudioManager.I.Play("spirit_release", 0.45f, 0.9f + index * 0.05f, 0.03f, 0.05f);
+            Flames(from, color, 14, 1.2f);
+            var wisp = Prop("vfx_glow", from, 1.4f, FX.OrderSky + 1, true);
+            var core = Prop("vfx_sparkle", from, 0.7f, FX.OrderSky + 2, true);
+            var glow = Instantiate(config.lightPrefab, wisp.transform).GetComponent<Light2D>();
+            glow.color = color;
+            glow.intensity = 1.6f;
+            glow.pointLightOuterRadius = 5f;
+            var trail = new FX.Burst
+            {
+                Sprite = "vfx_glow", Count = 1, SpeedMin = 0.2f, SpeedMax = 0.8f, AngleMin = 200f, AngleMax = 340f,
+                Drag = 1.5f, LifeMin = 0.5f, LifeMax = 0.9f, SizeMin = 0.4f, SizeMax = 0.75f, EndSize = 0.1f,
+                Color = color, EndColor = new Color(color.r, color.g, color.b, 0f), Additive = true, Order = FX.OrderSky,
+            };
+            float duration = Random.Range(2.1f, 2.6f), phase = Random.value * 6f;
+            for (float t = 0f; t < 1f; t += Time.deltaTime / duration)
+            {
+                var p = new Vector3(from.x + Mathf.Sin(t * 7f + phase) * 0.6f * (1f - 0.5f * t), Mathf.Lerp(from.y, 7.2f, t * (0.55f + 0.45f * t)));
+                float fade = Mathf.Clamp01(t * 6f);
+                wisp.transform.position = p;
+                wisp.color = new Color(color.r, color.g, color.b, 0.85f * fade);
+                core.transform.SetPositionAndRotation(p, Quaternion.Euler(0f, 0f, t * 400f));
+                core.color = new Color(1f, 1f, 1f, fade);
+                FX.I.Emit(p, trail);
+                yield return null;
+                if (!celebrating || wisp == null || core == null) yield break;
+            }
+            transients.Remove(wisp.gameObject);
+            transients.Remove(core.gameObject);
+            Destroy(wisp.gameObject);
+            Destroy(core.gameObject);
+        }
+
+        /// <summary>
+        /// Fortune's favour: a golden four-leaf clover tumbles down like a leaf to hover over Ace, and the hoard answers
+        /// with a fountain of gold on either side of him.
+        /// </summary>
+        IEnumerator Blessing()
+        {
+            var clover = Prop("icon_clover", hero.Head, 1.5f, 40, false);
+            var tr = clover.transform;
+            tr.SetParent(hero.transform, true);
+            var size = tr.localScale;
+            // Just above the tip of the sword-cane Ace thrusts up at the end of hero_celebrate (measured from its last frame).
+            var rest = new Vector3(hero.Height * 0.2f, hero.Height * 1.58f);
+            var from = rest + Vector3.up * 7f;
+            AudioManager.I.Play("whoosh_ui", 0.7f, 0.6f);
+            AudioManager.I.Play("hp_upgrade", 0.7f, 0.8f);
+            yield return Tween.Run(1.1f, t =>
+            {
+                tr.localPosition = Vector3.LerpUnclamped(from, rest, t) + Vector3.right * Mathf.Sin(t * 8f) * 0.35f * (1f - t);
+                tr.localScale = new Vector3(size.x * Mathf.Cos(t * Mathf.PI * 4f), size.y, 1f);
+                if (Random.value < 0.7f) FX.I.Sparks(tr.position, LuckColor, 1, 0.3f);
+            }, Ease.OutCubic);
+
+            var at = tr.position;
+            AudioManager.I.Play("royal_fanfare", 0.95f);
+            AudioManager.I.Play("charm_nudge", 0.9f, 1.1f);
+            FX.I.Ring(at, LuckColor, 6f, 0.45f);
+            FX.I.Ring(at, Gold, 3.5f, 0.3f);
+            FX.I.Emit(at, new FX.Burst
+            {
+                Sprite = "vfx_sparkle", Count = 40, SpeedMin = 3f, SpeedMax = 8f, AngleMin = 0f, AngleMax = 360f,
+                Gravity = 1f, Drag = 2f, LifeMin = 0.6f, LifeMax = 1.1f, SizeMin = 0.3f, SizeMax = 0.6f, EndSize = 0f,
+                Spin = 400f, Color = LuckColor, EndColor = Gold, Additive = true,
+            });
+            FX.I.Light(at, LuckColor, 5f, 9f, 1.2f);
+            FX.I.Text(at + new Vector3(2.1f, -0.7f), "LUCKY!", LuckColor, 1.1f, 0.6f, 1.5f, true);
+            hero.Flash(LuckColor, 0.6f);
+            CameraRig.I.ZoomPunch(-0.04f);
+            PostFX.I.Punch(bloomAdd: 1.5f, saturationAdd: 25f);
+            StartCoroutine(Hover(clover, rest, LuckColor));
+
+            AudioManager.I.Play("coin_shower", 0.7f);
+            foreach (float side in new[] { -3.4f, 3.4f })
+                FX.I.Coins(hero.transform.position + new Vector3(side, 0.1f), 30, 1.4f);
+            yield return new WaitForSeconds(0.4f);
+        }
+
+        /// <summary>A slow-turning gold sunburst behind Ace for the rest of the celebration.</summary>
+        IEnumerator GodRays(Vector3 at)
+        {
+            var outer = Prop("vfx_rays", at, 17f, FX.OrderSky + 2, true);
+            var inner = Prop("vfx_rays", at, 9f, FX.OrderSky + 3, true);
+            Vector3 outerScale = outer.transform.localScale, innerScale = inner.transform.localScale;
+            float t = 0f;
+            while (celebrating && outer != null && inner != null)
+            {
+                t += Time.deltaTime;
+                float grow = Ease.OutBack(Mathf.Clamp01(t / 0.9f));
+                float pulse = Mathf.Sin(t * 2.1f);
+                outer.transform.SetPositionAndRotation(at, Quaternion.Euler(0f, 0f, t * 8f));
+                outer.transform.localScale = outerScale * grow * (1f + 0.04f * pulse);
+                outer.color = new Color(1f, 0.76f, 0.36f, 0.42f + 0.1f * pulse);
+                inner.transform.SetPositionAndRotation(at, Quaternion.Euler(0f, 0f, -t * 13f));
+                inner.transform.localScale = innerScale * grow;
+                inner.color = new Color(1f, 0.95f, 0.8f, 0.3f - 0.08f * pulse);
+                yield return null;
+            }
+        }
+
+        /// <summary>Keeps a prop gently bobbing at <paramref name="rest"/> (local to its parent), shedding the odd sparkle, until it's cleaned up.</summary>
+        IEnumerator Hover(SpriteRenderer prop, Vector3 rest, Color sparkle)
+        {
+            float t = 0f;
+            while (prop != null)
+            {
+                t += Time.deltaTime;
+                prop.transform.localPosition = rest + Vector3.up * Mathf.Sin(t * 2.4f) * 0.12f;
+                prop.transform.localRotation = Quaternion.Euler(0f, 0f, Mathf.Sin(t * 1.7f) * 4f);
+                if (Random.value < 0.06f) FX.I.Sparks(prop.transform.position + (Vector3)Random.insideUnitCircle * 0.6f, sparkle, 1, 0.3f);
+                yield return null;
+            }
         }
 
         /// <summary>Adds the run's gold to the bank; true when the run went deeper than any before it (the first run sets no record).</summary>

@@ -12,7 +12,8 @@ namespace Lucky
     {
         public static FX I { get; private set; }
 
-        public const int OrderBehind = 5, OrderFront = 400, OrderText = 500;
+        /// <summary>Behind (embers), Sky (god rays, rising souls: above the backdrop, behind the fighters), Front, Text.</summary>
+        public const int OrderBehind = 5, OrderSky = 10, OrderFront = 400, OrderText = 500;
 
         public struct Burst
         {
@@ -231,10 +232,11 @@ namespace Lucky
             Spin = 90f, Color = color, EndColor = new Color(color.r, color.g, color.b, 0f), Order = OrderBehind + 20, Spread = new Vector2(0.4f, 0.05f),
         });
 
+        /// <summary>Paper strips that tumble and flutter down.</summary>
         public void Confetti(Vector3 pos, int count) => Emit(pos, new Burst
         {
-            Sprite = "vfx_circle", Count = count, SpeedMin = 6f, SpeedMax = 15f, AngleMin = 50f, AngleMax = 130f,
-            Gravity = -9f, Drag = 1.6f, LifeMin = 1.6f, LifeMax = 2.6f, SizeMin = 0.1f, SizeMax = 0.2f, EndSize = 0.9f,
+            Sprite = "vfx_confetti", Count = count, SpeedMin = 6f, SpeedMax = 15f, AngleMin = 50f, AngleMax = 130f,
+            Gravity = -9f, Drag = 1.6f, LifeMin = 1.6f, LifeMax = 2.6f, SizeMin = 0.2f, SizeMax = 0.32f, EndSize = 0.9f,
             Spin = 600f, RandomHue = true, Flip = true, Spread = new Vector2(2f, 0.2f),
         });
 

@@ -315,6 +315,7 @@ namespace Lucky.EditorTools
             var director = game.AddComponent<GameDirector>();
             director.config = cfg;
             director.volume = volume;
+            director.ambient = global;
             EditorUtility.SetDirty(doc);
             EditorUtility.SetDirty(director);
 

@@ -52,4 +52,14 @@ save(rgba(np.stack([d,d,d],-1), np.ones_like(d)), "Wheel/wheel_detail.png")
 x,y = grid(128); r=np.sqrt(x*x+y*y)
 a = np.clip(np.exp(-(r/0.22)**2)*1.0 + np.exp(-(r/0.6)**2)*0.45,0,1)*(r<1)
 save(rgba((1,1,1), a), "Wheel/bulb_glow.png")
+# god rays: two interleaved sets of tapered beams over a soft core, for the victory sunburst (additive, tinted)
+x,y = grid(512); r=np.sqrt(x*x+y*y); ang=np.arctan2(y,x)
+beams = 0.65*np.clip(np.cos(ang*9),0,1)**6 + 0.45*np.clip(np.cos(ang*14+0.7),0,1)**10
+fall = np.clip(1-r,0,1)**1.4
+a = gaussian_filter(beams*fall*np.clip(r*6,0,1), 1.2) + np.exp(-(r/0.18)**2)*0.6
+save(rgba((1,1,1), np.clip(a,0,1)), "VFX/vfx_rays.png")
+# confetti strip: rounded rectangle (2:1) so flipping pieces read as paper, not dots
+w,h=64,32; yy,xx=np.mgrid[0:h,0:w].astype(np.float32)
+dx=np.maximum(np.abs(xx-(w-1)/2)-(w/2-6),0); dy=np.maximum(np.abs(yy-(h-1)/2)-(h/2-6),0)
+save(rgba((1,1,1), np.clip((5.5-np.sqrt(dx*dx+dy*dy))*1.5,0,1)), "VFX/vfx_confetti.png")
 print("ok")

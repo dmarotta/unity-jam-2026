@@ -14,6 +14,9 @@ namespace Lucky
         float trauma;
         Spring kickX, kickY, zoom;
         float seed;
+        Vector2 focusOffset;
+        float focusZoom;
+        Coroutine focusing;
 
         public Camera Cam => cam;
 
@@ -51,6 +54,29 @@ namespace Lucky
 
         public void SnapTo(float x) => basePos.x = x;
 
+        /// <summary>
+        /// Cinematic framing held on top of the base view: glide to <paramref name="offset"/> and <paramref name="zoom"/>
+        /// (negative zooms in) over real time; Focus(zero, 0) releases it. Keep within the arena's ~1.5 unit margin.
+        /// </summary>
+        public void Focus(Vector2 offset, float zoom, float duration)
+        {
+            if (focusing != null) StopCoroutine(focusing);
+            Vector2 o0 = focusOffset;
+            float z0 = focusZoom;
+            focusing = StartCoroutine(Tween.Run(duration, t =>
+            {
+                focusOffset = Vector2.LerpUnclamped(o0, offset, t);
+                focusZoom = Mathf.LerpUnclamped(z0, zoom, t);
+            }, Ease.InOutCubic, true));
+        }
+
+        public void ClearFocus()
+        {
+            if (focusing != null) StopCoroutine(focusing);
+            focusOffset = Vector2.zero;
+            focusZoom = 0f;
+        }
+
         void LateUpdate()
         {
             float dt = Mathf.Min(Time.unscaledDeltaTime, 0.05f);
@@ -65,9 +91,9 @@ namespace Lucky
             float oy = (Mathf.PerlinNoise(seed + 10f, t) - 0.5f) * 2f * 0.45f * shake;
             float roll = (Mathf.PerlinNoise(seed + 20f, t) - 0.5f) * 2f * 2.2f * shake;
 
-            transform.position = basePos + new Vector3(ox + kickX.Value, oy + kickY.Value, 0f);
+            transform.position = basePos + new Vector3(ox + kickX.Value + focusOffset.x, oy + kickY.Value + focusOffset.y, 0f);
             transform.rotation = Quaternion.Euler(0f, 0f, roll);
-            cam.orthographicSize = BaseSize * (1f + zoom.Value);
+            cam.orthographicSize = BaseSize * (1f + zoom.Value + focusZoom);
         }
     }
 }

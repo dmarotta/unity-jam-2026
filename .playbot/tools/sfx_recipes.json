@@ -1842,6 +1842,77 @@
           "fade_in_ms": 80
         }
       ]
+    },
+    "curse_shatter": {
+      "channels": 2,
+      "length_ms": 4000,
+      "fade_out_ms": 1400,
+      "limit_db": 3,
+      "master": {
+        "hp_hz": 25,
+        "lp_hz": 16000
+      },
+      "layers": [
+        {
+          "file": "curse_shatter/bd_shatter.mp3",
+          "align": "start",
+          "gain_db": 0
+        },
+        {
+          "file": "jackpot/sb_impact_b.mp3",
+          "hp_hz": 25,
+          "lp_hz": 200,
+          "lp_order": 4,
+          "gain_db": -3
+        }
+      ]
+    },
+    "coin_shower": {
+      "channels": 2,
+      "length_ms": 3000,
+      "fade_out_ms": 700,
+      "peak_dbfs": -2.0,
+      "layers": [
+        {
+          "file": "coin_shower/bd_coins.mp3",
+          "align": "start",
+          "hp_hz": 1200,
+          "lp_hz": 14000,
+          "gain_db": 0
+        }
+      ]
+    },
+    "royal_fanfare": {
+      "channels": 2,
+      "length_ms": 3500,
+      "fade_out_ms": 700,
+      "master": {
+        "hp_hz": 40
+      },
+      "layers": [
+        {
+          "file": "royal_fanfare/bd_brass.mp3",
+          "align": "start",
+          "gain_db": 0
+        }
+      ]
+    },
+    "spirit_release": {
+      "channels": 2,
+      "length_ms": 2000,
+      "fade_out_ms": 700,
+      "master": {
+        "hp_hz": 120,
+        "lp_hz": 14000
+      },
+      "layers": [
+        {
+          "file": "spirit_release/bd_spirit.mp3",
+          "align": "start",
+          "hp_hz": 150,
+          "gain_db": 0
+        }
+      ]
     }
   }
 }

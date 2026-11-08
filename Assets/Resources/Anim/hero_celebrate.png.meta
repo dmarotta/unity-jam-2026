@@ -1,0 +1,1274 @@
+fileFormatVersion: 2
+guid: 5d54c9ea0ee8a1740bd24bfd537f0e48
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -7620201797140264747
+    second: hero_celebrate_0
+  - first:
+      213: 3615760884633121426
+    second: hero_celebrate_1
+  - first:
+      213: -9043867442936068707
+    second: hero_celebrate_2
+  - first:
+      213: 8504777033873847780
+    second: hero_celebrate_3
+  - first:
+      213: -7409619916266480210
+    second: hero_celebrate_4
+  - first:
+      213: 4248878954692243420
+    second: hero_celebrate_5
+  - first:
+      213: 2133945854572535024
+    second: hero_celebrate_6
+  - first:
+      213: 2220009606826444405
+    second: hero_celebrate_7
+  - first:
+      213: 3024172612859167980
+    second: hero_celebrate_8
+  - first:
+      213: 3932740104706951971
+    second: hero_celebrate_9
+  - first:
+      213: 7094758422426697109
+    second: hero_celebrate_10
+  - first:
+      213: -636312926596850038
+    second: hero_celebrate_11
+  - first:
+      213: -2410132718071674552
+    second: hero_celebrate_12
+  - first:
+      213: 8564947225866108849
+    second: hero_celebrate_13
+  - first:
+      213: -1276436693739366205
+    second: hero_celebrate_14
+  - first:
+      213: -1955181808372752346
+    second: hero_celebrate_15
+  - first:
+      213: -3148736035793682484
+    second: hero_celebrate_16
+  - first:
+      213: -7414063160327668060
+    second: hero_celebrate_17
+  - first:
+      213: 5995215638627948064
+    second: hero_celebrate_18
+  - first:
+      213: -8760959428041109381
+    second: hero_celebrate_19
+  - first:
+      213: -9176125446483476908
+    second: hero_celebrate_20
+  - first:
+      213: -2453731326614694645
+    second: hero_celebrate_21
+  - first:
+      213: 4061237715272553855
+    second: hero_celebrate_22
+  - first:
+      213: -5474358786471873351
+    second: hero_celebrate_23
+  - first:
+      213: 1172331079902807682
+    second: hero_celebrate_24
+  - first:
+      213: 3984519714544796904
+    second: hero_celebrate_25
+  - first:
+      213: -229232564874425395
+    second: hero_celebrate_26
+  - first:
+      213: 3404027236363552498
+    second: hero_celebrate_27
+  - first:
+      213: 429570523905466121
+    second: hero_celebrate_28
+  - first:
+      213: -4259614668274905107
+    second: hero_celebrate_29
+  - first:
+      213: -1045604437903447094
+    second: hero_celebrate_30
+  - first:
+      213: -1731299083733161426
+    second: hero_celebrate_31
+  - first:
+      213: -7146321453979421084
+    second: hero_celebrate_32
+  - first:
+      213: 5977744406079942642
+    second: hero_celebrate_33
+  - first:
+      213: 3625249654458769568
+    second: hero_celebrate_34
+  - first:
+      213: -7921439513061810715
+    second: hero_celebrate_35
+  - first:
+      213: 5117064455902429404
+    second: hero_celebrate_36
+  - first:
+      213: 366766748627566341
+    second: hero_celebrate_37
+  - first:
+      213: 2837798064751542999
+    second: hero_celebrate_38
+  - first:
+      213: -1973986551355205774
+    second: hero_celebrate_39
+  - first:
+      213: -1637037487923816335
+    second: hero_celebrate_40
+  - first:
+      213: 561652790249797720
+    second: hero_celebrate_41
+  - first:
+      213: 6686080129614097496
+    second: hero_celebrate_42
+  - first:
+      213: -3152587929923479020
+    second: hero_celebrate_43
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 0
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 60
+    crunchedCompression: 1
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: hero_celebrate_0
+      rect:
+        serializedVersion: 2
+        x: 55
+        y: 1601
+        width: 182
+        height: 284
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5d849acc6da9f3690800000000000000
+      internalID: -7620201797140264747
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hero_celebrate_1
+      rect:
+        serializedVersion: 2
+        x: 346
+        y: 1601
+        width: 184
+        height: 283
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2923f411e53cd2230800000000000000
+      internalID: 3615760884633121426
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hero_celebrate_2
+      rect:
+        serializedVersion: 2
+        x: 634
+        y: 1601
+        width: 200
+        height: 283
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d9543142a7abd7280800000000000000
+      internalID: -9043867442936068707
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hero_celebrate_3
+      rect:
+        serializedVersion: 2
+        x: 937
+        y: 1601
+        width: 206
+        height: 307
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4e573fde6a9070670800000000000000
+      internalID: 8504777033873847780
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hero_celebrate_4
+      rect:
+        serializedVersion: 2
+        x: 1251
+        y: 1601
+        width: 237
+        height: 293
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eadd64aa1fdbb2990800000000000000
+      internalID: -7409619916266480210
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hero_celebrate_5
+      rect:
+        serializedVersion: 2
+        x: 1570
+        y: 1601
+        width: 240
+        height: 269
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cdf6014d5ec07fa30800000000000000
+      internalID: 4248878954692243420
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hero_celebrate_6
+      rect:
+        serializedVersion: 2
+        x: 1889
+        y: 1601
+        width: 226
+        height: 270
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0fc96b7d27c4d9d10800000000000000
+      internalID: 2133945854572535024
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hero_celebrate_7
+      rect:
+        serializedVersion: 2
+        x: 2183
+        y: 1601
+        width: 213
+        height: 265
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 57648dca9fe0fce10800000000000000
+      internalID: 2220009606826444405
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hero_celebrate_8
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 1201
+        width: 240
+        height: 225
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ce48fe8f7f408f920800000000000000
+      internalID: 3024172612859167980
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hero_celebrate_9
+      rect:
+        serializedVersion: 2
+        x: 338
+        y: 1201
+        width: 242
+        height: 256
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 32b8df6e946e39630800000000000000
+      internalID: 3932740104706951971
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hero_celebrate_10
+      rect:
+        serializedVersion: 2
+        x: 639
+        y: 1201
+        width: 244
+        height: 286
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 59d34ff0235a57260800000000000000
+      internalID: 7094758422426697109
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hero_celebrate_11
+      rect:
+        serializedVersion: 2
+        x: 945
+        y: 1201
+        width: 242
+        height: 285
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a8e943cb3cc5b27f0800000000000000
+      internalID: -636312926596850038
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hero_celebrate_12
+      rect:
+        serializedVersion: 2
+        x: 1231
+        y: 1201
+        width: 259
+        height: 239
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8498ac5ff0d7d8ed0800000000000000
+      internalID: -2410132718071674552
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hero_celebrate_13
+      rect:
+        serializedVersion: 2
+        x: 1560
+        y: 1201
+        width: 235
+        height: 186
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1bf77b57f1eccd670800000000000000
+      internalID: 8564947225866108849
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hero_celebrate_14
+      rect:
+        serializedVersion: 2
+        x: 1901
+        y: 1201
+        width: 198
+        height: 190
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3c81463079f294ee0800000000000000
+      internalID: -1276436693739366205
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hero_celebrate_15
+      rect:
+        serializedVersion: 2
+        x: 2235
+        y: 1201
+        width: 163
+        height: 234
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 620e2a8118ccdd4e0800000000000000
+      internalID: -1955181808372752346
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hero_celebrate_16
+      rect:
+        serializedVersion: 2
+        x: 1130
+        y: 1122
+        width: 21
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ccfbb0712417d44d0800000000000000
+      internalID: -3148736035793682484
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hero_celebrate_17
+      rect:
+        serializedVersion: 2
+        x: 1425
+        y: 1139
+        width: 23
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4aefb5a46d4fb1990800000000000000
+      internalID: -7414063160327668060
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hero_celebrate_18
+      rect:
+        serializedVersion: 2
+        x: 1725
+        y: 1119
+        width: 22
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 026194cfbd8433350800000000000000
+      internalID: 5995215638627948064
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hero_celebrate_19
+      rect:
+        serializedVersion: 2
+        x: 2025
+        y: 1073
+        width: 22
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b70100851d1da6680800000000000000
+      internalID: -8760959428041109381
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hero_celebrate_20
+      rect:
+        serializedVersion: 2
+        x: 69
+        y: 801
+        width: 176
+        height: 266
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 45efdeb068ad7a080800000000000000
+      internalID: -9176125446483476908
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hero_celebrate_21
+      rect:
+        serializedVersion: 2
+        x: 329
+        y: 801
+        width: 226
+        height: 271
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b0512eedb5892fdd0800000000000000
+      internalID: -2453731326614694645
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hero_celebrate_22
+      rect:
+        serializedVersion: 2
+        x: 620
+        y: 801
+        width: 248
+        height: 270
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f755d374f2a6c5830800000000000000
+      internalID: 4061237715272553855
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hero_celebrate_23
+      rect:
+        serializedVersion: 2
+        x: 938
+        y: 801
+        width: 213
+        height: 270
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9b43e4720bb2704b0800000000000000
+      internalID: -5474358786471873351
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hero_celebrate_24
+      rect:
+        serializedVersion: 2
+        x: 1274
+        y: 801
+        width: 180
+        height: 268
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 286c1c8e7e4f44010800000000000000
+      internalID: 1172331079902807682
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hero_celebrate_25
+      rect:
+        serializedVersion: 2
+        x: 1599
+        y: 801
+        width: 172
+        height: 268
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8e4cbf9c19bdb4730800000000000000
+      internalID: 3984519714544796904
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hero_celebrate_26
+      rect:
+        serializedVersion: 2
+        x: 1907
+        y: 801
+        width: 166
+        height: 268
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dcb45bf523a91dcf0800000000000000
+      internalID: -229232564874425395
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hero_celebrate_27
+      rect:
+        serializedVersion: 2
+        x: 2201
+        y: 801
+        width: 167
+        height: 268
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2f644357cb88d3f20800000000000000
+      internalID: 3404027236363552498
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hero_celebrate_28
+      rect:
+        serializedVersion: 2
+        x: 58
+        y: 401
+        width: 197
+        height: 268
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 90f1d539d1426f500800000000000000
+      internalID: 429570523905466121
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hero_celebrate_29
+      rect:
+        serializedVersion: 2
+        x: 343
+        y: 401
+        width: 241
+        height: 268
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: def4e61170fc2e4c0800000000000000
+      internalID: -4259614668274905107
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hero_celebrate_30
+      rect:
+        serializedVersion: 2
+        x: 633
+        y: 401
+        width: 214
+        height: 302
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: acb6137bd444d71f0800000000000000
+      internalID: -1045604437903447094
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hero_celebrate_31
+      rect:
+        serializedVersion: 2
+        x: 937
+        y: 401
+        width: 207
+        height: 283
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e2a202af7a039f7e0800000000000000
+      internalID: -1731299083733161426
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hero_celebrate_32
+      rect:
+        serializedVersion: 2
+        x: 1245
+        y: 401
+        width: 203
+        height: 283
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 466bdcc108a23dc90800000000000000
+      internalID: -7146321453979421084
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hero_celebrate_33
+      rect:
+        serializedVersion: 2
+        x: 1556
+        y: 401
+        width: 196
+        height: 283
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2ff297aadd635f250800000000000000
+      internalID: 5977744406079942642
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hero_celebrate_34
+      rect:
+        serializedVersion: 2
+        x: 1872
+        y: 401
+        width: 201
+        height: 283
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0a06f147a597f4230800000000000000
+      internalID: 3625249654458769568
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hero_celebrate_35
+      rect:
+        serializedVersion: 2
+        x: 2193
+        y: 401
+        width: 189
+        height: 283
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5ed15328bb4611290800000000000000
+      internalID: -7921439513061810715
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hero_celebrate_36
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 1
+        width: 232
+        height: 298
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cd087d2e207730740800000000000000
+      internalID: 5117064455902429404
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hero_celebrate_37
+      rect:
+        serializedVersion: 2
+        x: 362
+        y: 1
+        width: 181
+        height: 385
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 50ffe572a64071500800000000000000
+      internalID: 366766748627566341
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hero_celebrate_38
+      rect:
+        serializedVersion: 2
+        x: 633
+        y: 1
+        width: 195
+        height: 398
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7d28ec9fd42e16720800000000000000
+      internalID: 2837798064751542999
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hero_celebrate_39
+      rect:
+        serializedVersion: 2
+        x: 920
+        y: 1
+        width: 212
+        height: 397
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 277131fa0bdfa94e0800000000000000
+      internalID: -1973986551355205774
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hero_celebrate_40
+      rect:
+        serializedVersion: 2
+        x: 1219
+        y: 1
+        width: 218
+        height: 397
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1789d4004131849e0800000000000000
+      internalID: -1637037487923816335
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hero_celebrate_41
+      rect:
+        serializedVersion: 2
+        x: 1521
+        y: 1
+        width: 220
+        height: 397
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 85832f9ac346bc700800000000000000
+      internalID: 561652790249797720
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hero_celebrate_42
+      rect:
+        serializedVersion: 2
+        x: 1832
+        y: 1
+        width: 213
+        height: 397
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 85c2279147ab9cc50800000000000000
+      internalID: 6686080129614097496
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hero_celebrate_43
+      rect:
+        serializedVersion: 2
+        x: 2151
+        y: 1
+        width: 198
+        height: 397
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 41a1ab91bf1cf34d0800000000000000
+      internalID: -3152587929923479020
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      hero_celebrate_0: -7620201797140264747
+      hero_celebrate_1: 3615760884633121426
+      hero_celebrate_10: 7094758422426697109
+      hero_celebrate_11: -636312926596850038
+      hero_celebrate_12: -2410132718071674552
+      hero_celebrate_13: 8564947225866108849
+      hero_celebrate_14: -1276436693739366205
+      hero_celebrate_15: -1955181808372752346
+      hero_celebrate_16: -3148736035793682484
+      hero_celebrate_17: -7414063160327668060
+      hero_celebrate_18: 5995215638627948064
+      hero_celebrate_19: -8760959428041109381
+      hero_celebrate_2: -9043867442936068707
+      hero_celebrate_20: -9176125446483476908
+      hero_celebrate_21: -2453731326614694645
+      hero_celebrate_22: 4061237715272553855
+      hero_celebrate_23: -5474358786471873351
+      hero_celebrate_24: 1172331079902807682
+      hero_celebrate_25: 3984519714544796904
+      hero_celebrate_26: -229232564874425395
+      hero_celebrate_27: 3404027236363552498
+      hero_celebrate_28: 429570523905466121
+      hero_celebrate_29: -4259614668274905107
+      hero_celebrate_3: 8504777033873847780
+      hero_celebrate_30: -1045604437903447094
+      hero_celebrate_31: -1731299083733161426
+      hero_celebrate_32: -7146321453979421084
+      hero_celebrate_33: 5977744406079942642
+      hero_celebrate_34: 3625249654458769568
+      hero_celebrate_35: -7921439513061810715
+      hero_celebrate_36: 5117064455902429404
+      hero_celebrate_37: 366766748627566341
+      hero_celebrate_38: 2837798064751542999
+      hero_celebrate_39: -1973986551355205774
+      hero_celebrate_4: -7409619916266480210
+      hero_celebrate_40: -1637037487923816335
+      hero_celebrate_41: 561652790249797720
+      hero_celebrate_42: 6686080129614097496
+      hero_celebrate_43: -3152587929923479020
+      hero_celebrate_5: 4248878954692243420
+      hero_celebrate_6: 2133945854572535024
+      hero_celebrate_7: 2220009606826444405
+      hero_celebrate_8: 3024172612859167980
+      hero_celebrate_9: 3932740104706951971
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

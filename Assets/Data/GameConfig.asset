@@ -115,6 +115,8 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 7566c88b44ce37e4a8740d1a09a0dfd1, type: 3}
   - {fileID: 21300000, guid: 54d3b13f05d53894293dab6ae56a145b, type: 3}
   - {fileID: 21300000, guid: db0a3d7c7a162b64aa4c4dcbd39d86ca, type: 3}
+  - {fileID: 21300000, guid: 70dc91c12fa0f914b86578c502f8fb44, type: 3}
+  - {fileID: 21300000, guid: 73dd548e61efbeb408c98eec02ada1dd, type: 3}
   clips:
   - {fileID: 8300000, guid: 56cee3dd4db7dfc4ba3358bd233e7958, type: 3}
   - {fileID: 8300000, guid: ce6c91ce2c9c6234383cbdb61810096a, type: 3}
@@ -205,6 +207,10 @@ MonoBehaviour:
   - {fileID: 8300000, guid: d2279916e3b59a04e92c9c3dd47cd956, type: 3}
   - {fileID: 8300000, guid: 158e52dcc39cb1d499be4ba64caaaf4d, type: 3}
   - {fileID: 8300000, guid: ed9981330175bb142aba6cc504521860, type: 3}
+  - {fileID: 8300000, guid: 6397956e46acf204ea00c27c333d28b7, type: 3}
+  - {fileID: 8300000, guid: ddcdd7020c9a4274d810bf25220ff479, type: 3}
+  - {fileID: 8300000, guid: eb75a7a29005bb0428f0ec45e24bf098, type: 3}
+  - {fileID: 8300000, guid: 7608d2b556e228d4983662d61c5c947a, type: 3}
   spriteFX: {fileID: 2100000, guid: eb1025400b52fc240809be280f4f45cb, type: 2}
   additive: {fileID: 2100000, guid: e99a2680480758f428f703aa1b6dedea, type: 2}
   vertexColor: {fileID: 2100000, guid: f08f30448f664854aa4b6df8dd1f3be3, type: 2}

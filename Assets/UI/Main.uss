@@ -147,6 +147,9 @@
     -unity-background-image-tint-color: rgb(110, 110, 110);
 }
 
+/* Held briefly as a boss dies so the pip swells and settles on its own transition. */
+.pip.stamped { scale: 1.7 1.7; border-color: rgb(255, 240, 180); }
+
 .depth-label {
     font-size: 28px;
     color: rgb(230, 210, 170);
@@ -437,6 +440,17 @@
 
 /* ---------- Overlays ---------- */
 
+/* Cinematic bars for boss intros and the finale, slid in by HUD.Letterbox; drawn under the HUD. */
+.letterbox {
+    position: absolute;
+    left: 0; right: 0;
+    height: 118px;
+    background-color: rgb(4, 2, 4);
+}
+
+.letterbox.top { top: 0; translate: 0 -100%; }
+.letterbox.bottom { bottom: 0; translate: 0 100%; }
+
 .flash, .fade {
     position: absolute;
     left: 0; top: 0; right: 0; bottom: 0;
@@ -595,6 +609,53 @@
 }
 
 .end-buttons { align-items: center; }
+
+/* Victory: the party behind shows through, and a gold sunburst turns behind the title. */
+.end-screen.victory { background-color: rgba(6, 3, 8, 0.38); }
+
+.end-rays {
+    position: absolute;
+    left: 50%;
+    top: -336px;
+    width: 900px;
+    height: 900px;
+    margin-left: -450px;
+    background-image: url("project://database/Assets/Art/VFX/vfx_rays.png");
+    -unity-background-image-tint-color: rgba(255, 200, 100, 0.55);
+    display: none;
+}
+
+/* Boss roll call: slain bosses struck through, the one that won ringed red, the rest still unseen. */
+.trophies { flex-direction: row; justify-content: center; margin-bottom: 26px; }
+
+.trophy {
+    width: 72px;
+    height: 72px;
+    margin: 0 6px;
+    border-radius: 36px;
+    border-width: 3px;
+    border-color: rgb(110, 90, 70);
+    background-color: rgb(25, 18, 20);
+    -unity-background-scale-mode: scale-and-crop;
+}
+
+.trophy.slain { border-color: rgb(255, 205, 110); -unity-background-image-tint-color: rgb(200, 190, 185); }
+.trophy.nemesis { border-color: rgb(255, 70, 85); border-width: 4px; }
+.trophy.sealed { -unity-background-image-tint-color: rgb(0, 0, 0); opacity: 0.45; }
+
+/* The strike-through across a slain boss. */
+.trophy-mark {
+    position: absolute;
+    left: -10px; right: -10px;
+    top: 50%;
+    height: 10px;
+    margin-top: -5px;
+    border-radius: 5px;
+    border-width: 2px;
+    border-color: rgb(60, 6, 8);
+    background-color: rgb(240, 52, 56);
+    rotate: -40deg;
+}
 
 /* Free-floating UI particles above a panel (gold sparkles on the end screen). */
 .fx-layer { position: absolute; left: 0; top: 0; right: 0; bottom: 0; }

@@ -152,6 +152,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Lucky.GameDirector
   config: {fileID: 11400000, guid: 241307d47735593418ae546e2a9d23dc, type: 2}
   volume: {fileID: 594935099}
+  ambient: {fileID: 768294982}
 --- !u!114 &3270966
 MonoBehaviour:
   m_ObjectHideFlags: 0

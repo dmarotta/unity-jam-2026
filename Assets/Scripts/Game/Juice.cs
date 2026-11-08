@@ -26,11 +26,18 @@ namespace Lucky
         public bool Frozen => Time.unscaledTime < hitstopUntil;
         public bool Paused { get; set; }
 
+#if UNITY_EDITOR
+        /// <summary>Debug panel fast-forward, on top of slow-mo. Only scaled time speeds up; UI tweens stay real-time.</summary>
+        public float DebugSpeed { get; set; } = 1f;
+#else
+        const float DebugSpeed = 1f;
+#endif
+
         void Update()
         {
             float target = Time.unscaledTime < slowUntil ? slowScale : 1f;
             current = Mathf.MoveTowards(current, target, Time.unscaledDeltaTime / Mathf.Max(0.05f, slowRecover));
-            Time.timeScale = Frozen || Paused ? 0f : current;
+            Time.timeScale = Frozen || Paused ? 0f : current * DebugSpeed;
             if (AudioManager.I != null) AudioManager.I.MusicPitch = Mathf.Lerp(0.82f, 1f, Mathf.InverseLerp(0.25f, 1f, current));
         }
 
