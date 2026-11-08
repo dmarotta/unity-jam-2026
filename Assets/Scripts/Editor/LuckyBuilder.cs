@@ -73,7 +73,8 @@ namespace Lucky.EditorTools
                 ti.textureType = TextureImporterType.Sprite;
                 ti.spriteImportMode = SpriteImportMode.Single;
                 ti.spritePixelsPerUnit = 100;
-                ti.mipmapEnabled = false;
+                // UI icons, portraits and cards are drawn well below source size, so they need mips to avoid shimmer.
+                ti.mipmapEnabled = path.Contains("/UI/");
                 ti.alphaIsTransparency = true;
                 ti.wrapMode = TextureWrapMode.Clamp;
                 ti.filterMode = FilterMode.Bilinear;
