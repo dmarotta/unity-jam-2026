@@ -73,8 +73,10 @@ namespace Lucky.EditorTools
                 ti.textureType = TextureImporterType.Sprite;
                 ti.spriteImportMode = SpriteImportMode.Single;
                 ti.spritePixelsPerUnit = 100;
-                // UI icons, portraits and cards are drawn well below source size, so they need mips to avoid shimmer.
-                ti.mipmapEnabled = path.Contains("/UI/");
+                // UI icons and portraits are drawn well below source size, so they need mips to avoid shimmer.
+                // Only power-of-two sources: NPOT + mips can't use DXT on web and would ship uncompressed.
+                ti.GetSourceTextureWidthAndHeight(out int srcW, out int srcH);
+                ti.mipmapEnabled = path.Contains("/UI/") && Mathf.IsPowerOfTwo(srcW) && Mathf.IsPowerOfTwo(srcH);
                 ti.alphaIsTransparency = true;
                 ti.wrapMode = TextureWrapMode.Clamp;
                 ti.filterMode = FilterMode.Bilinear;
